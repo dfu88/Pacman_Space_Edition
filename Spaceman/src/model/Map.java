@@ -52,7 +52,7 @@ public class Map {
 		}
 	}
 	
-	public static int getData(int row, int col) {
+	public int getData(int row, int col) {
 		return mapArray[row][col];
 	}
 	
