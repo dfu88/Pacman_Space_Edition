@@ -10,6 +10,7 @@ public class GameController extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+		primaryStage.setTitle("Pac-Man:Space Edition");
 		GUI menu = new GUI();
 		menu.createGUI();
 		changeScene(primaryStage, menu.returnScene());
