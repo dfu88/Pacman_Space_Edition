@@ -192,20 +192,4 @@ public class GUI {
 				pane.getChildren().add(button5);
 				pane.getChildren().add(button6);
 	}
-	
-//	private void addActionListeners() {
-//		button1.addActionListener(new ActionListener() {
-//			public void action(ActionEvent e) {
-//				buttonPressed = 1;
-//				System.out.println(buttonPressed);
-//			}
-//		});
-//		
-////		button2.addActions(new ActionListener()){
-////			public void action(ActionEvent e) {
-////				buttonPressed = 2;
-////				System.out.println(buttonPressed);
-////			}
-////		}
-//	}
 }

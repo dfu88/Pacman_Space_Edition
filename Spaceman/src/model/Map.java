@@ -19,11 +19,8 @@ public class Map {
 	public int SPAWN = 7;//maybe add ghost spawn aswell
 	public int GATE = 8;
 	
-	public Map(int type) {
-		initMap(type);
-	}
 	
-	private void initMap(int type) {
+	public void initMap(int type) {
 		if (type == 1) {
 			//mapArray = new int [21][21];
 			//					  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20

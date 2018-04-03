@@ -7,8 +7,10 @@ public class InterfaceController {
 	
 	public MainApp game;
 	
-	public Scene currentScene;
-	public Scene test;
+	public LevelController lvlCtrl;
+	
+	public Scene currentScene; //should not be in controller imo
+	public Scene test;			// same
 	
 	public InterfaceController(MainApp instance) {
 		game = instance;
@@ -21,7 +23,9 @@ public class InterfaceController {
 		currentScene = startMenu.returnScene();
 		test = startMenu.testScene;
 		//...
-		
+		LevelController lvlControl = new LevelController(this);
+		lvlControl.init();
+		lvlCtrl = lvlControl;
 		
 		
 	}
@@ -30,8 +34,9 @@ public class InterfaceController {
 		if (actionNumber == 1) {
 				//do something
 			System.out.println("420");
-			currentScene = test;
-			game.changeScene(currentScene);
+			//currentScene = test;
+			//game.changeScene(currentScene);
+			lvlCtrl.setLevel(1);
 			
 			
 		}
