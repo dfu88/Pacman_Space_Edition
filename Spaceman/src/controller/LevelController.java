@@ -9,6 +9,7 @@ import javafx.scene.*;
 
 public class LevelController {
 	public InterfaceController interfaceCtrl;
+	public LevelVisuals currentView;
 	public Scene levelScene;
 	public Level currentLevel;
 	
@@ -21,6 +22,7 @@ public class LevelController {
 		LevelVisuals visual = new LevelVisuals();
 		visual.createLevel();
 		levelScene = visual.returnScene();
+		currentView = visual;
 		Level lvl = new Level();
 		lvl.makeMaps();
 		currentLevel = lvl;
@@ -29,9 +31,12 @@ public class LevelController {
 	
 	public void setLevel(int type){
 		//.. set model char etc
-		currentLevel.setMap(1);
-		
+		System.out.println(type);
+		currentLevel.setMap(type);
+		currentView.addTiles(currentLevel.currentMap);
 		//..update visuals
-		interfaceCtrl.game.changeScene(levelScene);
+		
+		//interfaceCtrl.game.changeScene(levelScene);
+		interfaceCtrl.game.changeScene(currentView.returnScene());
 	}
 }

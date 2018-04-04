@@ -115,7 +115,8 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button2, (sceneWidth-button2.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button2, (sceneWidth-button2.getPrefWidth())*0.5);
 
-				button2.setOnAction(event -> System.out.println("Test Button 2"));
+				button2.setOnAction(event -> {
+					controller.process(2);});
 
 				Button button3 = new Button("Multiplayer Mode");
 				//should prevent changing size when window size changes but doesn't
@@ -132,7 +133,10 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button3, (sceneWidth-button3.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button3, (sceneWidth-button3.getPrefWidth())*0.5);
 
-
+				
+				button3.setOnAction(event -> {
+					controller.process(3);});
+				
 				Button button4 = new Button("Endless Mode");
 				//should prevent changing size when window size changes but doesn't
 				//dont need minmax if not resizble i think
@@ -147,7 +151,8 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button4, (sceneWidth-button4.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button4, (sceneWidth-button4.getPrefWidth())*0.5);
 
-
+				button4.setOnAction(event -> {
+					controller.process(4);});
 
 				Button button5 = new Button("Random Mode");
 				//should prevent changing size when window size changes but doesn't
@@ -163,7 +168,9 @@ public class GUI {
 				AnchorPane.setBottomAnchor(button5, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
 				AnchorPane.setLeftAnchor(button5, (sceneWidth-button5.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button5, (sceneWidth-button5.getPrefWidth())*0.5);
-
+				
+				button5.setOnAction(event -> {
+					controller.process(5);});
 
 				Button button6 = new Button("Leaderboards");
 				//should prevent changing size when window size changes but doesn't
@@ -180,7 +187,8 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button6, (sceneWidth-button6.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button6, (sceneWidth-button6.getPrefWidth())*0.5);
 
-				
+				button6.setOnAction(event -> {
+					controller.process(6);});
 				
 				
 				//Add the nodes to the scene
