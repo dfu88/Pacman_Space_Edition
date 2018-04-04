@@ -1,5 +1,7 @@
 package view;
 
+import controller.InterfaceController;//>??
+
 //Scene and layout
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -17,15 +19,24 @@ import javafx.scene.control.Button;
 
 
 public class GUI {
+	
+	private InterfaceController controller;
+	
 	private double sceneWidth;
 	private double sceneHeight;
 	private Scene scene;
 	
+	public Scene testScene;
 	
-	public void createGUI() {
+	//private Button button1;
+	//private Button button2;
+	//public int buttonPressed = -1;
+	
+	
+	public void createGUI(InterfaceController controller) {
 		sceneWidth = 1024.0;
 		sceneHeight = 768.0;
-		
+		this.controller = controller;
 		AnchorPane root = new AnchorPane(); //Layout based on coordinate from edge
 		root.setStyle("-fx-background-color: null;"); //controls add default css so need to remove
 		addComponents(root); //add nodes to the layout (buttons, text etc)
@@ -35,6 +46,13 @@ public class GUI {
 		
 		
 		scene = home;
+		
+		//test
+		AnchorPane testPane = new AnchorPane();
+		testPane.setStyle("-fx-background-color: null;");
+		Scene test1 = new Scene(testPane, 1440, 980);
+		test1.setFill(Color.LIGHTGREEN);
+		testScene = test1;
 		
 	}
 	public Scene returnScene() {
@@ -74,7 +92,13 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button1, (sceneWidth-button1.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button1, (sceneWidth-button1.getPrefWidth())*0.5);
 
-				//button1.setOnAction(event -> primaryStage.setScene(level));
+				button1.setOnAction(event -> {
+					//buttonPressed = 1;
+					//System.out.println(buttonPressed);
+					controller.process(1);});
+					//InterfaceController.process(1);});
+				
+				//button1.setOnAction(event -> System.out.println(buttonPressed));
 
 				Button button2 = new Button("Classic Mode");
 				//should prevent changing size when window size changes but doesn't
@@ -156,7 +180,9 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button6, (sceneWidth-button6.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button6, (sceneWidth-button6.getPrefWidth())*0.5);
 
-
+				
+				
+				
 				//Add the nodes to the scene
 				pane.getChildren().add(title);
 				pane.getChildren().add(button1);
