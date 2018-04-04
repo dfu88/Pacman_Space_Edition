@@ -33,7 +33,8 @@ public class LevelController {
 		//.. set model char etc
 		System.out.println(type);
 		currentLevel.setMap(type);
-		currentView.addTiles(currentLevel.currentMap);
+		//currentView.pane.getChildren().clear();
+		currentView.updateMap(currentLevel); //changed to pass in level instead
 		//..update visuals
 		
 		//interfaceCtrl.game.changeScene(levelScene);

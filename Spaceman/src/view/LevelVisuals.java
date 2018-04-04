@@ -3,6 +3,7 @@ package view;
 import controller.LevelController;//>??
 
 import model.Map;
+import model.Level;
 
 //Scene and layout
 import javafx.scene.Scene;
@@ -77,7 +78,9 @@ public class LevelVisuals {
 				//Add the nodes to the scene
 				//pane.getChildren().add(title);
 	}
-	public void addTiles(Map mapArray) {
+	public void updateMap(Level currentLevel) {
+		
+		pane.getChildren().clear();//not sure if needed
 		
 		double tileWidth = 45;
 		double tileHeight = 45;
@@ -86,7 +89,7 @@ public class LevelVisuals {
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
-				int currentElement = mapArray.getData(row, col);
+				int currentElement = currentLevel.currentMap.getData(row, col);
 				if (currentElement == 1) {
 					Rectangle wall = new Rectangle(mapStartX+tileWidth*col, mapStartY+tileHeight*row, tileWidth, tileHeight);
 					wall.setFill(Color.INDIANRED); //fill
@@ -94,7 +97,7 @@ public class LevelVisuals {
 					pane.getChildren().add(wall);
 				} else if (currentElement == 2) {
 					Circle pellet = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.125);
-					pellet.setFill(Color.LEMONCHIFFON);
+					pellet.setFill(Color.LEMONCHIFFON); //we can have a class theme to have a combination of colours to use
 					pane.getChildren().add(pellet);
 				} else if (currentElement == 3) {
 					Circle powerup = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
@@ -103,6 +106,30 @@ public class LevelVisuals {
 				}
 			}
 		}
+		
+		Text lives = new Text();
+		lives.setText("Lives");
+		lives.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
+		lives.setX((mapStartX-lives.getLayoutBounds().getWidth())*0.5);
+		lives.setY(100.0);
+		pane.getChildren().add(lives);
+		
+		
+		Text timeLabel = new Text();
+		timeLabel.setText("Time:");
+		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
+		timeLabel.setX(1440-mapStartX + ((mapStartX-timeLabel.getLayoutBounds().getWidth())*0.5));
+		timeLabel.setY(100.0);
+		pane.getChildren().add(timeLabel);
+		
+		Text time = new Text();
+		time.setText(Integer.toString(currentLevel.timeRemaining));
+		time.setFont(Font.font("Comic Sans MS",50));
+		time.setX(1440-mapStartX + ((mapStartX-time.getLayoutBounds().getWidth())*0.5));
+		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
+		pane.getChildren().add(time);
+		
 	}
+	
 
 }
