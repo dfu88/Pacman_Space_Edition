@@ -31,7 +31,8 @@ public class LevelController {
 	
 	public void setLevel(int type){
 		//.. set model char etc
-		currentLevel.setMap(1);
+		System.out.println(type);
+		currentLevel.setMap(type);
 		currentView.addTiles(currentLevel.currentMap);
 		//..update visuals
 		
