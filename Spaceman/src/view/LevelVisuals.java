@@ -109,6 +109,8 @@ public void updateMap(Level currentLevel) {
 				}
 			}
 		}
+		pane.getChildren().add(currentLevel.spaceman);
+		currentLevel.spaceman.start();
 		
 		//add other level objects
 		

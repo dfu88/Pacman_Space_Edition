@@ -6,9 +6,10 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
+import javafx.scene.Parent;
 import javafx.util.Duration;
 
-public abstract class CharacterAnimate {
+public abstract class CharacterAnimate extends Parent{
 
 	// animation frames total and movement distance
 	protected static final int ANIMATION_STEP = 4;
@@ -20,6 +21,8 @@ public abstract class CharacterAnimate {
 	protected static final int MOVE_UP = 1;
 	protected static final int MOVE_RIGHT = 2;
 	protected static final int MOVE_DOWN = 3;
+
+	protected int status;
 
 	protected Image[] images;
 	protected int imageIndex;
@@ -38,7 +41,8 @@ public abstract class CharacterAnimate {
 	protected Timeline timeline;
 
 	public CharacterAnimate() {
-		currentImage = images[imageIndex];
+		imageIndex = 0;
+		//currentImage = images[imageIndex];
 		moveCounter = 0;
 		xDirection = 0;
 		yDirection = 0;

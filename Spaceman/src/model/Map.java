@@ -76,5 +76,15 @@ public class Map {
 	public int getData(int row, int col) {
 		return mapArray[row][col];
 	}
+
+	public int getStartX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getStartY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }
