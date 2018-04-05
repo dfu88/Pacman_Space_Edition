@@ -39,6 +39,20 @@ public class InterfaceController {
 			lvlCtrl.setLevel(1);
 			
 			
+		} else if (actionNumber == 2) {
+				//do something
+			System.out.println("69");
+			//currentScene = test;
+			//game.changeScene(currentScene);
+			lvlCtrl.setLevel(2);
+		} else if (actionNumber == 3) {
+			System.out.println("42069");
+		} else if (actionNumber == 4) {
+			System.out.println("1269");
+		} else if (actionNumber == 5) {
+			System.out.println("nice");
+		} else if (actionNumber == 6) {
+			System.out.println("xd");
 		}
 	}
 }
