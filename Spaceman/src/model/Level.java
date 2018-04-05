@@ -1,6 +1,7 @@
 package model;
 
 import model.Map;
+import view.Spaceman;
 
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public class Level {
 	public int pelletsRemaining;
 
 	public Map currentMap;
-	//public Character pac;
+	public Spaceman spaceman;
 
 	public ArrayList <Map> mapList;
 
@@ -39,6 +40,7 @@ public class Level {
 		timeRemaining = 120; //180?
 		score = 0;
 		currentMap = model;
+		spaceman = new Spaceman(800, 700);
 		//command to generate visuals for map goes here
 	}
 
