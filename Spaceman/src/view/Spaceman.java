@@ -8,6 +8,7 @@ public class Spaceman extends CharacterAnimate{
 
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
 	private final int currentDirection;
+	public ImageView imageView;
 
 	public Spaceman(int x, int y) {
 		// Intialise Spaceman grid position
@@ -29,13 +30,13 @@ public class Spaceman extends CharacterAnimate{
 		imageIndex = 0;
 		currentImage = images[imageIndex];
 		
-		ImageView spaceManIMG = new ImageView(startImage);
-		spaceManIMG.setX(x);
-		spaceManIMG.setY(y);
-		spaceManIMG.setImage(currentImage);
-		spaceManIMG.setRotate(ROTATION_DEGREE[currentDirection]);
+		imageView = new ImageView(startImage);
+		imageView.setX(x);
+		imageView.setY(y);
+		imageView.setImage(images[imageIndex]);
+		imageView.setRotate(ROTATION_DEGREE[currentDirection]);
 		
-		getChildren().add(spaceManIMG);
+		getChildren().add(imageView);
 		
 	}
 
@@ -43,8 +44,13 @@ public class Spaceman extends CharacterAnimate{
 	public void moveOneStep() {
 		if (imageIndex < ANIMATION_STEP-1) {
 			imageIndex++;
+			currentImage = images[imageIndex];
+			imageView.setImage(currentImage);
+			
 		} else {
 			imageIndex = 0;
+			currentImage = images[imageIndex];
+			imageView.setImage(currentImage);
 		}
 	}
 
