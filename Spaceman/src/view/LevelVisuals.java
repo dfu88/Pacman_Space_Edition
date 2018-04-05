@@ -1,9 +1,11 @@
 package view;
 
 import controller.LevelController;//>??
+
 import model.Level;
 import model.Map;
 import javafx.scene.Group;
+
 //Scene and layout
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -30,6 +32,7 @@ public class LevelVisuals {
 	private double sceneHeight;
 	private Scene scene;
 	private Group pane;
+
 	
 	public Scene testScene;
 	
