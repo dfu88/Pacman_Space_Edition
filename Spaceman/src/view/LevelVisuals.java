@@ -4,7 +4,9 @@ import controller.LevelController;//>??
 
 import model.Level;
 import model.Map;
+
 import javafx.scene.Group;
+
 
 //Scene and layout
 import javafx.scene.Scene;
@@ -80,8 +82,7 @@ public class LevelVisuals {
 				//Add the nodes to the scene
 				//pane.getChildren().add(title);
 	}
-	
-public void updateMap(Level currentLevel) {
+	public void updateMap(Level currentLevel) {
 		
 		pane.getChildren().clear();//not sure if needed
 		
@@ -137,5 +138,6 @@ public void updateMap(Level currentLevel) {
 		pane.getChildren().add(time);
 		
 	}
+	
 
 }
