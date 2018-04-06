@@ -1,57 +1,48 @@
 package controller;
 
 import view.GUI;
-import javafx.scene.*;
 
 public class InterfaceController {
 	
-	public MainApp game;
-	
-	public LevelController lvlCtrl;
-	
-	public Scene currentScene; //should not be in controller imo
-	public Scene test;			// same
+	private MainApp game;
+	private LevelController lvlCtrl;
+	private GUI startMenu;
 	
 	public InterfaceController(MainApp instance) {
 		game = instance;
+		
+		startMenu = new GUI(this);
+		
+		lvlCtrl = new LevelController(this);	
 	}
 	
-	public void init() {
-		//Initialise instances of classes
-		GUI startMenu = new GUI();
-		startMenu.createGUI(this);
-		currentScene = startMenu.returnScene();
-		test = startMenu.testScene;
-		//...
-		LevelController lvlControl = new LevelController(this);
-		lvlControl.init();
-		lvlCtrl = lvlControl;
-		
-		
+	public GUI getGUI() {
+		return startMenu;
 	}
 	
-	public void process(int actionNumber) {
-		if (actionNumber == 1) {
-				//do something
+	public MainApp getMainApp() {
+		return game;
+	}
+	
+	public void executeProcess(int option) {
+		if (option == 0) {
 			System.out.println("420");
-			//currentScene = test;
-			//game.changeScene(currentScene);
-			lvlCtrl.setLevel(1);
+			lvlCtrl.setLevel(option);
 			
-			
-		} else if (actionNumber == 2) {
-				//do something
+		} else if (option == 1) {
 			System.out.println("69");
-			//currentScene = test;
-			//game.changeScene(currentScene);
-			lvlCtrl.setLevel(2);
-		} else if (actionNumber == 3) {
+			lvlCtrl.setLevel(option);
+			
+		} else if (option == 2) {
 			System.out.println("42069");
-		} else if (actionNumber == 4) {
+			
+		} else if (option == 3) {
 			System.out.println("1269");
-		} else if (actionNumber == 5) {
+			
+		} else if (option == 4) {
 			System.out.println("nice");
-		} else if (actionNumber == 6) {
+			
+		} else if (option == 5) {
 			System.out.println("xd");
 		}
 	}

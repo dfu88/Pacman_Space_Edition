@@ -1,61 +1,47 @@
 package controller;
 
 import model.Level;
-import model.Map;
 
 import view.LevelVisuals;
 
-import javafx.scene.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
 
 public class LevelController {
-	public InterfaceController interfaceCtrl;
-	public LevelVisuals currentView;
-	public Scene levelScene;
-	public Level currentLevel;
-	
+
+	private InterfaceController interfaceCtrl;
+	private LevelVisuals currentView;
+	private Level levelModel;
+
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
-	}
-	
-	
-	public void init() {
-		LevelVisuals visual = new LevelVisuals();
-		//visual.createLevel();
-		levelScene = visual.returnScene();
-		currentView = visual;
-		Level lvl = new Level();
-		lvl.makeMaps();
-		currentLevel = lvl;
-		levelScene.setOnKeyPressed(new EventHandler <KeyEvent> () {
+		currentView = new LevelVisuals(this);
+		levelModel = new Level();
+
+		levelModel.makeMaps();
+
+		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
 			public void handle(KeyEvent input) {
 				if (input.getCode() == KeyCode.LEFT) {
-					currentLevel.spaceman.setKeyInput(0);
+					levelModel.spaceman.setKeyInput(0);
 				} else if(input.getCode() == KeyCode.RIGHT) {
-					currentLevel.spaceman.setKeyInput(2);
+					levelModel.spaceman.setKeyInput(2);
 				} else if(input.getCode() == KeyCode.UP) {
-					currentLevel.spaceman.setKeyInput(1);
+					levelModel.spaceman.setKeyInput(1);
 				} else if(input.getCode() == KeyCode.DOWN) {
-					currentLevel.spaceman.setKeyInput(3);
+					levelModel.spaceman.setKeyInput(3);
 				}
 			}
 		});
-		//Map currentMap = new Map(1);
 	}
 	
-	
-	
+	public Level getLevel() {
+		return levelModel;
+	}
 	public void setLevel(int type){
-		//.. set model char etc
-		System.out.println(type);
-		currentLevel.setMap(type);
-		//currentView.pane.getChildren().clear();
-		currentView.generateMap(this); //changed to pass in level instead
-		//..update visuals
-		
-		//interfaceCtrl.game.changeScene(levelScene);
-		interfaceCtrl.game.changeScene(currentView.returnScene());
+		levelModel.setMap(type);
+		currentView.generateMap();
+		interfaceCtrl.getMainApp().changeScene(currentView.returnScene());
 	}
 }
