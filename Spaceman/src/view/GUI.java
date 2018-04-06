@@ -215,7 +215,7 @@ public class GUI {
 				pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
 					@Override
 					public void handle(KeyEvent event) {
-						if (event.getCode() == KeyCode.W) {
+						if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
 							if (mode > 0) {
 								listModes.get(mode).setVisible(true);
 								mode--;
@@ -223,7 +223,7 @@ public class GUI {
 								System.out.println(mode);
 								
 							}
-						} else if (event.getCode() == KeyCode.S) {
+						} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
 							if (mode < 5) {
 								listModes.get(mode).setVisible(true);
 								mode++;
