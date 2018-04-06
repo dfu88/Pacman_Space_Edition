@@ -1,7 +1,9 @@
 package view;
 
-import controller.InterfaceController;//>??
 
+import java.util.ArrayList;
+import controller.InterfaceController;//>??
+import javafx.event.EventHandler;
 //Scene and layout
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -10,6 +12,8 @@ import javafx.scene.layout.AnchorPane;
 //Components
 import javafx.scene.text.*;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
@@ -28,6 +32,8 @@ public class GUI {
 	
 	public Scene testScene;
 	
+	private int mode = 0;
+	private ArrayList<Button> listModes; //the list of buttons(can change) use cycle through
 	//private Button button1;
 	//private Button button2;
 	//public int buttonPressed = -1;
@@ -60,6 +66,8 @@ public class GUI {
 	}
 	
 	private void addComponents(AnchorPane pane) {
+				
+		listModes = new ArrayList();
 		
 		//Setup home screen nodes
 				double minWidthFromNodes = 40.0;
@@ -99,7 +107,9 @@ public class GUI {
 					//InterfaceController.process(1);});
 				
 				//button1.setOnAction(event -> System.out.println(buttonPressed));
-
+				listModes.add(button1);
+				
+				
 				Button button2 = new Button("Classic Mode");
 				//should prevent changing size when window size changes but doesn't
 				//dont need minmax if not resizble i think
@@ -117,7 +127,9 @@ public class GUI {
 
 				button2.setOnAction(event -> {
 					controller.process(2);});
-
+				
+				listModes.add(button2);
+				
 				Button button3 = new Button("Multiplayer Mode");
 				//should prevent changing size when window size changes but doesn't
 				//dont need minmax if not resizble i think
@@ -133,9 +145,11 @@ public class GUI {
 				AnchorPane.setLeftAnchor(button3, (sceneWidth-button3.getPrefWidth())*0.5);
 				AnchorPane.setRightAnchor(button3, (sceneWidth-button3.getPrefWidth())*0.5);
 
+				listModes.add(button3);
 				
 				button3.setOnAction(event -> {
 					controller.process(3);});
+				
 				
 				Button button4 = new Button("Endless Mode");
 				//should prevent changing size when window size changes but doesn't
@@ -153,7 +167,9 @@ public class GUI {
 
 				button4.setOnAction(event -> {
 					controller.process(4);});
-
+				
+				listModes.add(button4);
+				
 				Button button5 = new Button("Random Mode");
 				//should prevent changing size when window size changes but doesn't
 				//dont need minmax if not resizble i think
@@ -171,7 +187,9 @@ public class GUI {
 				
 				button5.setOnAction(event -> {
 					controller.process(5);});
-
+				
+				listModes.add(button5);
+				
 				Button button6 = new Button("Leaderboards");
 				//should prevent changing size when window size changes but doesn't
 				//dont need minmax if not resizble i think
@@ -190,6 +208,38 @@ public class GUI {
 				button6.setOnAction(event -> {
 					controller.process(6);});
 				
+				listModes.add(button6);
+				System.out.println(listModes.size());
+				
+				//key event
+				pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
+					@Override
+					public void handle(KeyEvent event) {
+						if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
+							if (mode > 0) {
+								listModes.get(mode).setVisible(true);
+								mode--;
+								System.out.print("changed mode (up)");
+								System.out.println(mode);
+								
+							}
+						} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
+							if (mode < 5) {
+								listModes.get(mode).setVisible(true);
+								mode++;
+								System.out.print("changed mode (down)");
+								System.out.println(mode);
+								//button1.setVisible(false);
+							}
+						} else if (event.getCode() == KeyCode.ENTER) {
+							System.out.print("Generate gamemode");
+							System.out.println(mode);
+							controller.process(mode+1); //prob change process in controller to 0 to 5 instead of 1 to 6
+						}
+						listModes.get(mode).setVisible(false);
+					}
+					
+				});
 				
 				//Add the nodes to the scene
 				pane.getChildren().add(title);
