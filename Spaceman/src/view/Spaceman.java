@@ -7,11 +7,12 @@ import javafx.scene.image.ImageView;
 public class Spaceman extends CharacterAnimate{
 
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
-	private final int currentDirection;
+	private int currentDirection;
 	public ImageView imageView;
 	private double graphicalX;
 	private double graphicalY;
 	private int keyInput;
+	private int currentRotation;
 
 	public Spaceman(int x, int y) {
 		keyInput = -1;
@@ -36,12 +37,13 @@ public class Spaceman extends CharacterAnimate{
 		};
 		imageIndex = 0;
 		currentImage = images[imageIndex];
+		currentRotation = ROTATION_DEGREE[currentDirection];
 
 		imageView = new ImageView(startImage);
 		imageView.setX(graphicalX);
 		imageView.setY(graphicalY);
 		imageView.setImage(images[imageIndex]);
-		imageView.setRotate(ROTATION_DEGREE[currentDirection]);
+		imageView.setRotate(currentRotation);
 
 		getChildren().add(imageView);
 
@@ -72,6 +74,7 @@ public class Spaceman extends CharacterAnimate{
 				imageView.setImage(currentImage);
 				imageView.setX(graphicalX);
 				imageView.setY(graphicalY);
+				imageView.setRotate(currentRotation);
 
 			} else {
 				imageIndex = 0;
@@ -79,6 +82,7 @@ public class Spaceman extends CharacterAnimate{
 				imageView.setImage(currentImage);
 				imageView.setX(graphicalX);
 				imageView.setY(graphicalY);
+				imageView.setRotate(currentRotation);
 			}
 		}
 	}
@@ -109,21 +113,33 @@ public class Spaceman extends CharacterAnimate{
 
 		xDirection = -1;
 		yDirection = 0;
+		currentDirection = MOVE_LEFT;
+		currentRotation = ROTATION_DEGREE[currentDirection];
+		status = MOVING;
 	}
 
 	private void moveRight() {
 		xDirection = 1;
 		yDirection = 0;
+		currentDirection = MOVE_RIGHT;
+		currentRotation = ROTATION_DEGREE[currentDirection];
+		status = MOVING;
 	}
 
 	private void moveUp() {
 		xDirection = 0;
 		yDirection = -1;
+		currentDirection = MOVE_UP;
+		currentRotation = ROTATION_DEGREE[currentDirection];
+		status = MOVING;
 	}
 
 	private void moveDown() {
 		xDirection = 0;
 		yDirection = 1;
+		currentDirection = MOVE_DOWN;
+		currentRotation = ROTATION_DEGREE[currentDirection];
+		status = MOVING;
 	}
 	
 	public void setKeyInput(int keyInput) {

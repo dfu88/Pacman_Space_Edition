@@ -47,7 +47,6 @@ public abstract class CharacterAnimate extends Parent{
 
 	public CharacterAnimate() {
 		imageIndex = 0;
-		//currentImage = images[imageIndex];
 		moveCounter = 0;
 		xDirection = 0;
 		yDirection = 0;
