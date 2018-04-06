@@ -6,6 +6,9 @@ import model.Map;
 import view.LevelVisuals;
 
 import javafx.scene.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.event.EventHandler;
 
 public class LevelController {
 	public InterfaceController interfaceCtrl;
@@ -26,8 +29,23 @@ public class LevelController {
 		Level lvl = new Level();
 		lvl.makeMaps();
 		currentLevel = lvl;
+		levelScene.setOnKeyPressed(new EventHandler <KeyEvent> () {
+			public void handle(KeyEvent input) {
+				if (input.getCode() == KeyCode.LEFT) {
+					currentLevel.spaceman.setKeyInput(0);
+				} else if(input.getCode() == KeyCode.RIGHT) {
+					currentLevel.spaceman.setKeyInput(2);
+				} else if(input.getCode() == KeyCode.UP) {
+					currentLevel.spaceman.setKeyInput(1);
+				} else if(input.getCode() == KeyCode.DOWN) {
+					currentLevel.spaceman.setKeyInput(3);
+				}
+			}
+		});
 		//Map currentMap = new Map(1);
 	}
+	
+	
 	
 	public void setLevel(int type){
 		//.. set model char etc
