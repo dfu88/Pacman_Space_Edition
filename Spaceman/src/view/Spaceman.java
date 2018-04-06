@@ -45,7 +45,8 @@ public class Spaceman extends CharacterAnimate{
 		imageView.setImage(images[imageIndex]);
 		imageView.setRotate(currentRotation);
 
-		getChildren().add(imageView);
+		getChildren().add(imageView);//QUENTIN: causing issues when I try put spaceman in level Visuals
+		//maybe extend off level visual instead of parent in char animate class? 
 
 		// remove later when movement logic is completed
 		status = MOVING;

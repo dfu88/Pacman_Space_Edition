@@ -1,253 +1,179 @@
 package view;
 
-
 import java.util.ArrayList;
+
 import controller.InterfaceController;//>??
-import javafx.event.EventHandler;
-//Scene and layout
+
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.AnchorPane;
-
-//Components
 import javafx.scene.text.*;
 import javafx.scene.control.Button;
+//import javafx.scene.shape.*;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-
+import javafx.event.EventHandler;
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
 
 
-//import javafx.scene.shape.*;
-
-
 public class GUI {
-	
+
 	private InterfaceController controller;
-	
-	private double sceneWidth;
-	private double sceneHeight;
+
+	private double SCENE_HEIGHT = 768;
+	private double SCENE_WIDTH = 1024.0;
 	private Scene scene;
-	
-	public Scene testScene;
-	
-	private int mode = 0;
-	private ArrayList<Button> listModes; //the list of buttons(can change) use cycle through
-	//private Button button1;
-	//private Button button2;
-	//public int buttonPressed = -1;
-	
-	
-	public void createGUI(InterfaceController controller) {
-		sceneWidth = 1024.0;
-		sceneHeight = 768.0;
+
+	private int option = 0;
+	private ArrayList<Button> listOptions;
+
+
+	public GUI (InterfaceController controller) {
 		this.controller = controller;
+
 		AnchorPane root = new AnchorPane(); //Layout based on coordinate from edge
 		root.setStyle("-fx-background-color: null;"); //controls add default css so need to remove
 		addComponents(root); //add nodes to the layout (buttons, text etc)
-		
-		Scene home = new Scene(root,sceneWidth,sceneHeight);
-		home.setFill(Color.DARKBLUE);
-		
-		
-		scene = home;
-		
-		//test
-		AnchorPane testPane = new AnchorPane();
-		testPane.setStyle("-fx-background-color: null;");
-		Scene test1 = new Scene(testPane, 1440, 980);
-		test1.setFill(Color.LIGHTGREEN);
-		testScene = test1;
-		
+
+		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
+		scene.setFill(Color.DARKBLUE);	
 	}
+
 	public Scene returnScene() {
 		return scene;
 	}
-	
+
 	private void addComponents(AnchorPane pane) {
-				
-		listModes = new ArrayList <Button> ();
-		
+
+		listOptions = new ArrayList<Button>();
+
 		//Setup home screen nodes
-				double minWidthFromNodes = 40.0;
-				double minHeightFromNodes = 40.0;
+		double minWidthFromNodes = 40.0;
+		double minHeightFromNodes = 40.0;
 
-				//Title
-				//Prob implement custom fonts
-				Text title = new Text();
-				title.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));//font not changing
-				title.setText("Pacman: SPACE Edition");
-				AnchorPane.setTopAnchor(title, minHeightFromNodes);
-				AnchorPane.setLeftAnchor(title, (sceneWidth-title.getLayoutBounds().getWidth())*0.5);
-				AnchorPane.setRightAnchor(title, (sceneWidth-title.getLayoutBounds().getWidth())*0.5);
-				AnchorPane.setBottomAnchor(title, sceneHeight - minHeightFromNodes);
+		//Title
+		//Prob implement custom fonts
+		Text title = new Text();
+		title.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));//font not changing
+		title.setText("Pacman: SPACE Edition");
+		AnchorPane.setTopAnchor(title, minHeightFromNodes);
+		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
+		AnchorPane.setRightAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
+		AnchorPane.setBottomAnchor(title, SCENE_HEIGHT - minHeightFromNodes);
 
-				//Buttons
-				//Could use shape/image instead of button
-				Button button1 = new Button("Story Mode");
-				//should prevent changing size when window size changes but doesn't
-				//dont need minmax if not resizble i think
-				button1.setPrefWidth(300.0);
-				button1.setMaxWidth(300.0);
-				button1.setMinWidth(300.0);
-				button1.setPrefHeight(50.0);
-				button1.setMaxHeight(50.0);
-				button1.setMinHeight(50.0);
+		//Buttons
+		//Could use shape/image instead of button
+		Button button1 = new Button("Story Mode");
+		button1.setPrefWidth(300.0);
+		button1.setPrefHeight(50.0);
 
-				AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getLayoutBounds().getHeight());
-				AnchorPane.setBottomAnchor(button1, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
-				AnchorPane.setLeftAnchor(button1, (sceneWidth-button1.getPrefWidth())*0.5);
-				AnchorPane.setRightAnchor(button1, (sceneWidth-button1.getPrefWidth())*0.5);
+		AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getLayoutBounds().getHeight());
+		AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
+		AnchorPane.setLeftAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
+		AnchorPane.setRightAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
 
-				button1.setOnAction(event -> {
-					//buttonPressed = 1;
-					//System.out.println(buttonPressed);
-					controller.process(1);});
-					//InterfaceController.process(1);});
-				
-				//button1.setOnAction(event -> System.out.println(buttonPressed));
-				listModes.add(button1);
-				
-				
-				Button button2 = new Button("Classic Mode");
-				//should prevent changing size when window size changes but doesn't
-				//dont need minmax if not resizble i think
-				button2.setPrefWidth(300.0);
-				button2.setMaxWidth(300.0);
-				button2.setMinWidth(300.0);
-				button2.setPrefHeight(50.0);
-				button2.setMaxHeight(50.0);
-				button2.setMinHeight(50.0);
+		button1.setOnAction(event -> {controller.executeProcess(0);});
+		listOptions.add(button1);
 
-				AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getLayoutBounds().getHeight()+button2.getPrefHeight());
-				AnchorPane.setBottomAnchor(button2, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
-				AnchorPane.setLeftAnchor(button2, (sceneWidth-button2.getPrefWidth())*0.5);
-				AnchorPane.setRightAnchor(button2, (sceneWidth-button2.getPrefWidth())*0.5);
 
-				button2.setOnAction(event -> {
-					controller.process(2);});
-				
-				listModes.add(button2);
-				
-				Button button3 = new Button("Multiplayer Mode");
-				//should prevent changing size when window size changes but doesn't
-				//dont need minmax if not resizble i think
-				button3.setPrefWidth(300.0);
-				button3.setMaxWidth(300.0);
-				button3.setMinWidth(300.0);
-				button3.setPrefHeight(50.0);
-				button3.setMaxHeight(50.0);
-				button3.setMinHeight(50.0);
+		Button button2 = new Button("Classic Mode");
+		button2.setPrefWidth(300.0);
+		button2.setPrefHeight(50.0);
 
-				AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*2);
-				AnchorPane.setBottomAnchor(button3, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
-				AnchorPane.setLeftAnchor(button3, (sceneWidth-button3.getPrefWidth())*0.5);
-				AnchorPane.setRightAnchor(button3, (sceneWidth-button3.getPrefWidth())*0.5);
+		AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getLayoutBounds().getHeight()+button2.getPrefHeight());
+		AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
+		AnchorPane.setLeftAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
+		AnchorPane.setRightAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
 
-				listModes.add(button3);
-				
-				button3.setOnAction(event -> {
-					controller.process(3);});
-				
-				
-				Button button4 = new Button("Endless Mode");
-				//should prevent changing size when window size changes but doesn't
-				//dont need minmax if not resizble i think
-				button4.setPrefWidth(300.0);
-				button4.setMaxWidth(300.0);
-				button4.setMinWidth(300.0);
-				button4.setPrefHeight(50.0);
-				button4.setMaxHeight(50.0);
-				button4.setMinHeight(50.0);
+		button2.setOnAction(event -> {controller.executeProcess(1);});
+		listOptions.add(button2);
 
-				AnchorPane.setBottomAnchor(button4, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
-				AnchorPane.setLeftAnchor(button4, (sceneWidth-button4.getPrefWidth())*0.5);
-				AnchorPane.setRightAnchor(button4, (sceneWidth-button4.getPrefWidth())*0.5);
+		Button button3 = new Button("Multiplayer Mode");
+		button3.setPrefWidth(300.0);
+		button3.setPrefHeight(50.0);
 
-				button4.setOnAction(event -> {
-					controller.process(4);});
-				
-				listModes.add(button4);
-				
-				Button button5 = new Button("Random Mode");
-				//should prevent changing size when window size changes but doesn't
-				//dont need minmax if not resizble i think
-				button5.setPrefWidth(300.0);
-				button5.setMaxWidth(300.0);
-				button5.setMinWidth(300.0);
-				button5.setPrefHeight(50.0);
-				button5.setMaxHeight(50.0);
-				button5.setMinHeight(50.0);
+		AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*2);
+		AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
+		AnchorPane.setLeftAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
+		AnchorPane.setRightAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
 
-				AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*4);
-				AnchorPane.setBottomAnchor(button5, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
-				AnchorPane.setLeftAnchor(button5, (sceneWidth-button5.getPrefWidth())*0.5);
-				AnchorPane.setRightAnchor(button5, (sceneWidth-button5.getPrefWidth())*0.5);
-				
-				button5.setOnAction(event -> {
-					controller.process(5);});
-				
-				listModes.add(button5);
-				
-				Button button6 = new Button("Leaderboards");
-				//should prevent changing size when window size changes but doesn't
-				//dont need minmax if not resizble i think
-				button6.setPrefWidth(300.0);
-				button6.setMaxWidth(300.0);
-				button6.setMinWidth(300.0);
-				button6.setPrefHeight(50.0);
-				button6.setMaxHeight(50.0);
-				button6.setMinHeight(50.0);
+		listOptions.add(button3);
+		button3.setOnAction(event -> {controller.executeProcess(2);});
 
-				AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*5);
-				AnchorPane.setBottomAnchor(button6, sceneHeight-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
-				AnchorPane.setLeftAnchor(button6, (sceneWidth-button6.getPrefWidth())*0.5);
-				AnchorPane.setRightAnchor(button6, (sceneWidth-button6.getPrefWidth())*0.5);
 
-				button6.setOnAction(event -> {
-					controller.process(6);});
-				
-				listModes.add(button6);
-				System.out.println(listModes.size());
-				
-				//key event
-				pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
-					@Override
-					public void handle(KeyEvent event) {
-						if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
-							if (mode > 0) {
-								listModes.get(mode).setVisible(true);
-								mode--;
-								System.out.print("changed mode (up)");
-								System.out.println(mode);
-								
-							}
-						} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
-							if (mode < 5) {
-								listModes.get(mode).setVisible(true);
-								mode++;
-								System.out.print("changed mode (down)");
-								System.out.println(mode);
-								//button1.setVisible(false);
-							}
-						} else if (event.getCode() == KeyCode.ENTER) {
-							System.out.print("Generate gamemode");
-							System.out.println(mode);
-							controller.process(mode+1); //prob change process in controller to 0 to 5 instead of 1 to 6
-						}
-						listModes.get(mode).setVisible(false);
+		Button button4 = new Button("Endless Mode");
+		button4.setPrefWidth(300.0);
+		button4.setPrefHeight(50.0);
+
+		AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
+		AnchorPane.setLeftAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
+		AnchorPane.setRightAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
+
+		button4.setOnAction(event -> {controller.executeProcess(3);});
+		listOptions.add(button4);
+
+		Button button5 = new Button("Random Mode");
+		button5.setPrefWidth(300.0);
+		button5.setPrefHeight(50.0);
+
+		AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*4);
+		AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
+		AnchorPane.setLeftAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
+		AnchorPane.setRightAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
+
+		button5.setOnAction(event -> {controller.executeProcess(4);});
+		listOptions.add(button5);
+
+		Button button6 = new Button("Leaderboards");
+		button6.setPrefWidth(300.0);
+		button6.setPrefHeight(50.0);
+
+		AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*5);
+		AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
+		AnchorPane.setLeftAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
+		AnchorPane.setRightAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
+
+		button6.setOnAction(event -> {controller.executeProcess(5);});
+		listOptions.add(button6);
+
+		//key event
+		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
+					if (option> 0) {
+						listOptions.get(option).setVisible(true);
+						option--;
+						System.out.print("changed option (up)");
+						System.out.println(option);
+
 					}
-					
-				});
-				
-				//Add the nodes to the scene
-				pane.getChildren().add(title);
-				pane.getChildren().add(button1);
-				pane.getChildren().add(button2);
-				pane.getChildren().add(button3);
-				pane.getChildren().add(button4);
-				pane.getChildren().add(button5);
-				pane.getChildren().add(button6);
+				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
+					if (option < 5) {
+						listOptions.get(option).setVisible(true);
+						option++;
+						System.out.print("changed option (down)");
+						System.out.println(option);
+						//button1.setVisible(false);
+					}
+				} else if (event.getCode() == KeyCode.ENTER) {
+					System.out.print("Generate gameoption");
+					System.out.println(option);
+					controller.executeProcess(option); //prob change process in controller to 0 to 5 instead of 1 to 6
+				}
+				listOptions.get(option).setVisible(false);
+			}
+
+		});
+
+		pane.getChildren().add(title);
+		pane.getChildren().add(button1);
+		pane.getChildren().add(button2);
+		pane.getChildren().add(button3);
+		pane.getChildren().add(button4);
+		pane.getChildren().add(button5);
+		pane.getChildren().add(button6);
 	}
 }

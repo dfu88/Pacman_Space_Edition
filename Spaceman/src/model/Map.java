@@ -1,23 +1,19 @@
 package model;
 
 public class Map {
-	//need to check pub/static
-	//public static int gridX;
-	//public static int gridY;
-	//public static int mapArray[][] = new int[gridY][gridX];
-	public int mapArray[][];// = new int[gridY][gridX]; //this was static before which was casuing a problem
-	
+	private int mapArray[][];
 	/*NOTE: map looks like 		col1 | col2
 							row1| X		X
 							row2| X		X
 	*/
-	public int GROUND 	= 0;
-	public static int WALL 	= 1;
-	public int PELLET 	= 2;
-	public int POWERUP 	= 3;
-	public int TELE = 5;
-	public int SPAWN = 7;//maybe add ghost spawn aswell
-	public int GATE = 8;
+	
+	private int GROUND 	= 0;
+	private int WALL 	= 1;
+	private int PELLET 	= 2;
+	private int POWERUP 	= 3;
+	private int TELE = 5;
+	private int PACMAN_SPAWN = 7;//maybe add ghost spawn aswell
+	private int GATE = 8;
 	
 	
 	public void initMap(int type) {

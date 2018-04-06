@@ -18,11 +18,14 @@ public class LevelVisuals {
 	
 	private double SCENE_WIDTH = 1440;
 	private double SCENE_HEIGHT = 900;
+	
+	private LevelController controller;
 	private Scene scene;
 	private Group root;
 	private ArrayList<Pellet> pelletsRendered;
 	
-	public LevelVisuals () {
+	public LevelVisuals (LevelController controller) {
+		this.controller = controller;
 		pelletsRendered = new ArrayList<Pellet>();
 		
 		//Setup Scene for game visuals
@@ -35,7 +38,7 @@ public class LevelVisuals {
 		return scene;
 	}
 	
-	public void generateMap(LevelController controller) {
+	public void generateMap() {
 		
 		//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
 		double tileWidth = 40;
@@ -50,7 +53,7 @@ public class LevelVisuals {
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
 				
-				int currentElement = controller.currentLevel.currentMap.getData(row, col);
+				int currentElement = controller.getLevel().getCurrentMap().getData(row, col);
 				//Walls
 				if (currentElement == 1) {
 					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
@@ -71,11 +74,14 @@ public class LevelVisuals {
 					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
 					powerup.setFill(Color.CRIMSON);
 					root.getChildren().add(powerup);
+				} else if (currentElement == 7) {
+					//Spaceman spaceman = new Spaceman(col, row);
+					
 				}
 			}
 		}
-		root.getChildren().add(controller.currentLevel.spaceman);
-		controller.currentLevel.spaceman.start();
+		root.getChildren().add(controller.getLevel().spaceman);
+		controller.getLevel().spaceman.start();
 		
 		
 		//add other level objects
@@ -95,7 +101,7 @@ public class LevelVisuals {
 		root.getChildren().add(timeLabel);
 		
 		Text time = new Text();
-		time.setText(Integer.toString(controller.currentLevel.timeRemaining));
+		time.setText(Integer.toString(controller.getLevel().timeRemaining));
 		time.setFont(Font.font("Comic Sans MS",50));
 		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
