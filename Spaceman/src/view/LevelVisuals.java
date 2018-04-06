@@ -88,8 +88,8 @@ public class LevelVisuals {
 		
 		double tileWidth = 45;
 		double tileHeight = 45;
-		double mapStartY = (980-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it)
-		double mapStartX = (1440 - tileWidth*21)*0.5; //WIndowW - MapW)/2
+		double mapStartY = (980-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 17.5
+		double mapStartX = (1440 - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 247.5
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {

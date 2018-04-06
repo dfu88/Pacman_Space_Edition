@@ -67,7 +67,7 @@ public class Level {
 		timeRemaining = 120; //180?
 		score = 0;
 		currentMap = model;
-		spaceman = new Spaceman(800, 700);
+		spaceman = new Spaceman(10, 15);
 		//command to generate visuals for map goes here
 	}
 

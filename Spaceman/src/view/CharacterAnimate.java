@@ -14,6 +14,11 @@ public abstract class CharacterAnimate extends Parent{
 	// animation frames total and movement distance
 	protected static final int ANIMATION_STEP = 4;
 	protected static final int MOVE_SPEED = 45 / ANIMATION_STEP;
+	protected static final double GRAPHICAL_X_OFFSET = 247.5;
+	protected static final double GRAPHICAL_Y_OFFSET = 17.5;
+	protected static final int TILE_WIDTH = 45;
+	protected static final int TILE_HEIGHT = 45;
+	
 
 	protected static final int MOVING = 1;
 	protected static final int STOPPED = 0;
