@@ -18,7 +18,7 @@ import javafx.scene.shape.*;
 //Components
 import javafx.scene.text.*;
 import javafx.scene.control.Button;
-
+import model.Pellet;
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
 
@@ -100,9 +100,12 @@ public class LevelVisuals {
 					wall.setStroke(Color.INDIANRED);//storke
 					pane.getChildren().add(wall);
 				} else if (currentElement == 2) {
-					Circle pellet = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.125);
-					pellet.setFill(Color.LEMONCHIFFON); //we can have a class theme to have a combination of colours to use
-					pane.getChildren().add(pellet);
+					Pellet pellet = new Pellet(mapStartX+tileWidth*(col+0.5), mapStartY+tileHeight*(0.5+row), tileWidth*0.125);
+					//Circle pellet = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.125);
+					pellet.returnPellet().setFill(Color.BLUEVIOLET); //we can have a class theme to have a combination of colours to use
+					//pellet.setFill(Color.LEMONCHIFFON);
+					pane.getChildren().add(pellet.returnPellet());
+					//pane.getChildren().add(pellet);
 				} else if (currentElement == 3) {
 					Circle powerup = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
 					powerup.setFill(Color.CRIMSON);

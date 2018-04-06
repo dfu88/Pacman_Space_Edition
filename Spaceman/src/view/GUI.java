@@ -67,7 +67,7 @@ public class GUI {
 	
 	private void addComponents(AnchorPane pane) {
 				
-		listModes = new ArrayList();
+		listModes = new ArrayList <Button> ();
 		
 		//Setup home screen nodes
 				double minWidthFromNodes = 40.0;
