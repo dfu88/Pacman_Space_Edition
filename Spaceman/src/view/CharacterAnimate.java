@@ -12,12 +12,13 @@ import javafx.util.Duration;
 public abstract class CharacterAnimate extends Parent{
 
 	// animation frames total and movement distance
+	
+	protected static final double GRAPHICAL_X_OFFSET = 300;
+	protected static final double GRAPHICAL_Y_OFFSET = 30;
+	protected static final int TILE_WIDTH = 40;
+	protected static final int TILE_HEIGHT = 40;
 	protected static final int ANIMATION_STEP = 4;
-	protected static final int MOVE_SPEED = 45 / ANIMATION_STEP;
-	protected static final double GRAPHICAL_X_OFFSET = 247.5;
-	protected static final double GRAPHICAL_Y_OFFSET = 17.5;
-	protected static final int TILE_WIDTH = 45;
-	protected static final int TILE_HEIGHT = 45;
+	protected static final int MOVE_SPEED = TILE_WIDTH / ANIMATION_STEP;
 	
 
 	protected static final int MOVING = 1;

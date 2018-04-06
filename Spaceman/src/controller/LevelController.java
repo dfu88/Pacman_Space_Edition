@@ -23,7 +23,7 @@ public class LevelController {
 	
 	public void init() {
 		LevelVisuals visual = new LevelVisuals();
-		visual.createLevel();
+		//visual.createLevel();
 		levelScene = visual.returnScene();
 		currentView = visual;
 		Level lvl = new Level();
@@ -52,7 +52,7 @@ public class LevelController {
 		System.out.println(type);
 		currentLevel.setMap(type);
 		//currentView.pane.getChildren().clear();
-		currentView.updateMap(currentLevel); //changed to pass in level instead
+		currentView.generateMap(this); //changed to pass in level instead
 		//..update visuals
 		
 		//interfaceCtrl.game.changeScene(levelScene);
