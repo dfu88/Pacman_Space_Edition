@@ -28,7 +28,6 @@ public class Spaceman extends CharacterAnimate{
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
 		// Intialise Spaceman moving left
-		currentDirection = MOVE_LEFT;
 		dx = -1;
 		dy = 0;
 
@@ -41,6 +40,7 @@ public class Spaceman extends CharacterAnimate{
 		};
 		imageIndex = 0;
 		currentImage = images[imageIndex];
+		currentDirection = MOVE_LEFT;
 		currentRotation = ROTATION_DEGREE[currentDirection];
 
 		imageView = new ImageView(startImage);
@@ -110,6 +110,12 @@ public class Spaceman extends CharacterAnimate{
 			int nextX = x + dx;
 			if (levelController.checkMap(nextX, y) == 1) {
 				status = STOPPED;
+			}
+			// HARDCODED VALUES FOR TUNNEL X COORDINATE - CHANGE LATER
+			if (nextX < 2) {
+				x = 20;
+			} else if (nextX > 18) {
+				x = 0;
 			}
 		}
 	}
