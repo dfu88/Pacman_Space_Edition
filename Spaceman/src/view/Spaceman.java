@@ -71,24 +71,29 @@ public class Spaceman extends CharacterAnimate{
 			if (dx == 0 && dy != 0) {
 				moveYAxis();
 			}
+			
+			imageView.setX(graphicalX);
+			imageView.setY(graphicalY);
+			imageView.setRotate(currentRotation);
+		}
+		
+		if (imageIndex < images.length-1) {
+			imageIndex++;
+			currentImage = images[imageIndex];
+			imageView.setImage(currentImage);
+//			imageView.setX(graphicalX);
+//			imageView.setY(graphicalY);
+//			imageView.setRotate(currentRotation);
+			
 
-			if (imageIndex < ANIMATION_STEP-1) {
-				imageIndex++;
-				currentImage = images[imageIndex];
-				imageView.setImage(currentImage);
-				imageView.setX(graphicalX);
-				imageView.setY(graphicalY);
-				imageView.setRotate(currentRotation);
-
-			} else {
-				imageIndex = 0;
-				currentImage = images[imageIndex];
-				imageView.setImage(currentImage);
-				imageView.setX(graphicalX);
-				imageView.setY(graphicalY);
-				imageView.setRotate(currentRotation);
-				
-			}
+		} else {
+			imageIndex = 0;
+			currentImage = images[imageIndex];
+			imageView.setImage(currentImage);
+//			imageView.setX(graphicalX);
+//			imageView.setY(graphicalY);
+//			imageView.setRotate(currentRotation);
+			
 		}
 	}
 
