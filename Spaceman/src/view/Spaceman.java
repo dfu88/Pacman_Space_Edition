@@ -1,11 +1,13 @@
 package view;
 
+import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Spaceman extends CharacterAnimate{
 
+	public LevelController levelController;
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
 	private int currentDirection;
 	public ImageView imageView;
@@ -14,9 +16,11 @@ public class Spaceman extends CharacterAnimate{
 	private int keyInput;
 	private int currentRotation;
 
-	public Spaceman(int x, int y) {
+	public Spaceman(LevelController levelController, int x, int y) {
 		keyInput = -1;
 		
+		this.levelController = levelController;
+
 		// Intialise Spaceman grid position
 		this.x = x;
 		this.y = y;
@@ -25,8 +29,8 @@ public class Spaceman extends CharacterAnimate{
 
 		// Intialise Spaceman moving left
 		currentDirection = MOVE_LEFT;
-		xDirection = -1;
-		yDirection = 0;
+		dx = -1;
+		dy = 0;
 
 		Image startImage = new Image(getClass().getResourceAsStream("res/left1.png")); 
 		images = new Image[] {
@@ -61,10 +65,10 @@ public class Spaceman extends CharacterAnimate{
 
 		if (status == MOVING) {
 
-			if (xDirection != 0) {
+			if (dx != 0 && dy == 0) {
 				moveXAxis();
 			} 
-			if (yDirection != 0) {
+			if (dx == 0 && dy != 0) {
 				moveYAxis();
 			}
 
@@ -83,6 +87,7 @@ public class Spaceman extends CharacterAnimate{
 				imageView.setX(graphicalX);
 				imageView.setY(graphicalY);
 				imageView.setRotate(currentRotation);
+				
 			}
 		}
 	}
@@ -90,62 +95,94 @@ public class Spaceman extends CharacterAnimate{
 	private void moveXAxis() {
 		moveCounter++;
 		if (moveCounter < ANIMATION_STEP) {
-			graphicalX = graphicalX + (xDirection * MOVE_SPEED);
+			graphicalX = graphicalX + (dx * MOVE_SPEED);
 		} else {
 			moveCounter = 0;
-			x = x + xDirection;
+			x = x + dx;
 			graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+			
+			int nextX = x + dx;
+			if (levelController.checkMap(nextX, y) == 1) {
+				status = STOPPED;
+			}
 		}
 	}
 
 	private void moveYAxis() {
 		moveCounter++;
 		if (moveCounter < ANIMATION_STEP) {
-			graphicalY = graphicalY + (yDirection * MOVE_SPEED);
+			graphicalY = graphicalY + (dy * MOVE_SPEED);
 		} else {
 			moveCounter = 0;
-			y = y + yDirection;
+			y = y + dy;
 			graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+			
+			int nextY = y + dy;
+			if (levelController.checkMap(x,nextY) == 1) {
+				status = STOPPED;
+			}
 		}
 	}
 
 	private void moveLeft() {
-
-		xDirection = -1;
-		yDirection = 0;
+		// Prevent invalid direction changes
+		int nextX = x - 1;
+		if (levelController.checkMap(nextX, y) == 1) {
+			return;
+		}
+		
+		// Changes direction
+		dx = -1;
+		dy = 0;
+		
 		currentDirection = MOVE_LEFT;
 		currentRotation = ROTATION_DEGREE[currentDirection];
 		status = MOVING;
 	}
 
 	private void moveRight() {
-		xDirection = 1;
-		yDirection = 0;
+		int nextX = x + 1;
+		if (levelController.checkMap(nextX, y) == 1) {
+			return;
+		}
+
+		dx = 1;
+		dy = 0;
 		currentDirection = MOVE_RIGHT;
 		currentRotation = ROTATION_DEGREE[currentDirection];
 		status = MOVING;
 	}
 
 	private void moveUp() {
-		xDirection = 0;
-		yDirection = -1;
+		int nextY = y - 1;
+		if (levelController.checkMap(x,nextY) == 1) {
+			return;
+		}
+		
+		dx = 0;
+		dy = -1;
 		currentDirection = MOVE_UP;
 		currentRotation = ROTATION_DEGREE[currentDirection];
 		status = MOVING;
 	}
 
 	private void moveDown() {
-		xDirection = 0;
-		yDirection = 1;
+		int nextY = y + 1;
+		if (levelController.checkMap(x,nextY) == 1) {
+			return;
+		}
+		
+		dx = 0;
+		dy = 1;
 		currentDirection = MOVE_DOWN;
 		currentRotation = ROTATION_DEGREE[currentDirection];
 		status = MOVING;
 	}
-	
+
 	public void setKeyInput(int keyInput) {
 		this.keyInput  = keyInput;
 	}
-	
+
 	private void changeCurrentDirection(int keyInput) {
 		if (keyInput == MOVE_LEFT) {
 			moveLeft();
@@ -157,5 +194,5 @@ public class Spaceman extends CharacterAnimate{
 			moveDown();
 		}
 	}
-	
+
 }

@@ -38,8 +38,8 @@ public abstract class CharacterAnimate extends Parent{
 	protected int y;
 
 	// move character by either x or y
-	protected int xDirection;
-	protected int yDirection;
+	protected int dx;
+	protected int dy;
 
 	protected int moveCounter;
 
@@ -48,8 +48,8 @@ public abstract class CharacterAnimate extends Parent{
 	public CharacterAnimate() {
 		imageIndex = 0;
 		moveCounter = 0;
-		xDirection = 0;
-		yDirection = 0;
+		dx = 0;
+		dy = 0;
 		timeline = makeTimeline();
 	}
 

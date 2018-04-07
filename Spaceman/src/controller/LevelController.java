@@ -4,7 +4,7 @@ import model.Level;
 import model.Map;
 
 import view.LevelVisuals;
-
+import view.Spaceman;
 import javafx.scene.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -15,6 +15,7 @@ public class LevelController {
 	public LevelVisuals currentView;
 	public Scene levelScene;
 	public Level currentLevel;
+	public Spaceman spaceman;
 	
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -29,6 +30,7 @@ public class LevelController {
 		Level lvl = new Level();
 		lvl.makeMaps();
 		currentLevel = lvl;
+		spaceman = new Spaceman(this, 10, 15);
 		levelScene.setOnKeyPressed(new EventHandler <KeyEvent> () {
 			public void handle(KeyEvent input) {
 				if (input.getCode() == KeyCode.LEFT) {
@@ -50,12 +52,17 @@ public class LevelController {
 	public void setLevel(int type){
 		//.. set model char etc
 		System.out.println(type);
-		currentLevel.setMap(type);
+		currentLevel.setMap(type, spaceman);
 		//currentView.pane.getChildren().clear();
 		currentView.updateMap(currentLevel); //changed to pass in level instead
 		//..update visuals
 		
 		//interfaceCtrl.game.changeScene(levelScene);
 		interfaceCtrl.game.changeScene(currentView.returnScene());
+	}
+	
+	public int checkMap(int x, int y) {
+//		currentLevel.currentMap
+		return currentLevel.currentMap.getData(y, x);
 	}
 }

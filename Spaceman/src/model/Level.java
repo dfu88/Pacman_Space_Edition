@@ -62,30 +62,30 @@ public class Level {
 //		..add other maps
 	}
 
-	public void initLevel(Map model) {
+	public void initLevel(Map model, Spaceman spaceman) {
 		lives = 3;
 		timeRemaining = 120; //180?
 		score = 0;
 		currentMap = model;
-		spaceman = new Spaceman(10, 15);
+		this.spaceman = spaceman;
 		//command to generate visuals for map goes here
 	}
 
-	public void setMap(int type) {
+	public void setMap(int type, Spaceman spaceman) {
 
 		if (type == 1) { //can possible get rid of these
 			//for testing 
 			System.out.println("aaaaa");
 			System.out.println(type);
 			
-			initLevel(mapList.get(type - 1));
+			initLevel(mapList.get(type - 1), spaceman);
 			
 		} else if (type == 2) { //prob dont need these, just pass type straight into initlevel func
 			//for testing 
 			System.out.println("bbbb");
 			System.out.println(type);
 			
-			initLevel(mapList.get(type  - 1));
+			initLevel(mapList.get(type  - 1), spaceman);
 		}
 	}
 }
