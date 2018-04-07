@@ -51,6 +51,8 @@ public class LevelVisuals {
 		
 		root.getChildren().clear();
 		
+		int startX = 0, startY = 0;
+		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
 				
@@ -76,12 +78,15 @@ public class LevelVisuals {
 					powerup.setFill(Color.CRIMSON);
 					root.getChildren().add(powerup);
 				} else if (currentElement == 7) {
-					spaceman = new Spaceman(controller, col, row);
-					root.getChildren().add(spaceman);
-					spaceman.start();
+					startX = col;
+					startY = row;
 				}
 			}
 		}
+		
+		spaceman = new Spaceman(controller, startX, startY);
+		root.getChildren().add(spaceman);
+		spaceman.start();
 		
 		
 		

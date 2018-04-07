@@ -63,20 +63,6 @@ public class Spaceman extends CharacterAnimate{
 		if (imageIndex == 0) {
 			changeCurrentDirection(keyInput);
 		}
-
-		if (status == MOVING) {
-
-			if (dx != 0 && dy == 0) {
-				moveXAxis();
-			} 
-			if (dx == 0 && dy != 0) {
-				moveYAxis();
-			}
-			
-			imageView.setX(graphicalX);
-			imageView.setY(graphicalY);
-			imageView.setRotate(currentRotation);
-		}
 		
 		if (imageIndex < images.length-1) {
 			imageIndex++;
@@ -95,6 +81,20 @@ public class Spaceman extends CharacterAnimate{
 //			imageView.setY(graphicalY);
 //			imageView.setRotate(currentRotation);
 			
+		}
+		
+		if (status == MOVING) {
+
+			if (dx != 0 && dy == 0) {
+				moveXAxis();
+			} 
+			if (dx == 0 && dy != 0) {
+				moveYAxis();
+			}
+			
+			imageView.setX(graphicalX);
+			imageView.setY(graphicalY);
+			imageView.setRotate(currentRotation);
 		}
 	}
 
