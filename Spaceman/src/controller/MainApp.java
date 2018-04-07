@@ -15,21 +15,11 @@ public class MainApp extends Application {
 		
 		stage = primaryStage;
 		
-		InterfaceController view = new InterfaceController(this);
-		view.init();
-		//view.run(); //maybe?? refering to ass3 from last year
+		InterfaceController controller = new InterfaceController(this);
 		
-		//GUI startMenu = new GUI();
-		//startMenu.createGUI(view);
-		
+		changeScene(controller.getGUI().returnScene());
 		primaryStage.setTitle("Pac-Man: Space Edition");
 		primaryStage.setResizable(false);
-		
-		
-		//primaryStage.setScene(startMenu.returnScene());
-		//primaryStage.setScene(view.currentScene);
-		changeScene(view.currentScene);
-		
 		primaryStage.show();
 	}
 

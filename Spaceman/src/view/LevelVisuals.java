@@ -1,141 +1,112 @@
 package view;
 
-import controller.LevelController;//>??
+import java.util.ArrayList;
 
-import model.Level;
-import model.Map;
+import controller.LevelController;
 
 import javafx.scene.Group;
-
-
-//Scene and layout
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.layout.AnchorPane;
-
 import javafx.scene.shape.*;
-
-//Components
 import javafx.scene.text.*;
-import javafx.scene.control.Button;
 
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
 
 
-//import javafx.scene.shape.*;
-
-
 public class LevelVisuals {
 	
-	//private InterfaceController controller;
+	private double SCENE_WIDTH = 1440;
+	private double SCENE_HEIGHT = 900;
 	
-	private double sceneWidth;
-	private double sceneHeight;
+	private LevelController controller;
 	private Scene scene;
-	private Group pane;
-
+	private Group root;
+	private ArrayList<Pellet> pelletsRendered;
+	public Spaceman spaceman;
 	
-	public Scene testScene;
-	
-	//private Button button1;
-	//private Button button2;
-	//public int buttonPressed = -1;
-	
-	
-	public void createLevel() {
-		sceneWidth = 1440.0;
-		sceneHeight = 990.0;//??
-		//this.controller = controller;
-		Group root = new Group(); //Layout based on coordinate from edge
-		root.setStyle("-fx-background-color: null;"); //controls add default css so need to remove
-		addComponents(root); //add nodes to the layout (buttons, text etc)
-		pane = root;
+	public LevelVisuals (LevelController controller) {
+		this.controller = controller;
+		pelletsRendered = new ArrayList<Pellet>();
 		
-		Scene level = new Scene(root,sceneWidth,sceneHeight);
-		level.setFill(Color.LIGHTBLUE);
-		
-		
-		scene = level;
-		
-		//test
-//		AnchorPane testPane = new AnchorPane();
-//		testPane.setStyle("-fx-background-color: null;");
-//		Scene test1 = new Scene(testPane, 1440, 980);
-//		test1.setFill(Color.LIGHTGREEN);
-//		testScene = test1;
-		
+		//Setup Scene for game visuals
+		root = new Group(); 
+		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
+		scene.setFill(Color.LIGHTBLUE);
 	}
+
 	public Scene returnScene() {
 		return scene;
 	}
 	
-	private void addComponents(Group pane) {
+	public void generateMap() {
 		
-		//Setup home screen nodes
+		//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
+		double tileWidth = 40;
+		double tileHeight = 40;
 		
+		//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
+		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
+		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 		
-
-				
-				
-				
-				//Add the nodes to the scene
-				//pane.getChildren().add(title);
-	}
-	public void updateMap(Level currentLevel) {
-		
-		pane.getChildren().clear();//not sure if needed
-		
-		double tileWidth = 45;
-		double tileHeight = 45;
-		double mapStartY = (980-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 17.5
-		double mapStartX = (1440 - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 247.5
+		root.getChildren().clear();
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
-				int currentElement = currentLevel.currentMap.getData(row, col);
+				
+				int currentElement = controller.getLevel().getCurrentMap().getData(row, col);
+				//Walls
 				if (currentElement == 1) {
-					Rectangle wall = new Rectangle(mapStartX+tileWidth*col, mapStartY+tileHeight*row, tileWidth, tileHeight);
+					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
 					wall.setFill(Color.INDIANRED); //fill
-					wall.setStroke(Color.INDIANRED);//storke
-					pane.getChildren().add(wall);
+					wall.setStroke(Color.INDIANRED);//outline
+					root.getChildren().add(wall);
+					
+				//Pellets	
 				} else if (currentElement == 2) {
-					Circle pellet = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.125);
-					pellet.setFill(Color.LEMONCHIFFON); //we can have a class theme to have a combination of colours to use
-					pane.getChildren().add(pellet);
+					Pellet pellet = new Pellet(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.125);
+					//we can have a class 'Theme' to have a combination of preset colours to use
+					pellet.returnPellet().setFill(Color.BLUEVIOLET); 
+					root.getChildren().add(pellet.returnPellet());
+					pelletsRendered.add(pellet);
+				
+				//Magic Pellet	
 				} else if (currentElement == 3) {
-					Circle powerup = new Circle(mapStartX+tileWidth*col+tileWidth*0.5, mapStartY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
+					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
 					powerup.setFill(Color.CRIMSON);
-					pane.getChildren().add(powerup);
+					root.getChildren().add(powerup);
+				} else if (currentElement == 7) {
+					spaceman = new Spaceman(controller, col, row);
+					root.getChildren().add(spaceman);
+					spaceman.start();
 				}
 			}
 		}
-		pane.getChildren().add(currentLevel.spaceman);
-		currentLevel.spaceman.start();
+		
+		
 		
 		//add other level objects
-		
 		Text lives = new Text();
 		lives.setText("Lives");
 		lives.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
-		lives.setX((mapStartX-lives.getLayoutBounds().getWidth())*0.5);
+		lives.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		lives.setY(100.0);
-		pane.getChildren().add(lives);
+		root.getChildren().add(lives);
 		
 		
 		Text timeLabel = new Text();
 		timeLabel.setText("Time:");
 		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
-		timeLabel.setX(1440-mapStartX + ((mapStartX-timeLabel.getLayoutBounds().getWidth())*0.5));
+		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
 		timeLabel.setY(100.0);
-		pane.getChildren().add(timeLabel);
+		root.getChildren().add(timeLabel);
 		
 		Text time = new Text();
-		time.setText(Integer.toString(currentLevel.timeRemaining));
+		time.setText(Integer.toString(controller.getLevel().timeRemaining));
 		time.setFont(Font.font("Comic Sans MS",50));
-		time.setX(1440-mapStartX + ((mapStartX-time.getLayoutBounds().getWidth())*0.5));
+		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
-		pane.getChildren().add(time);
+		root.getChildren().add(time);
 		
 	}
 	
