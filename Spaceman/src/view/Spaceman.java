@@ -106,9 +106,9 @@ public class Spaceman extends CharacterAnimate{
 			moveCounter = 0;
 			int nextX = x + dx;
 			// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-			if (nextX <= 1  && dx == -1) {
+			if (nextX <= 1  && dx == -1 && levelController.checkMap(nextX, y) == 5) {
 				x = 19;
-			} else if (nextX >= 19 && dx == 1) {
+			} else if (nextX >= 19 && dx == 1 && levelController.checkMap(nextX, y) == 5) {
 				x = 1;
 			} else {
 				x = x + dx;

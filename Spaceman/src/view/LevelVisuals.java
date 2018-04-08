@@ -100,14 +100,14 @@ public class LevelVisuals {
 		spaceman.start(); // NOTE: Change start spaceman animation after countdown
 		
 		//Add tunnel wall cover after Spaceman added to scene
-		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
-		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
-		root.getChildren().add(tunnelWallLeft);
-		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
-		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
-		root.getChildren().add(tunnelWallRight);
+//		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+//		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
+//		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
+//		root.getChildren().add(tunnelWallLeft);
+//		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+//		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
+//		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
+//		root.getChildren().add(tunnelWallRight);
 		
 		
 		
