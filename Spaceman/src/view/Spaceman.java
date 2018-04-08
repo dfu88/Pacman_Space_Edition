@@ -104,18 +104,20 @@ public class Spaceman extends CharacterAnimate{
 			graphicalX = graphicalX + (dx * MOVE_SPEED);
 		} else {
 			moveCounter = 0;
-			x = x + dx;
+			int nextX = x + dx;
+			// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
+			if (nextX <= 1  && dx == -1) {
+				x = 19;
+			} else if (nextX >= 19 && dx == 1) {
+				x = 1;
+			} else {
+				x = x + dx;
+			}
 			graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
 			
-			int nextX = x + dx;
+			nextX = x + dx;
 			if (levelController.checkMap(nextX, y) == 1) {
 				status = STOPPED;
-			}
-			// HARDCODED VALUES FOR TUNNEL X COORDINATE - CHANGE LATER
-			if (nextX < 2) {
-				x = 20;
-			} else if (nextX > 18) {
-				x = 0;
 			}
 		}
 	}
@@ -143,7 +145,7 @@ public class Spaceman extends CharacterAnimate{
 			return;
 		}
 		
-		// Changes direction
+		// Change direction
 		dx = -1;
 		dy = 0;
 		
@@ -153,11 +155,12 @@ public class Spaceman extends CharacterAnimate{
 	}
 
 	private void moveRight() {
+		// Prevent invalid direction changes
 		int nextX = x + 1;
 		if (levelController.checkMap(nextX, y) == 1) {
 			return;
 		}
-
+		// Change direction
 		dx = 1;
 		dy = 0;
 		currentDirection = MOVE_RIGHT;
@@ -166,11 +169,12 @@ public class Spaceman extends CharacterAnimate{
 	}
 
 	private void moveUp() {
+		// Prevent invalid direction changes
 		int nextY = y - 1;
 		if (levelController.checkMap(x,nextY) == 1) {
 			return;
 		}
-		
+		// Change direction
 		dx = 0;
 		dy = -1;
 		currentDirection = MOVE_UP;
@@ -179,11 +183,12 @@ public class Spaceman extends CharacterAnimate{
 	}
 
 	private void moveDown() {
+		// Prevent invalid direction changes
 		int nextY = y + 1;
 		if (levelController.checkMap(x,nextY) == 1) {
 			return;
 		}
-		
+		// Change direction
 		dx = 0;
 		dy = 1;
 		currentDirection = MOVE_DOWN;
