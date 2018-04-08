@@ -50,6 +50,7 @@ public class Level {
 	}
 
 	public void setMap(int type) {
+		makeMaps();
 		initLevel(mapList.get(type));
 	}
 	

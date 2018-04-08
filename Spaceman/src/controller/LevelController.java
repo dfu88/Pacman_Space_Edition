@@ -21,7 +21,7 @@ public class LevelController {
 		currentView = new LevelVisuals(this);
 		levelModel = new Level();
 
-		levelModel.makeMaps();
+		//levelModel.makeMaps();
 
 		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
 			public void handle(KeyEvent input) {
@@ -44,7 +44,7 @@ public class LevelController {
 		return levelModel;
 	}
 	public void setLevel(int type){
-		levelModel.makeMaps();
+		//levelModel.makeMaps();
 		levelModel.setMap(type);
 		currentView.generateMap();
 		interfaceCtrl.getMainApp().changeScene(currentView.returnScene()); // possible dont call getmainAPp()

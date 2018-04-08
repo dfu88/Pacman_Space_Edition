@@ -7,10 +7,16 @@ import controller.InterfaceController;//>??
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
 import javafx.scene.text.*;
 import javafx.scene.control.Button;
 //import javafx.scene.shape.*;
-
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.event.EventHandler;
@@ -34,11 +40,13 @@ public class GUI {
 		this.controller = controller;
 
 		AnchorPane root = new AnchorPane(); //Layout based on coordinate from edge
-		root.setStyle("-fx-background-color: null;"); //controls add default css so need to remove
+		//root.setStyle("-fx-background-color: null;"); //controls add default css so need to remove
 		addComponents(root); //add nodes to the layout (buttons, text etc)
-
+		
+		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+		root.setBackground(new Background(bg));
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
-		scene.setFill(Color.DARKBLUE);	
+		//scene.setFill(Color.DARKBLUE);	
 	}
 
 	public Scene returnScene() {
@@ -46,7 +54,8 @@ public class GUI {
 	}
 
 	private void addComponents(AnchorPane pane) {
-
+		
+		
 		listOptions = new ArrayList<Button>();
 
 		//Setup home screen nodes
@@ -55,22 +64,34 @@ public class GUI {
 
 		//Title
 		//Prob implement custom fonts
-		Text title = new Text();
-		title.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));//font not changing
-		title.setText("Pacman: SPACE Edition");
-		AnchorPane.setTopAnchor(title, minHeightFromNodes);
-		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
-		AnchorPane.setRightAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
-		AnchorPane.setBottomAnchor(title, SCENE_HEIGHT - minHeightFromNodes);
+		Image title = new Image(getClass().getResourceAsStream("bg/title.png"));
+		ImageView titleView = new ImageView(title);
+		titleView.setX((SCENE_WIDTH-title.getWidth())*0.5);
+		titleView.setY(minHeightFromNodes);
+		titleView.setScaleX(0.75);
+		titleView.setScaleY(0.75);
+//		Text title = new Text();
+//		title.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));//font not changing
+//		title.setFill(Color.AZURE);
+//		title.setText("Pacman: SPACE Edition");
+		
+		
+//		AnchorPane.setTopAnchor(title, minHeightFromNodes);
+//		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getWidth())*0.5);
+////		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
+////		AnchorPane.setRightAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
+//		AnchorPane.setBottomAnchor(title, SCENE_HEIGHT - minHeightFromNodes);
 
 		//Buttons
 		//Could use shape/image instead of button
 		Button button1 = new Button("Story Mode");
 		button1.setPrefWidth(300.0);
 		button1.setPrefHeight(50.0);
-
-		AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getLayoutBounds().getHeight());
-		AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
+		
+		AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getHeight());
+		AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
+		//AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getLayoutBounds().getHeight());
+		//AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
 		AnchorPane.setLeftAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
 		AnchorPane.setRightAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
 
@@ -81,9 +102,11 @@ public class GUI {
 		Button button2 = new Button("Classic Mode");
 		button2.setPrefWidth(300.0);
 		button2.setPrefHeight(50.0);
-
-		AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getLayoutBounds().getHeight()+button2.getPrefHeight());
-		AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
+		
+		AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getHeight()+button2.getPrefHeight());
+		AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
+		//AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getLayoutBounds().getHeight()+button2.getPrefHeight());
+		//AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
 		AnchorPane.setLeftAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
 		AnchorPane.setRightAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
 
@@ -94,8 +117,10 @@ public class GUI {
 		button3.setPrefWidth(300.0);
 		button3.setPrefHeight(50.0);
 
-		AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*2);
-		AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
+		AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getHeight()+button2.getPrefHeight()*2);
+		AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
+		//AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*2);
+		//AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
 		AnchorPane.setLeftAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
 		AnchorPane.setRightAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
 
@@ -107,7 +132,8 @@ public class GUI {
 		button4.setPrefWidth(300.0);
 		button4.setPrefHeight(50.0);
 
-		AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
+		AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
+		//AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
 		AnchorPane.setLeftAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
 		AnchorPane.setRightAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
 
@@ -117,9 +143,11 @@ public class GUI {
 		Button button5 = new Button("Random Mode");
 		button5.setPrefWidth(300.0);
 		button5.setPrefHeight(50.0);
-
-		AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*4);
-		AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
+		
+		AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getHeight()+button2.getPrefHeight()*4);
+		AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
+		//AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*4);
+		//AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
 		AnchorPane.setLeftAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
 		AnchorPane.setRightAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
 
@@ -129,9 +157,12 @@ public class GUI {
 		Button button6 = new Button("Leaderboards");
 		button6.setPrefWidth(300.0);
 		button6.setPrefHeight(50.0);
-
-		AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*5);
-		AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
+		
+		
+		AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getHeight()+button2.getPrefHeight()*5);
+		AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
+		//AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*5);
+		//AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
 		AnchorPane.setLeftAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
 		AnchorPane.setRightAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
 
@@ -168,7 +199,8 @@ public class GUI {
 
 		});
 
-		pane.getChildren().add(title);
+		//pane.getChildren().add(title);
+		pane.getChildren().add(titleView);
 		pane.getChildren().add(button1);
 		pane.getChildren().add(button2);
 		pane.getChildren().add(button3);
