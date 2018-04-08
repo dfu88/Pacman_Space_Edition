@@ -58,10 +58,12 @@ public class LevelController {
 			levelModel.addPoints(100);
 			//update score visual?
 			System.out.println(levelModel.getScore()); //temp
+			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
 			//do power up stuff
 			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
 			System.out.println("lol");
+			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
 		//this function is messing up the tunnel because its removing tele
