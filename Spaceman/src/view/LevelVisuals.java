@@ -60,13 +60,16 @@ public class LevelVisuals {
 //		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
 //		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 		
+		pelletsRendered.clear();
+		powerUpsRendered.clear();
 		root.getChildren().clear();
+		
 		
 		int startX = 0, startY = 0, tunnelXLeft = 0, tunnelXRight = 0;
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
-				
+				System.out.print(controller.getLevel().getCurrentMap().getData(row, col));
 				int currentElement = controller.getLevel().getCurrentMap().getData(row, col);
 				//Walls
 				if (currentElement == 1) {
@@ -108,6 +111,7 @@ public class LevelVisuals {
 					startY = row;
 				}
 			}
+			System.out.println("");
 		}
 		
 		//Add Spaceman after map added to scene
@@ -160,7 +164,6 @@ public class LevelVisuals {
 		score.setY(500);
 		root.getChildren().add(score);
 		this.score = score;
-		
 	}
 	
 	public void hideCorrespondingPellet(int charX, int charY) {

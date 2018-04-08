@@ -33,6 +33,8 @@ public class LevelController {
 					currentView.spaceman.setKeyInput(1);
 				} else if(input.getCode() == KeyCode.DOWN) {
 					currentView.spaceman.setKeyInput(3);
+				} else if(input.getCode() == KeyCode.H) {
+					controller.showHome();
 				}
 			}
 		});
@@ -42,6 +44,7 @@ public class LevelController {
 		return levelModel;
 	}
 	public void setLevel(int type){
+		levelModel.makeMaps();
 		levelModel.setMap(type);
 		currentView.generateMap();
 		interfaceCtrl.getMainApp().changeScene(currentView.returnScene()); // possible dont call getmainAPp()

@@ -46,4 +46,8 @@ public class InterfaceController {
 			System.out.println("xd");
 		}
 	}
+	
+	public void showHome() {
+		game.changeScene(startMenu.returnScene());
+	}
 }

@@ -29,6 +29,8 @@ public class Level {
 	}
 	
 	public void makeMaps( ) {
+		mapList.clear();
+		
 		Map classic = new Map();
 		classic.initMap(1);
 		mapList.add(classic);
