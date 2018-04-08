@@ -32,6 +32,7 @@ public class LevelVisuals {
 	private Group root;
 	private ArrayList<Pellet> pelletsRendered;
 	private ArrayList<PowerUp> powerUpsRendered;
+	private Text score;
 	public Spaceman spaceman;
 	
 	public LevelVisuals (LevelController controller) {
@@ -149,6 +150,17 @@ public class LevelVisuals {
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
 		root.getChildren().add(time);
 		
+		Text score = new Text();
+		//score.setText(Integer.toString(controller.getLevel().getScore()));
+		score.setText("0");
+		score.setFont(Font.font("Comic Sans MS",50));
+		//score.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-score.getLayoutBounds().getWidth())*0.5));
+		//score.setY(100+scoreLabel.getLayoutBounds().getHeight()+10);
+		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
+		score.setY(500);
+		root.getChildren().add(score);
+		this.score = score;
+		
 	}
 	
 	public void hideCorrespondingPellet(int charX, int charY) {
@@ -169,6 +181,10 @@ public class LevelVisuals {
 				}
 			}
 		}
+	}
+	
+	public void updateScore(int score) {
+		this.score.setText(Integer.toString(controller.getLevel().getScore()));
 	}
 
 }

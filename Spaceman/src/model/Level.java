@@ -7,6 +7,7 @@ import view.Spaceman;
 
 
 public class Level {
+	//make these private maybe?
 	public int lives;
 	public int timeRemaining;
 	public int score;
