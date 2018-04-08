@@ -9,7 +9,7 @@ public class Spaceman extends CharacterAnimate{
 
 	public LevelController levelController;
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
-	private int currentDirection;
+	private int rotationIndex;
 	public ImageView imageView;
 	private double graphicalX;
 	private double graphicalY;
@@ -31,17 +31,17 @@ public class Spaceman extends CharacterAnimate{
 		dx = -1;
 		dy = 0;
 
-		Image startImage = new Image(getClass().getResourceAsStream("res/left1.png")); 
+		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png")); 
 		images = new Image[] {
 				startImage,
-				new Image(getClass().getResourceAsStream("res/left2.png")),
-				startImage,
-				new Image(getClass().getResourceAsStream("res/round.png"))
+				new Image(getClass().getResourceAsStream("res/left1.png")),
+				new Image(getClass().getResourceAsStream("res/round.png")),
+				new Image(getClass().getResourceAsStream("res/left1.png"))
 		};
 		imageIndex = 0;
 		currentImage = images[imageIndex];
-		currentDirection = MOVE_LEFT;
-		currentRotation = ROTATION_DEGREE[currentDirection];
+		rotationIndex = MOVE_LEFT;
+		currentRotation = ROTATION_DEGREE[rotationIndex];
 
 		imageView = new ImageView(startImage);
 		imageView.setX(graphicalX);
@@ -103,7 +103,7 @@ public class Spaceman extends CharacterAnimate{
 		int nextX = x + dx;
 		if (levelController.checkMap(nextX, y) == 1) {
 			//pause animation here
-			imageIndex--;
+			imageIndex=0;
 		} else {
 			//start();
 			//if (levelController.checkMap(nextX, y) == 2) {
@@ -116,9 +116,9 @@ public class Spaceman extends CharacterAnimate{
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-				if (nextX <= 1  && dx == -1 && levelController.checkMap(nextX, y) == 5) {
+				if (nextX <= 1  && dx == -1 ) {
 					x = 19;
-				} else if (nextX >= 19 && dx == 1 && levelController.checkMap(nextX, y) == 5) {
+				} else if (nextX >= 19 && dx == 1 ) {
 					x = 1;
 				} else {
 					x = x + dx;
@@ -137,7 +137,7 @@ public class Spaceman extends CharacterAnimate{
 	private void moveYAxis() {
 		int nextY = y + dy;
 		if (levelController.checkMap(x,nextY) == 1) {
-			imageIndex--;
+			imageIndex=0;
 		} else {
 			//if (levelController.checkMap(x, nextY) == 2) {
 				levelController.updateMap(dx,dy,x,y);
@@ -186,8 +186,8 @@ public class Spaceman extends CharacterAnimate{
 		dx = -1;
 		dy = 0;
 		
-		currentDirection = MOVE_LEFT;
-		currentRotation = ROTATION_DEGREE[currentDirection];
+		rotationIndex = MOVE_LEFT;
+		currentRotation = ROTATION_DEGREE[rotationIndex];
 		status = MOVING;
 	}
 
@@ -200,8 +200,8 @@ public class Spaceman extends CharacterAnimate{
 		// Change direction
 		dx = 1;
 		dy = 0;
-		currentDirection = MOVE_RIGHT;
-		currentRotation = ROTATION_DEGREE[currentDirection];
+		rotationIndex = MOVE_RIGHT;
+		currentRotation = ROTATION_DEGREE[rotationIndex];
 		status = MOVING;
 	}
 
@@ -214,8 +214,8 @@ public class Spaceman extends CharacterAnimate{
 		// Change direction
 		dx = 0;
 		dy = -1;
-		currentDirection = MOVE_UP;
-		currentRotation = ROTATION_DEGREE[currentDirection];
+		rotationIndex = MOVE_UP;
+		currentRotation = ROTATION_DEGREE[rotationIndex];
 		status = MOVING;
 	}
 
@@ -228,8 +228,8 @@ public class Spaceman extends CharacterAnimate{
 		// Change direction
 		dx = 0;
 		dy = 1;
-		currentDirection = MOVE_DOWN;
-		currentRotation = ROTATION_DEGREE[currentDirection];
+		rotationIndex = MOVE_DOWN;
+		currentRotation = ROTATION_DEGREE[rotationIndex];
 		status = MOVING;
 	}
 
