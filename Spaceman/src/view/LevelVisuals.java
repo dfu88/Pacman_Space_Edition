@@ -19,15 +19,25 @@ public class LevelVisuals {
 	private double SCENE_WIDTH = 1440;
 	private double SCENE_HEIGHT = 900;
 	
+	//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
+	double tileWidth = 40;
+	double tileHeight = 40;
+
+	//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
+	double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
+	double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
+	
 	private LevelController controller;
 	private Scene scene;
 	private Group root;
 	private ArrayList<Pellet> pelletsRendered;
+	private ArrayList<PowerUp> powerUpsRendered;
 	public Spaceman spaceman;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
 		pelletsRendered = new ArrayList<Pellet>();
+		powerUpsRendered = new ArrayList<PowerUp>();
 		
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -41,13 +51,13 @@ public class LevelVisuals {
 	
 	public void generateMap() {
 		
-		//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
-		double tileWidth = 40;
-		double tileHeight = 40;
-		
-		//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
-		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
-		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
+//		//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
+//		double tileWidth = 40;
+//		double tileHeight = 40;
+//		
+//		//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
+//		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
+//		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 		
 		root.getChildren().clear();
 		
@@ -74,9 +84,14 @@ public class LevelVisuals {
 				} 
 				//Magic Pellet	
 				else if (currentElement == 3) {
-					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
-					powerup.setFill(Color.CRIMSON);
-					root.getChildren().add(powerup);
+//					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
+//					powerup.setFill(Color.CRIMSON);
+//					root.getChildren().add(powerup);
+					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
+					//we can have a class 'Theme' to have a combination of preset colours to use
+					powerUp.returnPowerUp().setFill(Color.CRIMSON); 
+					root.getChildren().add(powerUp.returnPowerUp());
+					powerUpsRendered.add(powerUp);
 				}
 				//Tunnel Wall x position
 				else if (currentElement == 5) {
@@ -99,15 +114,15 @@ public class LevelVisuals {
 		root.getChildren().add(spaceman);
 		spaceman.start(); // NOTE: Change start spaceman animation after countdown
 		
-		//Add tunnel wall cover after Spaceman added to scene
-//		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-//		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
-//		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
-//		root.getChildren().add(tunnelWallLeft);
-//		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-//		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
-//		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
-//		root.getChildren().add(tunnelWallRight);
+		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
+		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
+		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
+		root.getChildren().add(tunnelWallLeft);
+		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
+		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
+		root.getChildren().add(tunnelWallRight);
 		
 		
 		
@@ -136,5 +151,24 @@ public class LevelVisuals {
 		
 	}
 	
+	public void hideCorrespondingPellet(int charX, int charY) {
+		for (int index = 0; index < pelletsRendered.size(); index++) {
+			if ((pelletsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
+					pelletsRendered.get(index).returnPellet().setVisible(false);
+				}
+			}
+		}
+	}
+	//change for powerup after making powerup class
+	public void hideCorrespondingPowerUp(int charX, int charY) {
+		for (int index = 0; index < powerUpsRendered.size(); index++) {
+			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
+					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
+				}
+			}
+		}
+	}
 
 }

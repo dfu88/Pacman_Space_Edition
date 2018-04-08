@@ -49,4 +49,12 @@ public class Level {
 	public void setMap(int type) {
 		initLevel(mapList.get(type));
 	}
+	
+	public void addPoints(int pointsToAdd) {
+		score += pointsToAdd;
+	}
+	
+	public int getScore() {
+		return score;
+	}
 }

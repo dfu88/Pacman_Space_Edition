@@ -82,5 +82,9 @@ public class Map {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+	////note Y determines the rows(up and down) //X determines the col (left and right)
+	public void updateData(int dx, int dy, int posX, int posY) { 
+			mapArray[posY+dy][posX+dx] = getData(posY, posX);
+			mapArray[posY][posX] = GROUND;
+		}
 }

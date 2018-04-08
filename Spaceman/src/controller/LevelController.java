@@ -44,10 +44,27 @@ public class LevelController {
 	public void setLevel(int type){
 		levelModel.setMap(type);
 		currentView.generateMap();
-		interfaceCtrl.getMainApp().changeScene(currentView.returnScene());
-	}
+		interfaceCtrl.getMainApp().changeScene(currentView.returnScene()); // possible dont call getmainAPp()
+	}																		//create method in intCtrller to change scenes
 	
 	public int checkMap(int x, int y) {
 		return levelModel.getCurrentMap().getData(y, x);
+	}
+	
+	public void updateMap(int dx, int dy,int posX, int posY) {
+		
+		if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 2) {
+			currentView.hideCorrespondingPellet(posX+dx, posY + dy);
+			levelModel.addPoints(100);
+			//update score visual?
+			System.out.println(levelModel.getScore()); //temp
+		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
+			//do power up stuff
+			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
+			System.out.println("lol");
+		}
+		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
+		//this function is messing up the tunnel because its removing tele
+		//but if using updateData function then must be in the if statements
 	}
 }

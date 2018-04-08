@@ -99,43 +99,80 @@ public class Spaceman extends CharacterAnimate{
 	}
 
 	private void moveXAxis() {
-		moveCounter++;
-		if (moveCounter < ANIMATION_STEP) {
-			graphicalX = graphicalX + (dx * MOVE_SPEED);
+		//Wallcheck logic: If next destination is wall, do not move, else move as normal
+		int nextX = x + dx;
+		if (levelController.checkMap(nextX, y) == 1) {
+			//pause animation here
+			imageIndex--;
 		} else {
-			moveCounter = 0;
-			int nextX = x + dx;
-			// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-			if (nextX <= 1  && dx == -1 && levelController.checkMap(nextX, y) == 5) {
-				x = 19;
-			} else if (nextX >= 19 && dx == 1 && levelController.checkMap(nextX, y) == 5) {
-				x = 1;
+			//start();
+			//if (levelController.checkMap(nextX, y) == 2) {
+				levelController.updateMap(dx,dy,x,y);
+			//}
+			moveCounter++;
+			if (moveCounter < ANIMATION_STEP) {
+				graphicalX = graphicalX + (dx * MOVE_SPEED);
 			} else {
-				x = x + dx;
-			}
-			graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
-			
-			nextX = x + dx;
-			if (levelController.checkMap(nextX, y) == 1) {
-				status = STOPPED;
+				moveCounter = 0;
+				nextX = x + dx;
+				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
+				if (nextX <= 1  && dx == -1 && levelController.checkMap(nextX, y) == 5) {
+					x = 19;
+				} else if (nextX >= 19 && dx == 1 && levelController.checkMap(nextX, y) == 5) {
+					x = 1;
+				} else {
+					x = x + dx;
+				}
+				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+				
+				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
+//				nextX = x + dx;
+//				if (levelController.checkMap(nextX, y) == 1) {
+//					status = STOPPED;
+//				}
 			}
 		}
 	}
 
 	private void moveYAxis() {
-		moveCounter++;
-		if (moveCounter < ANIMATION_STEP) {
-			graphicalY = graphicalY + (dy * MOVE_SPEED);
+		int nextY = y + dy;
+		if (levelController.checkMap(x,nextY) == 1) {
+			imageIndex--;
 		} else {
-			moveCounter = 0;
-			y = y + dy;
-			graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+			//if (levelController.checkMap(x, nextY) == 2) {
+				levelController.updateMap(dx,dy,x,y);
+			//}
 			
-			int nextY = y + dy;
-			if (levelController.checkMap(x,nextY) == 1) {
-				status = STOPPED;
+			moveCounter++;
+			if (moveCounter < ANIMATION_STEP) {
+				graphicalY = graphicalY + (dy * MOVE_SPEED);
+			} else {
+				moveCounter = 0;
+				y = y + dy;
+				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+				
+				
+				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
+//				int nextY = y + dy;
+//				if (levelController.checkMap(x,nextY) == 1) {
+//					status = STOPPED;
+//				}
 			}
 		}
+		//old stuff
+//		moveCounter++;
+//		if (moveCounter < ANIMATION_STEP) {
+//			graphicalY = graphicalY + (dy * MOVE_SPEED);
+//		} else {
+//			moveCounter = 0;
+//			y = y + dy;
+//			graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+//			
+//			int nextY = y + dy;
+//			if (levelController.checkMap(x,nextY) == 1) {
+//				status = STOPPED;
+//			}
+//		}
 	}
 
 	private void moveLeft() {

@@ -45,7 +45,7 @@ public abstract class CharacterAnimate extends Parent{
 	protected int moveCounter;
 
 	protected Timeline timeline;
-
+	
 	public CharacterAnimate() {
 		imageIndex = 0;
 		moveCounter = 0;
@@ -92,4 +92,5 @@ public abstract class CharacterAnimate extends Parent{
 
 		return timeline.getStatus() == Animation.Status.PAUSED;
 	}
+
 }
