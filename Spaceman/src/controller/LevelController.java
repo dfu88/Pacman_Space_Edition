@@ -44,8 +44,8 @@ public class LevelController {
 	public void setLevel(int type){
 		levelModel.setMap(type);
 		currentView.generateMap();
-		interfaceCtrl.getMainApp().changeScene(currentView.returnScene());
-	}
+		interfaceCtrl.getMainApp().changeScene(currentView.returnScene()); // possible dont call getmainAPp()
+	}																		//create method in intCtrller to change scenes
 	
 	public int checkMap(int x, int y) {
 		return levelModel.getCurrentMap().getData(y, x);
