@@ -63,6 +63,8 @@ public class LevelController {
 			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
 			System.out.println("lol");
 		}
-		levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
+		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
+		//this function is messing up the tunnel because its removing tele
+		//but if using updateData function then must be in the if statements
 	}
 }

@@ -114,42 +114,24 @@ public class Spaceman extends CharacterAnimate{
 				graphicalX = graphicalX + (dx * MOVE_SPEED);
 			} else {
 				moveCounter = 0;
-				x = x + dx;
+				nextX = x + dx;
+				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
+				if (nextX <= 1  && dx == -1 && levelController.checkMap(nextX, y) == 5) {
+					x = 19;
+				} else if (nextX >= 19 && dx == 1 && levelController.checkMap(nextX, y) == 5) {
+					x = 1;
+				} else {
+					x = x + dx;
+				}
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
 				
-				//Not sure the point of this code tbh
-//				//int nextX = x + dx;
+				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
+//				nextX = x + dx;
 //				if (levelController.checkMap(nextX, y) == 1) {
 //					status = STOPPED;
 //				}
-//				// HARDCODED VALUES FOR TUNNEL X COORDINATE - CHANGE LATER
-//				if (nextX < 2) {
-//					x = 20;
-//				} else if (nextX > 18) {
-//					x = 0;
-//				}
 			}
 		}
-		//w/o quentin changes
-//		moveCounter++;
-//		if (moveCounter < ANIMATION_STEP) {
-//			graphicalX = graphicalX + (dx * MOVE_SPEED);
-//		} else {
-//			moveCounter = 0;
-//			x = x + dx;
-//			graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
-//			
-//			int nextX = x + dx;
-//			if (levelController.checkMap(nextX, y) == 1) {
-//				status = STOPPED;
-//			}
-//			// HARDCODED VALUES FOR TUNNEL X COORDINATE - CHANGE LATER
-//			if (nextX < 2) {
-//				x = 20;
-//			} else if (nextX > 18) {
-//				x = 0;
-//			}
-//		}
 	}
 
 	private void moveYAxis() {
@@ -169,6 +151,8 @@ public class Spaceman extends CharacterAnimate{
 				y = y + dy;
 				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 				
+				
+				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
 //				int nextY = y + dy;
 //				if (levelController.checkMap(x,nextY) == 1) {
 //					status = STOPPED;
