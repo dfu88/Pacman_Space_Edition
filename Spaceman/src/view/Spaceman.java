@@ -150,19 +150,38 @@ public class Spaceman extends CharacterAnimate{
 	}
 
 	private void moveYAxis() {
-		moveCounter++;
-		if (moveCounter < ANIMATION_STEP) {
-			graphicalY = graphicalY + (dy * MOVE_SPEED);
+		int nextY = y + dy;
+		if (levelController.checkMap(x,nextY) == 1) {
+			imageIndex--;
 		} else {
-			moveCounter = 0;
-			y = y + dy;
-			graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
-			
-			int nextY = y + dy;
-			if (levelController.checkMap(x,nextY) == 1) {
-				status = STOPPED;
+			moveCounter++;
+			if (moveCounter < ANIMATION_STEP) {
+				graphicalY = graphicalY + (dy * MOVE_SPEED);
+			} else {
+				moveCounter = 0;
+				y = y + dy;
+				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+				
+//				int nextY = y + dy;
+//				if (levelController.checkMap(x,nextY) == 1) {
+//					status = STOPPED;
+//				}
 			}
 		}
+		//old stuff
+//		moveCounter++;
+//		if (moveCounter < ANIMATION_STEP) {
+//			graphicalY = graphicalY + (dy * MOVE_SPEED);
+//		} else {
+//			moveCounter = 0;
+//			y = y + dy;
+//			graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+//			
+//			int nextY = y + dy;
+//			if (levelController.checkMap(x,nextY) == 1) {
+//				status = STOPPED;
+//			}
+//		}
 	}
 
 	private void moveLeft() {
