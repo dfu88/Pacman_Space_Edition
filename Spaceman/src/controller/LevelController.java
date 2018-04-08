@@ -56,6 +56,7 @@ public class LevelController {
 		if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 2) {
 			currentView.hideCorrespondingPellet(posX+dx, posY + dy);
 			levelModel.addPoints(100);
+			currentView.updateScore(levelModel.getScore());
 			//update score visual?
 			System.out.println(levelModel.getScore()); //temp
 		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
