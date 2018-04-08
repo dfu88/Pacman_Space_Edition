@@ -50,4 +50,9 @@ public class LevelController {
 	public int checkMap(int x, int y) {
 		return levelModel.getCurrentMap().getData(y, x);
 	}
+	
+	public void updateMap(int dx, int dy,int posX, int posY) {
+		levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
+		currentView.hideCorrespondingPellet(posX+dx, posY + dy);
+	}
 }

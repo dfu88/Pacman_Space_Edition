@@ -106,6 +106,9 @@ public class Spaceman extends CharacterAnimate{
 			imageIndex--;
 		} else {
 			//start();
+			if (levelController.checkMap(nextX, y) == 2) {
+				levelController.updateMap(dx,dy,x,y);
+			}
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalX = graphicalX + (dx * MOVE_SPEED);
@@ -154,6 +157,10 @@ public class Spaceman extends CharacterAnimate{
 		if (levelController.checkMap(x,nextY) == 1) {
 			imageIndex--;
 		} else {
+			if (levelController.checkMap(x, nextY) == 2) {
+				levelController.updateMap(dx,dy,x,y);
+			}
+			
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalY = graphicalY + (dy * MOVE_SPEED);

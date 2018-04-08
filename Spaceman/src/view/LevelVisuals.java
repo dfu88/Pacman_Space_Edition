@@ -19,6 +19,14 @@ public class LevelVisuals {
 	private double SCENE_WIDTH = 1440;
 	private double SCENE_HEIGHT = 900;
 	
+	//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
+	double tileWidth = 40;
+	double tileHeight = 40;
+
+	//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
+	double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
+	double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
+	
 	private LevelController controller;
 	private Scene scene;
 	private Group root;
@@ -41,13 +49,13 @@ public class LevelVisuals {
 	
 	public void generateMap() {
 		
-		//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
-		double tileWidth = 40;
-		double tileHeight = 40;
-		
-		//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
-		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
-		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
+//		//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
+//		double tileWidth = 40;
+//		double tileHeight = 40;
+//		
+//		//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
+//		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
+//		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 		
 		root.getChildren().clear();
 		
@@ -115,5 +123,14 @@ public class LevelVisuals {
 		
 	}
 	
+	public void hideCorrespondingPellet(int charX, int charY) {
+		for (int index = 0; index < pelletsRendered.size(); index++) {
+			if ((pelletsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
+					pelletsRendered.get(index).returnPellet().setVisible(false);
+				}
+			}
+		}
+	}
 
 }
