@@ -51,7 +51,7 @@ public class LevelVisuals {
 		
 		root.getChildren().clear();
 		
-		int startX = 0, startY = 0;
+		int startX = 0, startY = 0, tunnelXLeft = 0, tunnelXRight = 0;
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
@@ -62,31 +62,52 @@ public class LevelVisuals {
 					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
 					wall.setFill(Color.INDIANRED); //fill
 					wall.setStroke(Color.INDIANRED);//outline
-					root.getChildren().add(wall);
-					
-				//Pellets	
-				} else if (currentElement == 2) {
+					root.getChildren().add(wall);	
+				} 
+				//Pellets
+				else if (currentElement == 2) {
 					Pellet pellet = new Pellet(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.125);
 					//we can have a class 'Theme' to have a combination of preset colours to use
 					pellet.returnPellet().setFill(Color.BLUEVIOLET); 
 					root.getChildren().add(pellet.returnPellet());
 					pelletsRendered.add(pellet);
-				
+				} 
 				//Magic Pellet	
-				} else if (currentElement == 3) {
+				else if (currentElement == 3) {
 					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
 					powerup.setFill(Color.CRIMSON);
 					root.getChildren().add(powerup);
-				} else if (currentElement == 7) {
+				}
+				//Tunnel Wall x position
+				else if (currentElement == 5) {
+					if (col < 2) {
+						tunnelXLeft = col;	
+					} else if (col > 18) {
+						tunnelXRight = col;
+					}
+				} 
+				//Set Spaceman Start x and y position
+				else if (currentElement == 7) {
 					startX = col;
 					startY = row;
 				}
 			}
 		}
 		
+		//Add Spaceman after map added to scene
 		spaceman = new Spaceman(controller, startX, startY);
 		root.getChildren().add(spaceman);
-		spaceman.start();
+		spaceman.start(); // NOTE: Change start spaceman animation after countdown
+		
+		//Add tunnel wall cover after Spaceman added to scene
+		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
+		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
+		root.getChildren().add(tunnelWallLeft);
+		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
+		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
+		root.getChildren().add(tunnelWallRight);
 		
 		
 		
