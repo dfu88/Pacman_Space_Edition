@@ -31,11 +31,13 @@ public class LevelVisuals {
 	private Scene scene;
 	private Group root;
 	private ArrayList<Pellet> pelletsRendered;
+	private ArrayList<PowerUp> powerUpsRendered;
 	public Spaceman spaceman;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
 		pelletsRendered = new ArrayList<Pellet>();
+		powerUpsRendered = new ArrayList<PowerUp>();
 		
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -82,9 +84,15 @@ public class LevelVisuals {
 				
 				//Magic Pellet	
 				} else if (currentElement == 3) {
-					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
-					powerup.setFill(Color.CRIMSON);
-					root.getChildren().add(powerup);
+//					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
+//					powerup.setFill(Color.CRIMSON);
+//					root.getChildren().add(powerup);
+					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
+					//we can have a class 'Theme' to have a combination of preset colours to use
+					powerUp.returnPowerUp().setFill(Color.CRIMSON); 
+					root.getChildren().add(powerUp.returnPowerUp());
+					powerUpsRendered.add(powerUp);
+					
 				} else if (currentElement == 7) {
 					startX = col;
 					startY = row;
@@ -128,6 +136,16 @@ public class LevelVisuals {
 			if ((pelletsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					pelletsRendered.get(index).returnPellet().setVisible(false);
+				}
+			}
+		}
+	}
+	//change for powerup after making powerup class
+	public void hideCorrespondingPowerUp(int charX, int charY) {
+		for (int index = 0; index < powerUpsRendered.size(); index++) {
+			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
+					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
 				}
 			}
 		}

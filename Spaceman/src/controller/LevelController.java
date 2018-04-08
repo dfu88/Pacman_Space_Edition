@@ -52,7 +52,17 @@ public class LevelController {
 	}
 	
 	public void updateMap(int dx, int dy,int posX, int posY) {
+		
+		if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 2) {
+			currentView.hideCorrespondingPellet(posX+dx, posY + dy);
+			levelModel.addPoints(100);
+			//update score visual?
+			System.out.println(levelModel.getScore()); //temp
+		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
+			//do power up stuff
+			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
+			System.out.println("lol");
+		}
 		levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
-		currentView.hideCorrespondingPellet(posX+dx, posY + dy);
 	}
 }
