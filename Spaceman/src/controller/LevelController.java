@@ -50,13 +50,19 @@ public class LevelController {
 					currentView.spaceman.setKeyInput(1);
 				} else if(input.getCode() == KeyCode.DOWN) {
 					currentView.spaceman.setKeyInput(3);
+				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
+					levelModel.timeRemaining = 0;
+					currentView.updateTime(levelModel.timeRemaining);
+					currentView.spaceman.stop();
+					
 				} else if(input.getCode() == KeyCode.H) {
 					currentView.spaceman.stop();
 					timeline.stop();
+					startTimer = 3;
 					controller.showHome();
 				} else if(input.getCode() == KeyCode.ENTER) {
 					timeline.play();
-					currentView.spaceman.start();
+					//currentView.spaceman.start();
 					///countdown.schedule(startGame,1000l); //starts after 3 seconds prob use timeline instead
 					//currentView.spaceman.start();//enter to start timer goes before this
 				}
@@ -106,13 +112,32 @@ public class LevelController {
 			@Override
 			public void handle(ActionEvent event) {
 				//moveOneStep();
-				if (startTimer > 0 ) {
-					startTimer--;
-					System.out.println(startTimer);
-				} else if (levelModel.timeRemaining > 0) {
-					levelModel.timeRemaining--;
-					currentView.updateTime(levelModel.timeRemaining);
-					//System.out.println(levelModel.timeRemaining);
+				if (levelModel.timeRemaining !=0) {
+					if (startTimer >= -1) {
+						currentView.updateMessage(startTimer);
+						if ((startTimer == 0)) {
+							currentView.spaceman.start();
+						}
+						startTimer--;
+						System.out.println(startTimer);
+						//if (startTimer == 0) {
+							//currentView.updateMessage(startTimer);
+							
+						//}
+					} else if (levelModel.timeRemaining > 0) {
+						levelModel.timeRemaining--;
+						currentView.updateTime(levelModel.timeRemaining);
+						//System.out.println(levelModel.timeRemaining);
+					} else {
+						System.out.println("Gameover");
+						timeline.stop(); //not stopping as intended
+					}
+				} else {
+					System.out.println("assas");
+					//int temp = -1;
+					currentView.updateMessage(-1);
+					System.out.println("OwO");
+					timeline.stop();
 				}
 			}
 
@@ -120,5 +145,9 @@ public class LevelController {
 		timeline.getKeyFrames().add(keyFrame);
 
 		return timeline;
+	}
+	
+	public int getCountdown() {
+		return startTimer;
 	}
 }
