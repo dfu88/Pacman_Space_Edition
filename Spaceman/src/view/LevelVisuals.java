@@ -39,6 +39,7 @@ public class LevelVisuals {
 	private ArrayList<Pellet> pelletsRendered;
 	private ArrayList<PowerUp> powerUpsRendered;
 	private Text score;
+	private Text time;
 	public Spaceman spaceman;
 	
 	public LevelVisuals (LevelController controller) {
@@ -162,6 +163,7 @@ public class LevelVisuals {
 		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
 		root.getChildren().add(time);
+		this.time = time;
 		
 		Text score = new Text();
 		//score.setText(Integer.toString(controller.getLevel().getScore()));
@@ -197,6 +199,10 @@ public class LevelVisuals {
 	
 	public void updateScore(int score) {
 		this.score.setText(Integer.toString(controller.getLevel().getScore()));
+	}
+	
+	public void updateTime(int time) {
+		this.time.setText(Integer.toString(controller.getLevel().timeRemaining));
 	}
 
 }
