@@ -45,6 +45,7 @@ public class LevelController {
 				} else if(input.getCode() == KeyCode.DOWN) {
 					currentView.spaceman.setKeyInput(3);
 				} else if(input.getCode() == KeyCode.H) {
+					currentView.spaceman.stop();
 					controller.showHome();
 				} else if(input.getCode() == KeyCode.ENTER) {
 					currentView.spaceman.start();
