@@ -7,6 +7,10 @@ import view.Spaceman;
 import javafx.scene.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import javafx.event.EventHandler;
 
 public class LevelController {
@@ -21,6 +25,13 @@ public class LevelController {
 		currentView = new LevelVisuals(this);
 		levelModel = new Level();
 
+		Timer countdown = new Timer();
+		TimerTask startGame = new TimerTask() {
+			public void run() {
+				//if var < 3 then schedule again?
+				currentView.spaceman.start();
+			}
+		};
 		//levelModel.makeMaps();
 
 		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
@@ -35,6 +46,10 @@ public class LevelController {
 					currentView.spaceman.setKeyInput(3);
 				} else if(input.getCode() == KeyCode.H) {
 					controller.showHome();
+				} else if(input.getCode() == KeyCode.ENTER) {
+					currentView.spaceman.start();
+					///countdown.schedule(startGame,1000l); //starts after 3 seconds prob use timeline instead
+					//currentView.spaceman.start();//enter to start timer goes before this
 				}
 			}
 		});

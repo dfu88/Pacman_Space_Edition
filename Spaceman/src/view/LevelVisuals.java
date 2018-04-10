@@ -6,6 +6,12 @@ import controller.LevelController;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
@@ -44,6 +50,9 @@ public class LevelVisuals {
 		root = new Group(); 
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 		scene.setFill(Color.LIGHTBLUE);
+		
+//		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+//		root.setBackground(new Background(bg));
 	}
 
 	public Scene returnScene() {
@@ -117,7 +126,7 @@ public class LevelVisuals {
 		//Add Spaceman after map added to scene
 		spaceman = new Spaceman(controller, startX, startY);
 		root.getChildren().add(spaceman);
-		spaceman.start(); // NOTE: Change start spaceman animation after countdown
+		//spaceman.start(); // NOTE: Change start spaceman animation after countdown
 		
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
 		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);

@@ -20,6 +20,7 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
@@ -82,6 +83,9 @@ public class GUI {
 		titleView.setFocusTraversable(true); //IMPORTANT, this allows keyevent recognisition w/o the buttons
 											//https://stackoverflow.com/questions/31320018/javafx-key-press-not-captured
 		
+		DropShadow shadow = new DropShadow(50, Color.YELLOW);
+		
+		
 		Image btn0 = new Image(getClass().getResourceAsStream("bg/btn0.png"));
 		ImageView btn0View = new ImageView(btn0);
 		optionList.add(btn0View);
@@ -111,11 +115,22 @@ public class GUI {
 			optionList.get(i).setScaleY(0.4);
 			optionList.get(i).setX((SCENE_WIDTH-optionList.get(i).getLayoutBounds().getWidth())*0.5);
 			optionList.get(i).setY((minHeightFromNodes*(i+2)+title.getHeight()*titleView.getScaleY()+optionList.get(i).getLayoutBounds().getHeight()*i*0.4));
+//			optionList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+//			     @Override
+//			     public void handle(MouseEvent event) {
+//			         System.out.println("Tile pressed ");
+//			         optionList.get(option).setEffect(null);
+//			         for (int j = 0; j < optionList.size(); j++) {
+//			        	 if option = i;
+//			         }
+//			         optionList.get(i).setEffect(shadow);
+//			         //event.consume();
+//			     }
+//			});
 		}
 		
-		DropShadow shadow = new DropShadow(50, Color.YELLOW);
-		btn0View.setEffect(shadow);
 		
+		btn0View.setEffect(shadow);
 		pane.getChildren().add(titleView);
 		pane.getChildren().add(btn0View);
 		pane.getChildren().add(btn1View);
