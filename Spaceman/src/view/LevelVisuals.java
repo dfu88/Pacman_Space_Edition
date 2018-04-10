@@ -6,6 +6,12 @@ import controller.LevelController;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
@@ -32,6 +38,7 @@ public class LevelVisuals {
 	private Group root;
 	private ArrayList<Pellet> pelletsRendered;
 	private ArrayList<PowerUp> powerUpsRendered;
+	private Text score;
 	public Spaceman spaceman;
 	
 	public LevelVisuals (LevelController controller) {
@@ -43,6 +50,9 @@ public class LevelVisuals {
 		root = new Group(); 
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 		scene.setFill(Color.LIGHTBLUE);
+		
+//		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+//		root.setBackground(new Background(bg));
 	}
 
 	public Scene returnScene() {
@@ -59,13 +69,16 @@ public class LevelVisuals {
 //		double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
 //		double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 		
+		pelletsRendered.clear();
+		powerUpsRendered.clear();
 		root.getChildren().clear();
+		
 		
 		int startX = 0, startY = 0, tunnelXLeft = 0, tunnelXRight = 0;
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
-				
+				System.out.print(controller.getLevel().getCurrentMap().getData(row, col));
 				int currentElement = controller.getLevel().getCurrentMap().getData(row, col);
 				//Walls
 				if (currentElement == 1) {
@@ -107,12 +120,13 @@ public class LevelVisuals {
 					startY = row;
 				}
 			}
+			System.out.println("");
 		}
 		
 		//Add Spaceman after map added to scene
 		spaceman = new Spaceman(controller, startX, startY);
 		root.getChildren().add(spaceman);
-		spaceman.start(); // NOTE: Change start spaceman animation after countdown
+		//spaceman.start(); // NOTE: Change start spaceman animation after countdown
 		
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
 		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
@@ -149,6 +163,16 @@ public class LevelVisuals {
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
 		root.getChildren().add(time);
 		
+		Text score = new Text();
+		//score.setText(Integer.toString(controller.getLevel().getScore()));
+		score.setText("0");
+		score.setFont(Font.font("Comic Sans MS",50));
+		//score.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-score.getLayoutBounds().getWidth())*0.5));
+		//score.setY(100+scoreLabel.getLayoutBounds().getHeight()+10);
+		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
+		score.setY(500);
+		root.getChildren().add(score);
+		this.score = score;
 	}
 	
 	public void hideCorrespondingPellet(int charX, int charY) {
@@ -169,6 +193,10 @@ public class LevelVisuals {
 				}
 			}
 		}
+	}
+	
+	public void updateScore(int score) {
+		this.score.setText(Integer.toString(controller.getLevel().getScore()));
 	}
 
 }

@@ -84,7 +84,12 @@ public class Map {
 	}
 	////note Y determines the rows(up and down) //X determines the col (left and right)
 	public void updateData(int dx, int dy, int posX, int posY) { 
-			mapArray[posY+dy][posX+dx] = getData(posY, posX);
+		//int temp = mapArray[posY+dy][posX+dx]; //if we want non linear tele then uncomment these code
+		mapArray[posY+dy][posX+dx] = getData(posY, posX);
+		//if (temp == TELE) {
+		//	mapArray[posY][posX] = TELE;
+		//} else {
 			mapArray[posY][posX] = GROUND;
-		}
+		//}
+	}
 }

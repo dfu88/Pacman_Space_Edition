@@ -107,12 +107,13 @@ public class Spaceman extends CharacterAnimate{
 		} else {
 			//start();
 			//if (levelController.checkMap(nextX, y) == 2) {
-				levelController.updateMap(dx,dy,x,y);
+				//levelController.updateMap(dx,dy,x,y);
 			//}
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalX = graphicalX + (dx * MOVE_SPEED);
 			} else {
+				levelController.updateMap(dx,dy,x,y);
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
@@ -140,13 +141,14 @@ public class Spaceman extends CharacterAnimate{
 			imageIndex=0;
 		} else {
 			//if (levelController.checkMap(x, nextY) == 2) {
-				levelController.updateMap(dx,dy,x,y);
+				//levelController.updateMap(dx,dy,x,y);
 			//}
 			
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalY = graphicalY + (dy * MOVE_SPEED);
 			} else {
+				levelController.updateMap(dx,dy,x,y);
 				moveCounter = 0;
 				y = y + dy;
 				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;

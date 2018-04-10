@@ -7,6 +7,7 @@ import view.Spaceman;
 
 
 public class Level {
+	//make these private maybe?
 	public int lives;
 	public int timeRemaining;
 	public int score;
@@ -28,6 +29,8 @@ public class Level {
 	}
 	
 	public void makeMaps( ) {
+		mapList.clear();
+		
 		Map classic = new Map();
 		classic.initMap(1);
 		mapList.add(classic);
@@ -47,6 +50,7 @@ public class Level {
 	}
 
 	public void setMap(int type) {
+		makeMaps();
 		initLevel(mapList.get(type));
 	}
 	
