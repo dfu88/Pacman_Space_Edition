@@ -23,7 +23,8 @@ public class LevelController {
 	//public Spaceman spaceman;
 	private Timeline timeline;
 	private int startTimer;
-	private boolean wasPaused;
+	private boolean paused;
+	private int pauseMenuOption;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -31,16 +32,32 @@ public class LevelController {
 		levelModel = new Level();
 		timeline = makeTimeline();
 		startTimer = 3;
-		wasPaused = false;
+		paused = false;
 		
 		//levelModel.makeMaps();
 
 		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
 			public void handle(KeyEvent input) {
 				if (input.getCode() == KeyCode.LEFT) {
-					currentView.spaceman.setKeyInput(0);
+					if (paused) {
+						if (pauseMenuOption > 0) {
+							pauseMenuOption--;
+						}
+						System.out.println("a");
+						currentView.cycleOptions(pauseMenuOption);
+					} else {
+						currentView.spaceman.setKeyInput(0);
+					}
 				} else if(input.getCode() == KeyCode.RIGHT) {
-					currentView.spaceman.setKeyInput(2);
+					if (paused) {
+						if (pauseMenuOption < 1) {
+							pauseMenuOption++;
+						}
+						System.out.println("b");
+						currentView.cycleOptions(pauseMenuOption);
+					} else {
+						currentView.spaceman.setKeyInput(2);
+					}
 				} else if(input.getCode() == KeyCode.UP) {
 					currentView.spaceman.setKeyInput(1);
 				} else if(input.getCode() == KeyCode.DOWN) {
@@ -56,25 +73,45 @@ public class LevelController {
 					startTimer = 3;
 					controller.showHome();
 				} else if(input.getCode() == KeyCode.ENTER) {
-					timeline.play();
+					if (paused) {
+						//resume
+						if (pauseMenuOption == 0) {
+							timeline.play();
+						//maybe make a bool var isCountdown isntead for clarity
+							if (levelModel.timeRemaining>0 & startTimer<= -1) { 
+								currentView.spaceman.start();
+							}
+							paused = !paused;
+							currentView.updatePauseScreen(paused);
+						} else if (pauseMenuOption == 1){
+							//exit
+							currentView.spaceman.stop();
+							timeline.stop();
+							startTimer = 3;
+							controller.showHome();
+						}
+					} else {
+						timeline.play();
+					}
 					//currentView.spaceman.start();
 					///countdown.schedule(startGame,1000l); //starts after 3 seconds prob use timeline instead
 					//currentView.spaceman.start();//enter to start timer goes before this
 				} else if(input.getCode() == KeyCode.P) { //seems to bug out the countdown
-					if (wasPaused) {
+					paused = !paused;
+					pauseMenuOption = 0;
+					if (paused) {
+						timeline.pause();
+						currentView.spaceman.pause();
+			
+					} else {
 						timeline.play();
 						//maybe make a bool var isCountdown isntead for clarity
 						if (levelModel.timeRemaining>0 & startTimer<= -1) { 
 							currentView.spaceman.start();
 						}
-						
-						
-					} else {
-						timeline.pause();
-						currentView.spaceman.pause();
 					}
-					currentView.updatePauseScreen(wasPaused);
-					wasPaused = !wasPaused;
+					currentView.updatePauseScreen(paused);
+					
 				}
 			}
 		});

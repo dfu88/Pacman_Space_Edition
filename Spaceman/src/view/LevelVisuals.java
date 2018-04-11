@@ -6,6 +6,7 @@ import controller.LevelController;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -47,14 +48,17 @@ public class LevelVisuals {
 	private Group setting;
 	private Group gameView;
 	private GaussianBlur blur;
+	private DropShadow shadow;
+	private ArrayList<ImageView> pauseOptions;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
+		pauseOptions = new ArrayList<ImageView>();
 		
 		blur = new GaussianBlur();
-		
+		shadow = new DropShadow(500, Color.YELLOW);
 		
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -72,6 +76,7 @@ public class LevelVisuals {
 	public void generateMap() {
 		pelletsRendered.clear();
 		powerUpsRendered.clear();
+		pauseOptions.clear();
 		root.getChildren().clear();
 		
 		gameView = addGameComponents();
@@ -340,8 +345,8 @@ public class LevelVisuals {
 		Group group = new Group();
 		
 		Rectangle frame = new Rectangle(700,400);
-		frame.setFill(Color.LIGHTGRAY);
-		frame.setStroke(Color.BLACK);
+		frame.setFill(Color.BLACK);
+		frame.setStroke(Color.WHITE);
 		frame.setStrokeWidth(2.0);
 		frame.setArcHeight(15);
 		frame.setArcWidth(15);
@@ -352,22 +357,30 @@ public class LevelVisuals {
 		
 		Text label = new Text("Paused");
 		label.setFont(Font.font(50));
+		label.setFill(Color.WHITE);
 		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
 		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
 		group.getChildren().add(label);
-		//Image play = new Image(getClass().getResourceAsStream("misc/play.png"));
-		//Image exit = new Image(getClass().getResourceAsStream("misc/exit.png"));
 		
+		Image resume = new Image(getClass().getResourceAsStream("misc/resume.png"));
+		ImageView resumeButton = new ImageView(resume);
+		resumeButton.setX(frame.getX()+100);
+		resumeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
+		resumeButton.setEffect(shadow);
+		pauseOptions.add(resumeButton);
 		
-		Image close = new Image(getClass().getResourceAsStream("misc/close.png"));
+		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
 		ImageView closeButton = new ImageView(close);
-		closeButton.setX(frame.getWidth()+frame.getX()-closeButton.getLayoutBounds().getWidth()-10);
-		closeButton.setY(frame.getY()+25);
+		closeButton.setX(frame.getX()+frame.getLayoutBounds().getWidth()-closeButton.getLayoutBounds().getWidth()-100);
+		closeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
+		pauseOptions.add(closeButton);
+		//Image exit = new Image(getClass().getResourceAsStream("misc/exit.png"));
 		//closeButton.set
 //		closeButton.setScaleX(0.35);
 //		closeButton.setScaleY(0.35);
 		group.getChildren().add(closeButton);
-		System.out.println(closeButton.getLayoutX());
+		group.getChildren().add(resumeButton);
+		//System.out.println(closeButton.getLayoutX());
 		
 		return group;
 	}
@@ -417,14 +430,25 @@ public class LevelVisuals {
 	public void updatePauseScreen(boolean wasPaused) {
 		// TODO Auto-generated method stub
 		if (wasPaused) {
-			gameView.setEffect(null);
-			setting.setVisible(false);
-		} else {
-			
 			gameView.setEffect(blur);
 			setting.setVisible(true);
+			
+		} else {
+			gameView.setEffect(null);
+			setting.setVisible(false);
+			
 		}
 		
+	}
+	
+	public void cycleOptions(int option) {
+		if (option == 0) {
+			pauseOptions.get(option).setEffect(shadow);
+			pauseOptions.get(option+1).setEffect(null);
+		} else if (option == 1) {
+			pauseOptions.get(option).setEffect(shadow);
+			pauseOptions.get(option-1).setEffect(null);
+		}
 	}
 
 }

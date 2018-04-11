@@ -120,16 +120,15 @@ public class GUI {
 //			     public void handle(MouseEvent event) {
 //			         System.out.println("Tile pressed ");
 //			         optionList.get(option).setEffect(null);
-//			         for (int j = 0; j < optionList.size(); j++) {
-//			        	 if option = i;
-//			         }
-//			         optionList.get(i).setEffect(shadow);
-//			         //event.consume();
+//			         optionList.get(0).get
+////			         for (int j = 0; j < optionList.size(); j++) {
+////			        	 if option = i;
+////			         }
+////			         optionList.get(i).setEffect(shadow);
 //			     }
 //			});
 			pane.getChildren().add(optionList.get(i));
 		}
-		
 		
 		btn0View.setEffect(shadow);
 		pane.getChildren().add(titleView);
