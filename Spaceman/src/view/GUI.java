@@ -127,17 +127,18 @@ public class GUI {
 //			         //event.consume();
 //			     }
 //			});
+			pane.getChildren().add(optionList.get(i));
 		}
 		
 		
 		btn0View.setEffect(shadow);
 		pane.getChildren().add(titleView);
-		pane.getChildren().add(btn0View);
-		pane.getChildren().add(btn1View);
-		pane.getChildren().add(btn2View);
-		pane.getChildren().add(btn3View);
-		pane.getChildren().add(btn4View);
-		pane.getChildren().add(btn5View);
+//		pane.getChildren().add(btn0View);
+//		pane.getChildren().add(btn1View);
+//		pane.getChildren().add(btn2View);
+//		pane.getChildren().add(btn3View);
+//		pane.getChildren().add(btn4View);
+//		pane.getChildren().add(btn5View);
 		
 //		AnchorPane.setTopAnchor(title, minHeightFromNodes);
 //		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getWidth())*0.5);

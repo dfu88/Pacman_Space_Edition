@@ -23,6 +23,7 @@ public class LevelController {
 	//public Spaceman spaceman;
 	private Timeline timeline;
 	private int startTimer;
+	private boolean wasPaused;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -30,13 +31,7 @@ public class LevelController {
 		levelModel = new Level();
 		timeline = makeTimeline();
 		startTimer = 3;
-		//Timer countdown = new Timer();
-		//TimerTask startGame = new TimerTask() {
-			//public void run() {
-				//if var < 3 then schedule again?
-				//currentView.spaceman.start();
-			//}
-		//};
+		wasPaused = false;
 		
 		//levelModel.makeMaps();
 
@@ -65,6 +60,21 @@ public class LevelController {
 					//currentView.spaceman.start();
 					///countdown.schedule(startGame,1000l); //starts after 3 seconds prob use timeline instead
 					//currentView.spaceman.start();//enter to start timer goes before this
+				} else if(input.getCode() == KeyCode.P) { //seems to bug out the countdown
+					if (wasPaused) {
+						timeline.play();
+						//maybe make a bool var isCountdown isntead for clarity
+						if (levelModel.timeRemaining>0 & startTimer<= -1) { 
+							currentView.spaceman.start();
+						}
+						
+						
+					} else {
+						timeline.pause();
+						currentView.spaceman.pause();
+					}
+					currentView.updatePauseScreen(wasPaused);
+					wasPaused = !wasPaused;
 				}
 			}
 		});
