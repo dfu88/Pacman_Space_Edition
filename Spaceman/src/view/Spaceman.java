@@ -1,5 +1,15 @@
 package view;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.scene.image.Image;
@@ -15,6 +25,8 @@ public class Spaceman extends CharacterAnimate{
 	private double graphicalY;
 	private int keyInput;
 	private int currentRotation;
+	
+	public Clip pelletSound;
 
 	public Spaceman(LevelController levelController, int x, int y) {
 		keyInput = -1;
@@ -54,6 +66,26 @@ public class Spaceman extends CharacterAnimate{
 
 		// remove later when movement logic is completed
 		status = MOVING;
+		
+		
+		try {
+			URL url = this.getClass().getResource("sound/sound1.wav");
+			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
+			Clip clip = AudioSystem.getClip();
+			clip.open(sound);
+			pelletSound = clip;
+			//clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch blockaudioIn
+			e.printStackTrace();
+		}
+		
 
 	}
 
@@ -84,7 +116,7 @@ public class Spaceman extends CharacterAnimate{
 		}
 		
 		if (status == MOVING) {
-
+			pelletSound.setFramePosition(0);//reset sound to 0 seconds
 			if (dx != 0 && dy == 0) {
 				moveXAxis();
 			} 
@@ -109,11 +141,13 @@ public class Spaceman extends CharacterAnimate{
 			//if (levelController.checkMap(nextX, y) == 2) {
 				//levelController.updateMap(dx,dy,x,y);
 			//}
+			
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalX = graphicalX + (dx * MOVE_SPEED);
 			} else {
 				levelController.updateMap(dx,dy,x,y);
+				
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE

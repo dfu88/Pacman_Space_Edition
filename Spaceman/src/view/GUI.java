@@ -1,6 +1,14 @@
 package view;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.InterfaceController;//>??
 
@@ -38,6 +46,9 @@ public class GUI {
 	private ArrayList<Button> listOptions;
 
 	private ArrayList<ImageView> optionList;
+	
+	public Clip click;
+	public Clip cycle;
 
 
 	public GUI (InterfaceController controller) {
@@ -53,6 +64,30 @@ public class GUI {
 		//scene.setFill(Color.DARKBLUE);
 //		listOptions = new ArrayList<Button>();
 //		optionList = new ArrayList<ImageView>();
+		
+		try {
+			URL url = this.getClass().getResource("sound/laser.wav");
+			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
+			Clip clip = AudioSystem.getClip();
+			clip.open(sound);
+			click = clip;
+			
+			URL url2 = this.getClass().getResource("sound/sound1.wav");
+			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
+			Clip clip2 = AudioSystem.getClip();
+			clip2.open(sound2);
+			cycle = clip2;
+			//clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch blockaudioIn
+			e.printStackTrace();
+		}
 	}
 
 	public Scene returnScene() {
@@ -137,8 +172,31 @@ public class GUI {
 		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
 			@Override
 			public void handle(KeyEvent event) {
+				cycle.setFramePosition(0);
+				try {//crashes if i hold down up or down heaps
+					
+					URL url2 = this.getClass().getResource("sound/sound1.wav");
+					AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
+					Clip clip2 = AudioSystem.getClip();
+					clip2.open(sound2);
+					cycle = clip2;
+					//clip.start();
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch blockaudioIn
+					e.printStackTrace();
+				}
 				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
 					if (option> 0) {
+						//cycle.setFramePosition(0);
+						//cycle.setFramePosition(0);
+						cycle.loop(0);
+						cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
 						//listOptions.get(option).setVisible(true);
 						option--;
@@ -148,6 +206,9 @@ public class GUI {
 					}
 				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
 					if (option < 5) {
+						//cycle.setFramePosition(0);
+						cycle.loop(0);
+						cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
 						//listOptions.get(option).setVisible(true);
 						option++;
@@ -158,10 +219,13 @@ public class GUI {
 				} else if (event.getCode() == KeyCode.ENTER) {
 					System.out.print("Generate gameoption");
 					System.out.println(option);
+					click.setFramePosition(0);
+					click.loop(0);
 					controller.executeProcess(option); //prob change process in controller to 0 to 5 instead of 1 to 6
 				}
 				//listOptions.get(option).setVisible(false);
 				optionList.get(option).setEffect(shadow);
+				
 			}
 
 		});
