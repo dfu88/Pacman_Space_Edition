@@ -85,11 +85,12 @@ public class Map {
 	////note Y determines the rows(up and down) //X determines the col (left and right)
 	public void updateData(int dx, int dy, int posX, int posY) { 
 		//int temp = mapArray[posY+dy][posX+dx]; //if we want non linear tele then uncomment these code
-		mapArray[posY+dy][posX+dx] = getData(posY, posX);
+		//mapArray[posY+dy][posX+dx] = getData(posY, posX); //dont need to update player
+		mapArray[posY+dy][posX+dx] = GROUND;
 		//if (temp == TELE) {
 		//	mapArray[posY][posX] = TELE;
 		//} else {
-			mapArray[posY][posX] = GROUND;
+			//mapArray[posY][posX] = GROUND;
 		//}
 	}
 }
