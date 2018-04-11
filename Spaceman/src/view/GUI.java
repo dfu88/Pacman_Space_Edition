@@ -133,105 +133,6 @@ public class GUI {
 		
 		btn0View.setEffect(shadow);
 		pane.getChildren().add(titleView);
-//		pane.getChildren().add(btn0View);
-//		pane.getChildren().add(btn1View);
-//		pane.getChildren().add(btn2View);
-//		pane.getChildren().add(btn3View);
-//		pane.getChildren().add(btn4View);
-//		pane.getChildren().add(btn5View);
-		
-//		AnchorPane.setTopAnchor(title, minHeightFromNodes);
-//		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getWidth())*0.5);
-////		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
-////		AnchorPane.setRightAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
-//		AnchorPane.setBottomAnchor(title, SCENE_HEIGHT - minHeightFromNodes);
-
-		//Buttons
-		//Could use shape/image instead of button
-		Button button1 = new Button("Story Mode");
-		button1.setPrefWidth(300.0);
-		button1.setPrefHeight(50.0);
-		
-		AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getHeight());
-		AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
-		//AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getLayoutBounds().getHeight());
-		//AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
-		AnchorPane.setLeftAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
-
-		button1.setOnAction(event -> {controller.executeProcess(0);});
-		listOptions.add(button1);
-
-
-		Button button2 = new Button("Classic Mode");
-		button2.setPrefWidth(300.0);
-		button2.setPrefHeight(50.0);
-		
-		AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getHeight()+button2.getPrefHeight());
-		AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
-		//AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getLayoutBounds().getHeight()+button2.getPrefHeight());
-		//AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
-		AnchorPane.setLeftAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
-
-		button2.setOnAction(event -> {controller.executeProcess(1);});
-		listOptions.add(button2);
-
-		Button button3 = new Button("Multiplayer Mode");
-		button3.setPrefWidth(300.0);
-		button3.setPrefHeight(50.0);
-
-		AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getHeight()+button2.getPrefHeight()*2);
-		AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
-		//AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*2);
-		//AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
-		AnchorPane.setLeftAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
-
-		listOptions.add(button3);
-		button3.setOnAction(event -> {controller.executeProcess(2);});
-
-
-		Button button4 = new Button("Endless Mode");
-		button4.setPrefWidth(300.0);
-		button4.setPrefHeight(50.0);
-
-		AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
-		//AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
-		AnchorPane.setLeftAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
-
-		button4.setOnAction(event -> {controller.executeProcess(3);});
-		listOptions.add(button4);
-
-		Button button5 = new Button("Random Mode");
-		button5.setPrefWidth(300.0);
-		button5.setPrefHeight(50.0);
-		
-		AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getHeight()+button2.getPrefHeight()*4);
-		AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
-		//AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*4);
-		//AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
-		AnchorPane.setLeftAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
-
-		button5.setOnAction(event -> {controller.executeProcess(4);});
-		listOptions.add(button5);
-
-		Button button6 = new Button("Leaderboards");
-		button6.setPrefWidth(300.0);
-		button6.setPrefHeight(50.0);
-		
-		
-		AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getHeight()+button2.getPrefHeight()*5);
-		AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
-		//AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*5);
-		//AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
-		AnchorPane.setLeftAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
-
-		button6.setOnAction(event -> {controller.executeProcess(5);});
-		listOptions.add(button6);
 
 		//key event
 		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
@@ -265,14 +166,5 @@ public class GUI {
 			}
 
 		});
-
-		//pane.getChildren().add(title);
-		//pane.getChildren().add(titleView);
-//		pane.getChildren().add(button1);
-//		pane.getChildren().add(button2);
-//		pane.getChildren().add(button3);
-//		pane.getChildren().add(button4);
-//		pane.getChildren().add(button5);
-//		pane.getChildren().add(button6);
 	}
 }
