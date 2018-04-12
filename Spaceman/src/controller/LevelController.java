@@ -195,6 +195,7 @@ public class LevelController {
 						currentView.spaceman.start();
 						timeElapsed++;
 						currentView.updateTime(levelModel.getTimeLimit());
+						respawnCollectables();
 						
 					}
 				

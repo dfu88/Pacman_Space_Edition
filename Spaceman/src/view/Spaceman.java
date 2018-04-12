@@ -73,24 +73,6 @@ public class Spaceman extends CharacterAnimate{
 		// remove later when movement logic is completed
 		status = MOVING;
 		
-		
-//		try {
-//			URL url = this.getClass().getResource("sound/sound1.wav");
-//			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
-//			Clip clip = AudioSystem.getClip();
-//			clip.open(sound);
-//			pelletSound = clip;
-//			//clip.start();
-//		} catch (UnsupportedAudioFileException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (LineUnavailableException e) {
-//			// TODO Auto-generated catch blockaudioIn
-//			e.printStackTrace();
-//		}
 		URL url = this.getClass().getResource("sound/boop.wav");
 		pelletSound = new AudioClip(url.toString());
 
@@ -98,7 +80,7 @@ public class Spaceman extends CharacterAnimate{
 
 	@Override
 	public void moveOneStep() {
-		levelController.respawnCollectables();
+//		levelController.respawnCollectables();
 		if (imageIndex == 0) {
 			changeCurrentDirection(keyInput);
 		}

@@ -57,7 +57,8 @@ public class LevelVisuals {
 	private Pellet currentPellet;
 	
 	private ArrayList<Pellet> pelletsRendered;
-	private ArrayList<Pellet> despawnedPellets;
+	private ArrayList<Integer> despawnIndex;
+	
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> pauseOptions;
 	
@@ -76,7 +77,7 @@ public class LevelVisuals {
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
 		pauseOptions = new ArrayList<ImageView>();
-		despawnedPellets = new ArrayList<Pellet>();
+		despawnIndex = new ArrayList<Integer>();
 		
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
@@ -313,8 +314,12 @@ public class LevelVisuals {
 					spaceman.playPelletSound();
 					//Endless mode: set respawn
 					if (controller.getMode() == 3) {
-						despawnedPellets.add(pelletsRendered.get(index));
+						//respawn time doesnt seems to be changing //fixed
 						pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);//temp
+						despawnIndex.add(index);
+						//despawnedPellets.add(pelletsRendered.get(index)); 
+						
+						//System.out.println(despawnedPellets.size());
 					}
 					
 				}
@@ -325,13 +330,32 @@ public class LevelVisuals {
 	}
 	
 	public void respawnPellet() {
-		for (int index = 0; index < despawnedPellets.size(); index++) {
+//		System.out.print("    aaa");
+//		System.out.println(controller.getTimeElapsed());
+
+		for (int i = 0; i < despawnIndex.size(); i++) {
+			//System.out.println(index);
+			System.out.print("     ElapsedT: ");
+			System.out.println(controller.getTimeElapsed());
+			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() > controller.getTimeElapsed()) {
+				break; //seems to break a little early
+			}
+			System.out.print(i);
+			System.out.print(": ");
+			System.out.print(pelletsRendered.get(despawnIndex.get(i)).getRespawnTime());
+			System.out.print("     ElapsedT: ");
+			System.out.println(controller.getTimeElapsed());
 			//Respawn pellets at set time
-			if (pelletsRendered.get(index).getRespawnTime() == controller.getTimeElapsed()) {
-				pelletsRendered.get(index).returnPellet().setVisible(true);
-				despawnedPellets.remove(index);
+			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
+				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
+				System.out.print("indexRemoved: ");
+				System.out.println(i);
+				despawnIndex.remove(i); //seems to remove last element //this seems to crash
+				
 			} 
+			
 		}
+		System.out.println("------");
 	}
 	
 	//change for powerup after making powerup class
