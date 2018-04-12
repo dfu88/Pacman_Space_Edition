@@ -74,7 +74,7 @@ public class ShortestPath {
 		// Intialise empty set of closed nodes (essentially visited nodes)
 		Vector<Vector<Integer>> closedNodes = new Vector<Vector<Integer>>();
 
-		
+
 		Vector<Integer> sourceNode = new Vector<Integer>();
 		sourceNode.add(sourceX);
 		sourceNode.add(sourceY);
@@ -88,8 +88,8 @@ public class ShortestPath {
 			System.out.println("rip");
 			return Integer.MAX_VALUE;
 		}
-//		Vector<Integer> sourceNode = nodes.get(sourceIndex);
-//		Vector<Integer> targetNode = nodes.get(targetIndex);
+		//		Vector<Integer> sourceNode = nodes.get(sourceIndex);
+		//		Vector<Integer> targetNode = nodes.get(targetIndex);
 		// Calculates heuristic of source node to target node
 		int sourceHeuristic = Math.abs(sourceX-targetX) + Math.abs(sourceY-targetY);
 		// Adds source node to the openNodes list
@@ -104,7 +104,7 @@ public class ShortestPath {
 			Vector<Integer> currentNode = nodes.get(minIndex(openNodes,nodes,totalCost));
 			int currentIndex = nodeIndex(nodes,currentNode);
 			System.out.println("while "+currentIndex);
-			if (currentNode == targetNode) {
+			if (compareNodes(currentNode,targetNode)) {
 				System.out.println("FFFUUUUUUU");
 				return totalCost.get(currentIndex);
 			}
@@ -115,11 +115,11 @@ public class ShortestPath {
 				Vector<Integer> neighbourNode = neighbourNodes.get(i); 
 				System.out.println("innn");
 				int neighbourIndex = nodeIndex(nodes,neighbourNode);
-				if (closedNodes.contains(neighbourNode)) {
+				if (isValid(closedNodes,neighbourNode)) {
 					System.out.println("closssed");
 					continue;
 				}
-				if (!(openNodes.contains(neighbourNode))) {
+				if (!(isValid(openNodes, neighbourNode))) {
 					openNodes.add(neighbourNode);
 					System.out.println("addd");
 				}
@@ -133,11 +133,11 @@ public class ShortestPath {
 				weight.set(neighbourIndex, tempWeight);
 				heuristic.set(neighbourIndex, neighbourHeuristic);
 				totalCost.set(neighbourIndex, tempWeight+neighbourHeuristic);
-				
+
 				System.out.println(totalCost);
 				System.out.println("SUPERgood");
 			}
-			return Integer.MAX_VALUE;
+			//return Integer.MAX_VALUE;
 		}
 		System.out.println("fckkkkk");
 		return Integer.MAX_VALUE;
@@ -148,11 +148,11 @@ public class ShortestPath {
 		int node1Y = node1.get(1);
 		int node2X = node2.get(0);
 		int node2Y = node2.get(1);
-		
+
 		if (node1X == node2X && node1Y == node2Y) {
 			return true;
 		}
-		
+
 		return false;
 	}
 
@@ -175,7 +175,7 @@ public class ShortestPath {
 		System.out.println("------");
 		System.out.println("minInd "+mIndex);
 		return mIndex;
-		
+
 	}
 
 	private Vector<Vector<Integer>> generateNeighbours(Vector<Vector<Integer>> nodes, Vector<Integer> node){
@@ -200,30 +200,35 @@ public class ShortestPath {
 
 		// Add valid neighbours to vector
 		Vector<Vector<Integer>> neighbourNodes = new Vector<Vector<Integer>>();
-		if (nodes.contains(leftNeighbour)) {
+		if (isValid(nodes,leftNeighbour)) {
 			neighbourNodes.add(leftNeighbour);
 			System.out.println("goodLeft");
 		}
-		if (nodes.contains(rightNeighbour)) {
+		if (isValid(nodes,rightNeighbour)) {
 			neighbourNodes.add(rightNeighbour);
 			System.out.println("goodRight");
 		}
-		if (nodes.contains(upNeighbour)) {	
+		if (isValid(nodes,upNeighbour)) {	
 			neighbourNodes.add(upNeighbour);
 			System.out.println("goodUp");
 		}	
-		if (nodes.contains(downNeighbour)) {
+		if (isValid(nodes,downNeighbour)) {
 			neighbourNodes.add(downNeighbour);
 			System.out.println("goodDown");
 		}
-		
+
 		System.out.println("okay");
 		return neighbourNodes;
 	}
 
-	//	private boolean isValidNode(Vector<Vector<Integer>> nodes, Vector<Integer> node) {
-	//		
-	//	}
+	private boolean isValid(Vector<Vector<Integer>> setNodes, Vector<Integer> node) {
+		for (int i=0; i<setNodes.size(); i++) {
+			if (compareNodes(node, setNodes.get(i))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 
 }
