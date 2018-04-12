@@ -109,7 +109,9 @@ public class Map {
 	public void updateData(int dx, int dy, int posX, int posY) { 
 		//int temp = mapArray[posY+dy][posX+dx]; //if we want non linear tele then uncomment these code
 		//mapArray[posY+dy][posX+dx] = getData(posY, posX); //dont need to update player
-		mapArray[posY+dy][posX+dx] = GROUND;
+		
+		//mapArray[posY+dy][posX+dx] = GROUND;	//removed 13/4/18
+		
 		//if (temp == TELE) {
 		//	mapArray[posY][posX] = TELE;
 		//} else {

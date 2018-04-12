@@ -297,7 +297,7 @@ public class LevelVisuals {
 		return scene;
 	}
 	
-	public void hideCorrespondingPellet(int charX, int charY) {
+	public boolean hideCorrespondingPellet(int charX, int charY) {
 		for (int index = 0; index < pelletsRendered.size(); index++) {
 			//Hides corresponding pellet matching destination of spaceman
 			currentPellet = pelletsRendered.get(index);
@@ -308,38 +308,37 @@ public class LevelVisuals {
 			
 			if ((currentPellet.getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((currentPellet.getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
-					pelletsRendered.get(index).returnPellet().setVisible(false);
-				
-					//spaceman.pelletSound.loop(0);
-					spaceman.playPelletSound();
-					//Endless mode: set respawn
-					if (controller.getMode() == 3) {
-						//respawn time doesnt seems to be changing //fixed
-						pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);//temp
-						despawnIndex.add(index);
-						//despawnedPellets.add(pelletsRendered.get(index)); 
-						
-						//System.out.println(despawnedPellets.size());
-					}
 					
+					if (currentPellet.returnPellet().isVisible()) {
+						pelletsRendered.get(index).returnPellet().setVisible(false);
+						spaceman.playPelletSound();
+						
+						//Endless mode: set respawn
+						if (controller.getMode() == 3) {
+							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
+							despawnIndex.add(index);
+						}
+						
+						return true;
+					}
 				}
 			}
 			
 		}
 		currentPellet = null;
+		return false;
 	}
 	
 	public void respawnPellet() {
-//		System.out.print("    aaa");
-//		System.out.println(controller.getTimeElapsed());
 
 		for (int i = 0; i < despawnIndex.size(); i++) {
-			//System.out.println(index);
+			//testing prints
 			System.out.print("     ElapsedT: ");
 			System.out.println(controller.getTimeElapsed());
 			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() > controller.getTimeElapsed()) {
-				break; //seems to break a little early
+				break; //seems to break a little early, need to fix this condition but still works fine-ish
 			}
+			//testing prints, remove next commit
 			System.out.print(i);
 			System.out.print(": ");
 			System.out.print(pelletsRendered.get(despawnIndex.get(i)).getRespawnTime());
@@ -348,13 +347,15 @@ public class LevelVisuals {
 			//Respawn pellets at set time
 			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
 				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
+				//testing prints, remove next commit
 				System.out.print("indexRemoved: ");
 				System.out.println(i);
-				despawnIndex.remove(i); //seems to remove last element //this seems to crash
+				despawnIndex.remove(i);
 				
 			} 
 			
 		}
+		//testing print
 		System.out.println("------");
 	}
 	
