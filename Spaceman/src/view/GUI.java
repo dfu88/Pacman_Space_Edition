@@ -1,6 +1,14 @@
 package view;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.InterfaceController;//>??
 
@@ -38,6 +46,9 @@ public class GUI {
 	private ArrayList<Button> listOptions;
 
 	private ArrayList<ImageView> optionList;
+	
+	public Clip click;
+	public Clip cycle;
 
 
 	public GUI (InterfaceController controller) {
@@ -53,6 +64,30 @@ public class GUI {
 		//scene.setFill(Color.DARKBLUE);
 //		listOptions = new ArrayList<Button>();
 //		optionList = new ArrayList<ImageView>();
+		
+		try {
+			URL url = this.getClass().getResource("sound/laser.wav");
+			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
+			Clip clip = AudioSystem.getClip();
+			clip.open(sound);
+			click = clip;
+			
+			URL url2 = this.getClass().getResource("sound/sound1.wav");
+			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
+			Clip clip2 = AudioSystem.getClip();
+			clip2.open(sound2);
+			cycle = clip2;
+			//clip.start();
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch blockaudioIn
+			e.printStackTrace();
+		}
 	}
 
 	public Scene returnScene() {
@@ -120,124 +155,48 @@ public class GUI {
 //			     public void handle(MouseEvent event) {
 //			         System.out.println("Tile pressed ");
 //			         optionList.get(option).setEffect(null);
-//			         for (int j = 0; j < optionList.size(); j++) {
-//			        	 if option = i;
-//			         }
-//			         optionList.get(i).setEffect(shadow);
-//			         //event.consume();
+//			         optionList.get(0).get
+////			         for (int j = 0; j < optionList.size(); j++) {
+////			        	 if option = i;
+////			         }
+////			         optionList.get(i).setEffect(shadow);
 //			     }
 //			});
+			pane.getChildren().add(optionList.get(i));
 		}
-		
 		
 		btn0View.setEffect(shadow);
 		pane.getChildren().add(titleView);
-		pane.getChildren().add(btn0View);
-		pane.getChildren().add(btn1View);
-		pane.getChildren().add(btn2View);
-		pane.getChildren().add(btn3View);
-		pane.getChildren().add(btn4View);
-		pane.getChildren().add(btn5View);
-		
-//		AnchorPane.setTopAnchor(title, minHeightFromNodes);
-//		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getWidth())*0.5);
-////		AnchorPane.setLeftAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
-////		AnchorPane.setRightAnchor(title, (SCENE_WIDTH-title.getLayoutBounds().getWidth())*0.5);
-//		AnchorPane.setBottomAnchor(title, SCENE_HEIGHT - minHeightFromNodes);
-
-		//Buttons
-		//Could use shape/image instead of button
-		Button button1 = new Button("Story Mode");
-		button1.setPrefWidth(300.0);
-		button1.setPrefHeight(50.0);
-		
-		AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getHeight());
-		AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
-		//AnchorPane.setTopAnchor(button1, minHeightFromNodes*2+title.getLayoutBounds().getHeight());
-		//AnchorPane.setBottomAnchor(button1, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()-(minHeightFromNodes)*2);
-		AnchorPane.setLeftAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button1, (SCENE_WIDTH-button1.getPrefWidth())*0.5);
-
-		button1.setOnAction(event -> {controller.executeProcess(0);});
-		listOptions.add(button1);
-
-
-		Button button2 = new Button("Classic Mode");
-		button2.setPrefWidth(300.0);
-		button2.setPrefHeight(50.0);
-		
-		AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getHeight()+button2.getPrefHeight());
-		AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
-		//AnchorPane.setTopAnchor(button2, minHeightFromNodes*3+title.getLayoutBounds().getHeight()+button2.getPrefHeight());
-		//AnchorPane.setBottomAnchor(button2, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*2-(minHeightFromNodes)*3);
-		AnchorPane.setLeftAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button2, (SCENE_WIDTH-button2.getPrefWidth())*0.5);
-
-		button2.setOnAction(event -> {controller.executeProcess(1);});
-		listOptions.add(button2);
-
-		Button button3 = new Button("Multiplayer Mode");
-		button3.setPrefWidth(300.0);
-		button3.setPrefHeight(50.0);
-
-		AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getHeight()+button2.getPrefHeight()*2);
-		AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
-		//AnchorPane.setTopAnchor(button3, minHeightFromNodes*4+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*2);
-		//AnchorPane.setBottomAnchor(button3, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*3-(minHeightFromNodes)*4);
-		AnchorPane.setLeftAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button3, (SCENE_WIDTH-button3.getPrefWidth())*0.5);
-
-		listOptions.add(button3);
-		button3.setOnAction(event -> {controller.executeProcess(2);});
-
-
-		Button button4 = new Button("Endless Mode");
-		button4.setPrefWidth(300.0);
-		button4.setPrefHeight(50.0);
-
-		AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
-		//AnchorPane.setBottomAnchor(button4, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*4-(minHeightFromNodes)*5);
-		AnchorPane.setLeftAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button4, (SCENE_WIDTH-button4.getPrefWidth())*0.5);
-
-		button4.setOnAction(event -> {controller.executeProcess(3);});
-		listOptions.add(button4);
-
-		Button button5 = new Button("Random Mode");
-		button5.setPrefWidth(300.0);
-		button5.setPrefHeight(50.0);
-		
-		AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getHeight()+button2.getPrefHeight()*4);
-		AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
-		//AnchorPane.setTopAnchor(button5, minHeightFromNodes*6+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*4);
-		//AnchorPane.setBottomAnchor(button5, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*5-(minHeightFromNodes)*6);
-		AnchorPane.setLeftAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button5, (SCENE_WIDTH-button5.getPrefWidth())*0.5);
-
-		button5.setOnAction(event -> {controller.executeProcess(4);});
-		listOptions.add(button5);
-
-		Button button6 = new Button("Leaderboards");
-		button6.setPrefWidth(300.0);
-		button6.setPrefHeight(50.0);
-		
-		
-		AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getHeight()+button2.getPrefHeight()*5);
-		AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
-		//AnchorPane.setTopAnchor(button6, minHeightFromNodes*7+title.getLayoutBounds().getHeight()+button2.getPrefHeight()*5);
-		//AnchorPane.setBottomAnchor(button6, SCENE_HEIGHT-title.getLayoutBounds().getHeight()-button1.getPrefHeight()*6-(minHeightFromNodes)*7);
-		AnchorPane.setLeftAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
-		AnchorPane.setRightAnchor(button6, (SCENE_WIDTH-button6.getPrefWidth())*0.5);
-
-		button6.setOnAction(event -> {controller.executeProcess(5);});
-		listOptions.add(button6);
 
 		//key event
 		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
 			@Override
 			public void handle(KeyEvent event) {
+				cycle.setFramePosition(0);
+				try {//crashes if i hold down up or down heaps
+					
+					URL url2 = this.getClass().getResource("sound/sound1.wav");
+					AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
+					Clip clip2 = AudioSystem.getClip();
+					clip2.open(sound2);
+					cycle = clip2;
+					//clip.start();
+				} catch (UnsupportedAudioFileException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (LineUnavailableException e) {
+					// TODO Auto-generated catch blockaudioIn
+					e.printStackTrace();
+				}
 				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
 					if (option> 0) {
+						//cycle.setFramePosition(0);
+						//cycle.setFramePosition(0);
+						cycle.loop(0);
+						cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
 						//listOptions.get(option).setVisible(true);
 						option--;
@@ -247,6 +206,9 @@ public class GUI {
 					}
 				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
 					if (option < 5) {
+						//cycle.setFramePosition(0);
+						cycle.loop(0);
+						cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
 						//listOptions.get(option).setVisible(true);
 						option++;
@@ -257,21 +219,15 @@ public class GUI {
 				} else if (event.getCode() == KeyCode.ENTER) {
 					System.out.print("Generate gameoption");
 					System.out.println(option);
+					click.setFramePosition(0);
+					click.loop(0);
 					controller.executeProcess(option); //prob change process in controller to 0 to 5 instead of 1 to 6
 				}
 				//listOptions.get(option).setVisible(false);
 				optionList.get(option).setEffect(shadow);
+				
 			}
 
 		});
-
-		//pane.getChildren().add(title);
-		//pane.getChildren().add(titleView);
-//		pane.getChildren().add(button1);
-//		pane.getChildren().add(button2);
-//		pane.getChildren().add(button3);
-//		pane.getChildren().add(button4);
-//		pane.getChildren().add(button5);
-//		pane.getChildren().add(button6);
 	}
 }
