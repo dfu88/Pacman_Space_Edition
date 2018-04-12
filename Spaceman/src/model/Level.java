@@ -9,7 +9,7 @@ import view.Spaceman;
 public class Level {
 	//make these private maybe?
 	public int lives;
-	public int timeRemaining;
+	public int timeLimit;
 	public int score;
 	
 	private int pelletsRemaining;
@@ -38,21 +38,39 @@ public class Level {
 		Map testMap = new Map();
 		testMap.initMap(2);
 		mapList.add(testMap);
+		
+		Map testMap2 = new Map();
+		testMap2.initMap(1);
+		mapList.add(testMap2);
+		
+		Map testMap3 = new Map();
+		testMap3.initMap(3);
+		mapList.add(testMap3);
 	}
 
-	private void initLevel(Map model) {
-		lives = 3;
-		timeRemaining = 120; //180?
+	public void initLevel(int mode) {
 		score = 0;
-		currentMap = model;
+		lives = 3;
+		if (mode == 3) {
+			timeLimit = -1;
+		} else {
+			timeLimit = 120; //180?
+		}
+		
+		makeMaps();
+		currentMap = mapList.get(mode);
 		//spaceman = new Spaceman(10, 15); //SHOULDNT BE HERE, SPACEMAN IS A CLASS THAT RELATES TO VIEW/GRAPHICS
 		//command to generate visuals for map goes here
 	}
-
-	public void setMap(int type) {
-		makeMaps();
-		initLevel(mapList.get(type));
+	
+	public int getTimeLimit() {
+		return timeLimit;
 	}
+//
+//	public void setMap(int type) {
+//		
+//		initLevel());
+//	}
 	
 	public void addPoints(int pointsToAdd) {
 		score += pointsToAdd;

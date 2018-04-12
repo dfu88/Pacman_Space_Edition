@@ -14,10 +14,12 @@ import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.AudioClip;
 
 public class Spaceman extends CharacterAnimate{
 
 	public LevelController levelController;
+	//private LevelVisuals view;
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
 	private int rotationIndex;
 	public ImageView imageView;
@@ -26,11 +28,15 @@ public class Spaceman extends CharacterAnimate{
 	private int keyInput;
 	private int currentRotation;
 	
-	public Clip pelletSound;
-
+	//public Clip pelletSound;
+	
+	private AudioClip pelletSound;
+	
 	public Spaceman(LevelController levelController, int x, int y) {
+	//public Spaceman(LevelController levelController, int x, int y) {
 		keyInput = -1;
 		
+		//this.view = view;
 		this.levelController = levelController;
 
 		// Intialise Spaceman grid position
@@ -66,31 +72,14 @@ public class Spaceman extends CharacterAnimate{
 		// remove later when movement logic is completed
 		status = MOVING;
 		
-		
-		try {
-			URL url = this.getClass().getResource("sound/sound1.wav");
-			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
-			Clip clip = AudioSystem.getClip();
-			clip.open(sound);
-			pelletSound = clip;
-			//clip.start();
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch blockaudioIn
-			e.printStackTrace();
-		}
-		
+		URL url = this.getClass().getResource("sound/boop.wav");
+		pelletSound = new AudioClip(url.toString());
 
 	}
 
 	@Override
 	public void moveOneStep() {
-
+//		levelController.respawnCollectables();
 		if (imageIndex == 0) {
 			changeCurrentDirection(keyInput);
 		}
@@ -115,9 +104,12 @@ public class Spaceman extends CharacterAnimate{
 		}
 		
 		if (status == MOVING) {
-			if (pelletSound.isRunning()) {
+//			if (pelletSound.isRunning()) {
+//				pelletSound.stop();
+//				pelletSound.setFramePosition(0);//reset sound to 0 seconds
+//			}
+			if (pelletSound.isPlaying()) {
 				pelletSound.stop();
-				pelletSound.setFramePosition(0);//reset sound to 0 seconds
 			}
 			if (dx != 0 && dy == 0) {
 				moveXAxis();
@@ -131,7 +123,11 @@ public class Spaceman extends CharacterAnimate{
 			imageView.setRotate(currentRotation);
 		}
 	}
-
+	
+	public void playPelletSound( ) {
+		pelletSound.play();
+	}
+	
 	private void moveXAxis() {
 		//Wallcheck logic: If next destination is wall, do not move, else move as normal
 		int nextX = x + dx;

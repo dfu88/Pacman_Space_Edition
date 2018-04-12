@@ -38,6 +38,7 @@ public class InterfaceController {
 			
 		} else if (option == 3) {
 			System.out.println("1269");
+			lvlCtrl.setLevel(3);
 			
 		} else if (option == 4) {
 			System.out.println("nice");

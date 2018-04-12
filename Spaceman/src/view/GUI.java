@@ -1,14 +1,7 @@
 package view;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.InterfaceController;//>??
 
@@ -33,6 +26,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
+import javafx.scene.media.AudioClip;
 
 
 public class GUI {
@@ -46,8 +40,11 @@ public class GUI {
 	private int option = 0;
 	private ArrayList<ImageView> optionList;
 	
-	public Clip click;
-	public Clip cycle;
+//	public Clip click;
+//	public Clip cycle;
+//	
+	private AudioClip cycle;
+	private AudioClip click;
 
 
 	public GUI (InterfaceController controller) {
@@ -61,30 +58,16 @@ public class GUI {
 		root.setBackground(new Background(bg));
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 		
-		//Get Sounds and store them in field variables
-		try {
-			URL url = this.getClass().getResource("sound/laser.wav");
-			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
-			Clip clip = AudioSystem.getClip();
-			clip.open(sound);
-			click = clip; 
-			
-			url = this.getClass().getResource("sound/sound1.wav");
-			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url);
-			clip = AudioSystem.getClip();
-			clip.open(sound2);
-			cycle = clip;
-			
-		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch blockaudioIn
-			e.printStackTrace();
-		}
+		//Load sound clips
+		//https://stackoverflow.com/questions/22648793/how-to-play-a-lots-of-sound-effects 
+		URL url = this.getClass().getResource("sound/laser1.wav");
+		click = new AudioClip(url.toString());
+		click.setVolume(0.4);
+		
+		url = this.getClass().getResource("sound/sound1.wav");
+		cycle = new AudioClip(url.toString());
+		
+		
 	}
 
 	public Scene returnScene() {
@@ -164,35 +147,32 @@ public class GUI {
 			@Override
 			public void handle(KeyEvent event) {
 				
-				if (cycle.isRunning()) {
-					cycle.stop();
-					cycle.setFramePosition(0);
-				}
+//				if (cycle.isRunning()) {
+//					cycle.stop();
+//					cycle.setFramePosition(0);
+//				}
 			
 				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
 					if (option> 0) {
-						cycle.loop(0); // use insteadof start();
+						//cycle.loop(0); // use insteadof start();
+						cycle.play();
 						optionList.get(option).setEffect(null);
 						option--;
 					}
 					
 				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
 					if (option < 5) {
-						cycle.loop(0);
+						cycle.play();
 						optionList.get(option).setEffect(null);
 						option++;
 					}
 					
 				} else if (event.getCode() == KeyCode.ENTER) {
-					System.out.print("Generate gameoption");
-					System.out.println(option);
-					click.setFramePosition(0);
-					click.loop(0);
+					click.play();
 					controller.executeProcess(option); 
 				}
 				
 				optionList.get(option).setEffect(shadow);
-				
 			}
 
 		});

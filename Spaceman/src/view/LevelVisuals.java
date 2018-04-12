@@ -23,6 +23,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
@@ -51,9 +52,13 @@ public class LevelVisuals {
 	private Group pauseMenu;
 	private Group gameView;
 	private Group countDownView;
+	private Group timeComponent;
 	public Spaceman spaceman;
+	private Pellet currentPellet;
 	
 	private ArrayList<Pellet> pelletsRendered;
+	private ArrayList<Integer> despawnIndex;
+	
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> pauseOptions;
 	
@@ -65,31 +70,26 @@ public class LevelVisuals {
 	private DropShadow shadow;
 	
 	private Clip countdown;
-	private Clip cycle;
+	private AudioClip cycle;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
 		pauseOptions = new ArrayList<ImageView>();
+		despawnIndex = new ArrayList<Integer>();
 		
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
 		
-		//Gets and stores sounds
+		//Countdown must be Clip instead of AudioClip since I need to pause it
+		URL url = this.getClass().getResource("sound/countdown.wav");
+		AudioInputStream sound;
 		try {
-			URL url = this.getClass().getResource("sound/countdown.wav");
-			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
-			Clip clip = AudioSystem.getClip();
-			clip.open(sound);
-			countdown = clip;
-			
-			url = this.getClass().getResource("sound/sound1.wav");
-			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url);
-			clip = AudioSystem.getClip();
-			clip.open(sound2);
-			cycle = clip;
-			
+			sound = AudioSystem.getAudioInputStream(url);
+			Clip soundClip = AudioSystem.getClip();
+			soundClip.open(sound);
+			countdown = soundClip;
 		} catch (UnsupportedAudioFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,9 +97,13 @@ public class LevelVisuals {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch blockaudioIn
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		url = this.getClass().getResource("sound/sound1.wav");
+		cycle = new AudioClip(url.toString());
 		
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -176,8 +180,8 @@ public class LevelVisuals {
 				}
 			}
 		}
-		
 		spaceman = new Spaceman(controller, startX, startY);
+		//spaceman = new Spaceman(controller, startX, startY);
 		group.getChildren().add(spaceman);
 		
 		//Add Aliens after map added to scene
@@ -204,27 +208,29 @@ public class LevelVisuals {
 		lives.setY(100.0);
 		group.getChildren().add(lives);
 		
-		
-		Text timeLabel = new Text("Time:");
-		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
-		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
-		timeLabel.setY(100.0);
-		group.getChildren().add(timeLabel);
-		
-		Text time = new Text();
-		time.setText(Integer.toString(controller.getLevel().timeRemaining));
-		time.setFont(Font.font("Comic Sans MS",50));
-		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
-		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
-		group.getChildren().add(time);
-		this.time = time;
-		
 		Text score = new Text("0");
 		score.setFont(Font.font("Comic Sans MS",50));
 		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		score.setY(500);
 		group.getChildren().add(score);
 		this.score = score;
+		
+		timeComponent = new Group();
+		Text timeLabel = new Text("Time:");
+		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
+		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
+		timeLabel.setY(100.0);
+		timeComponent.getChildren().add(timeLabel);
+		
+		Text time = new Text();
+		time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
+		time.setFont(Font.font("Comic Sans MS",50));
+		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
+		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
+		timeComponent.getChildren().add(time);
+		this.time = time;
+		
+		group.getChildren().add(timeComponent);
 		
 		return group;
 	}
@@ -296,19 +302,68 @@ public class LevelVisuals {
 		return scene;
 	}
 	
-	public void hideCorrespondingPellet(int charX, int charY) {
+	public boolean hideCorrespondingPellet(int charX, int charY) {
 		for (int index = 0; index < pelletsRendered.size(); index++) {
 			//Hides corresponding pellet matching destination of spaceman
-			if ((pelletsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
-				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
-					pelletsRendered.get(index).returnPellet().setVisible(false);
-				
-					spaceman.pelletSound.loop(0);
+			currentPellet = pelletsRendered.get(index);
+			//Respawn pellets at set time
+			if (currentPellet.getRespawnTime() == controller.getTimeElapsed()) {
+				pelletsRendered.get(index).returnPellet().setVisible(true);
+			} 
+			
+			if ((currentPellet.getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+				if ((currentPellet.getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					
+					if (currentPellet.returnPellet().isVisible()) {
+						pelletsRendered.get(index).returnPellet().setVisible(false);
+						spaceman.playPelletSound();
+						
+						//Endless mode: set respawn
+						if (controller.getMode() == 3) {
+							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
+							despawnIndex.add(index);
+						}
+						
+						return true;
+					}
 				}
 			}
+			
 		}
+		currentPellet = null;
+		return false;
 	}
+	
+	public void respawnPellet() {
+
+		for (int i = 0; i < despawnIndex.size(); i++) {
+			//testing prints
+			System.out.print("     ElapsedT: ");
+			System.out.println(controller.getTimeElapsed());
+			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() > controller.getTimeElapsed()) {
+				break; //seems to break a little early, need to fix this condition but still works fine-ish
+			}
+			//testing prints, remove next commit
+			System.out.print(i);
+			System.out.print(": ");
+			System.out.print(pelletsRendered.get(despawnIndex.get(i)).getRespawnTime());
+			System.out.print("     ElapsedT: ");
+			System.out.println(controller.getTimeElapsed());
+			//Respawn pellets at set time
+			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
+				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
+				//testing prints, remove next commit
+				System.out.print("indexRemoved: ");
+				System.out.println(i);
+				despawnIndex.remove(i);
+				
+			} 
+			
+		}
+		//testing print
+		System.out.println("------");
+	}
+	
 	//change for powerup after making powerup class
 	public void hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
@@ -316,6 +371,7 @@ public class LevelVisuals {
 			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
+					
 				}
 			}
 		}
@@ -326,7 +382,11 @@ public class LevelVisuals {
 	}
 	
 	public void updateTime(int time) {
-		this.time.setText(Integer.toString(controller.getLevel().timeRemaining));
+		if (time <= -1) {
+			timeComponent.setVisible(false);
+		} else {
+			this.time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
+		}
 	}
 	
 	//Controls countDown display
@@ -340,7 +400,7 @@ public class LevelVisuals {
 			
 		} else {
 			countDownView.setVisible(false);
-			countdown.setFramePosition(0);
+			//countdown.setFramePosition(0);
 		}
 		message.setX((SCENE_WIDTH-message.getLayoutBounds().getWidth())*0.5);
 	}
@@ -369,22 +429,27 @@ public class LevelVisuals {
 		}
 	}
 	
+	
 	public void playCountdown() {
-		countdown.loop(0); //for soem reason loop(0) works better than start()
+		countdown.start(); //for soem reason loop(0) works better than start()
 	}
 	
 	public void pauseCountdown() {
 		countdown.stop();
 	}
 	
+	public void resetCountdown() {
+		countdown.setFramePosition(0);
+	}
+	
+	
 	public void playCycleSound( ) {
-		cycle.loop(0);	//for soem reason loop(0) works better than start()
+		cycle.play();
 	}
 	
 	public void stopCycleClip( ) {
-		if (cycle.isRunning()) {
+		if (cycle.isPlaying()) {
 			cycle.stop();
-			cycle.setFramePosition(0);
 		}
 	}
 	
