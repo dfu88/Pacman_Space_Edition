@@ -68,12 +68,14 @@ public class ShortestPath {
 		// Intialise empty set of closed nodes (essentially visited nodes)
 		Vector<Vector<Integer>> closedNodes = new Vector<Vector<Integer>>();
 
-
-
+		// Get source and target nodes
 		Vector<Integer> sourceNode = nodes.get(nodeIndex(nodes, sourceX, sourceY));
 		Vector<Integer> targetNode = nodes.get(nodeIndex(nodes, targetX, targetY));
+		// Calculates heuristic of source node to target node
 		int sourceHeuristic = Math.abs(sourceX-targetX) + Math.abs(sourceY-targetY);
+		// Adds source node to the openNodes list
 		openNodes.add(sourceNode);
+		// Updates the weight, heuristic, and totalCost vectors for source node
 		weight.add(nodeIndex(nodes, sourceX, sourceY), 0);
 		heuristic.add(nodeIndex(nodes, sourceX, sourceY), sourceHeuristic);
 		totalCost.add(nodeIndex(nodes, sourceX, sourceY), sourceHeuristic);
