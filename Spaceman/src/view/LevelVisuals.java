@@ -149,6 +149,11 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 		//spaceman.start(); // NOTE: Change start spaceman animation after countdown
 		
+		//Add Aliens after map added to scene
+		Alien red = new Alien(controller,this,10,7,-1,0);
+		group.getChildren().add(red);
+		red.start();
+		
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
 		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
 		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
