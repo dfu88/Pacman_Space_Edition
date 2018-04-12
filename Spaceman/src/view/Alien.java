@@ -14,6 +14,7 @@ import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import model.ShortestPath;
 
 public class Alien extends CharacterAnimate{
 
@@ -37,16 +38,91 @@ public class Alien extends CharacterAnimate{
 		// Intialise Alien current direction
 		this.dx = dx;
 		this.dy = dy;
+
+		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
+		images = new Image[] {
+				startImage,
+				new Image(getClass().getResourceAsStream("res/left1.png")),
+				new Image(getClass().getResourceAsStream("res/round.png")),
+				new Image(getClass().getResourceAsStream("res/left1.png"))
+		};
+		imageIndex = 0;
+		currentImage = images[imageIndex];
+
+		imageView = new ImageView(startImage);
+		imageView.setX(graphicalX);
+		imageView.setY(graphicalY);
+		imageView.setImage(images[imageIndex]);
+
+		getChildren().add(imageView);
+
+		// remove later when movement logic is completed
+		status = MOVING;
 	}
 
+	// If moving in y-axis, move in x-axis or continue
 	private void moveLeftOrRight(boolean mustMove) {
+		//Initialise shortest path algorithm
+		ShortestPath moveRank = new ShortestPath(levelController);
+		int moveLeft = Integer.MAX_VALUE, moveRight = Integer.MAX_VALUE, moveContinue = Integer.MAX_VALUE;
+		if (dy == -1) {
+			moveContinue = moveRank.computeShortest(x, y-1, levelView.spaceman.x, levelView.spaceman.y);
+		} else if (dy == 1) {
+			moveContinue = moveRank.computeShortest(x, y+1, levelView.spaceman.x, levelView.spaceman.y);
+		}
+		moveLeft = moveRank.computeShortest(x-1, y, levelView.spaceman.x, levelView.spaceman.y);
+		moveRight = moveRank.computeShortest(x+1, y, levelView.spaceman.x, levelView.spaceman.y);
 		
+		System.out.println(moveLeft);
+		System.out.println(moveRight);
+		System.out.println(moveContinue);
+
+		if (moveLeft < moveRight && moveLeft < moveContinue) {
+			dx = -1;
+			dy = 0;
+			System.out.println("LEFTRIGHT--LEFT");
+		} else if (moveRight < moveLeft && moveRight < moveContinue) {
+			dx = 1;
+			dy = 0;
+			System.out.println("LEFTRIGHT--RIGHT");
+		} else {
+			System.out.println("LEFTRIGHT--CONTINUE");
+			return;
+		}
 	}
-	
+
+	// If moving in x-axis, move in y-axis or continue
 	private void moveUpOrDown(boolean mustMove) {
+		//Initialise shortest path algorithm
+		ShortestPath moveRank = new ShortestPath(levelController);
+		int moveUp = Integer.MAX_VALUE, moveDown = Integer.MAX_VALUE, moveContinue = Integer.MAX_VALUE;
+		if (dx == -1) {
+			moveContinue = moveRank.computeShortest(x-1, y, levelView.spaceman.x, levelView.spaceman.y);
+		} else if (dx == 1) {
+			moveContinue = moveRank.computeShortest(x+1, y, levelView.spaceman.x, levelView.spaceman.y);
+		}
+		moveUp = moveRank.computeShortest(x, y-1, levelView.spaceman.x, levelView.spaceman.y);
+		moveDown = moveRank.computeShortest(x, y+1, levelView.spaceman.x, levelView.spaceman.y);
+
+		System.out.println(moveUp);
+		System.out.println(moveDown);
+		System.out.println(moveContinue);
 		
+		if (moveUp < moveDown && moveUp < moveContinue) {
+			dx = 0;
+			dy = -1;
+			System.out.println("UPDOWN--UP");
+
+		} else if (moveDown < moveUp && moveDown < moveContinue) {
+			dx = 0;
+			dy = 1;
+			System.out.println("UPDOWN--DOWN");
+		} else {
+			System.out.println("UPDOWN--CONTINUE");
+			return;
+		}
 	}
-	
+
 	private void moveXAxis() {
 		//Wallcheck logic: If next destination is wall, do not move, else move as normal
 		int nextX = x + dx;
@@ -70,7 +146,9 @@ public class Alien extends CharacterAnimate{
 				} else {
 					x = x + dx;
 				}
+			
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+				moveUpOrDown(false);
 			}
 		}
 	}
@@ -78,7 +156,7 @@ public class Alien extends CharacterAnimate{
 	private void moveYAxis() {
 		int nextY = y + dy;
 		if (levelController.checkMap(x,nextY) == 1) {
-			imageIndex=0;
+			moveLeftOrRight(true);
 		} else {
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
@@ -88,6 +166,7 @@ public class Alien extends CharacterAnimate{
 				moveCounter = 0;
 				y = y + dy;
 				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+				moveLeftOrRight(false);
 			}
 		}
 	}
