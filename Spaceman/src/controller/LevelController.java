@@ -88,6 +88,7 @@ public class LevelController {
 							currentView.spaceman.stop();
 							timeline.stop();
 							startTimer = 3;
+							pauseMenuOption = 0;
 							controller.showHome();
 						}
 					} else {
