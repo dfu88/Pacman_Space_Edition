@@ -5,13 +5,13 @@ import java.util.Vector;
 import controller.LevelController;
 
 public class ShortestPath {
-	private int[][] mapArray;
+	//private int[][] mapArray;
 	public LevelController levelController;
 	//	private ArrayList<Integer> nextDXDY; //{dx,dy}
 
 
-	public ShortestPath(int[][] mapArray, LevelController levelController) {
-		this.mapArray = mapArray;
+	public ShortestPath(LevelController levelController) {
+		//this.mapArray = mapArray;
 		this.levelController = levelController;
 	}
 
@@ -33,7 +33,7 @@ public class ShortestPath {
 
 	public int computeShortest(int sourceX, int sourceY, int targetX, int targetY){
 		// Intialise set of nodes
-		Vector<Vector<Integer>> nodes = null;
+		Vector<Vector<Integer>> nodes = new Vector<Vector<Integer>>();
 		// Add all nodes
 		for (int row=0; row<21; row++) {
 			for (int col=0; col<21; col++) {
