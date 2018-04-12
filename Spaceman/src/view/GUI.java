@@ -72,11 +72,11 @@ public class GUI {
 			clip.open(sound);
 			click = clip;
 			
-			URL url2 = this.getClass().getResource("sound/sound1.wav");
-			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
-			Clip clip2 = AudioSystem.getClip();
-			clip2.open(sound2);
-			cycle = clip2;
+			url = this.getClass().getResource("sound/sound1.wav");
+			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(sound2);
+			cycle = clip;
 			//clip.start();
 		} catch (UnsupportedAudioFileException e) {
 			// TODO Auto-generated catch block
@@ -172,31 +172,35 @@ public class GUI {
 		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
 			@Override
 			public void handle(KeyEvent event) {
-				cycle.setFramePosition(0);
-				try {//crashes if i hold down up or down heaps
-					
-					URL url2 = this.getClass().getResource("sound/sound1.wav");
-					AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
-					Clip clip2 = AudioSystem.getClip();
-					clip2.open(sound2);
-					cycle = clip2;
-					//clip.start();
-				} catch (UnsupportedAudioFileException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (LineUnavailableException e) {
-					// TODO Auto-generated catch blockaudioIn
-					e.printStackTrace();
+				
+				if (cycle.isRunning()) { //seems fine as of 12/4/18 1PM
+					cycle.stop();
+					cycle.setFramePosition(0);
 				}
+//				try {//crashes if i hold down up or down heaps
+//					
+//					URL url2 = this.getClass().getResource("sound/sound1.wav");
+//					AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
+//					Clip clip2 = AudioSystem.getClip();
+//					clip2.open(sound2);
+//					cycle = clip2;
+//					//clip.start();
+//				} catch (UnsupportedAudioFileException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (LineUnavailableException e) {
+//					// TODO Auto-generated catch blockaudioIn
+//					e.printStackTrace();
+//				}
 				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
 					if (option> 0) {
 						//cycle.setFramePosition(0);
 						//cycle.setFramePosition(0);
 						cycle.loop(0);
-						cycle.setFramePosition(0);
+						//cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
 						//listOptions.get(option).setVisible(true);
 						option--;
@@ -208,7 +212,7 @@ public class GUI {
 					if (option < 5) {
 						//cycle.setFramePosition(0);
 						cycle.loop(0);
-						cycle.setFramePosition(0);
+						//cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
 						//listOptions.get(option).setVisible(true);
 						option++;
