@@ -19,13 +19,14 @@ import javafx.scene.layout.Background;
 import javafx.scene.text.*;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-//import javafx.scene.shape.*;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -43,8 +44,6 @@ public class GUI {
 	private Scene scene;
 
 	private int option = 0;
-	private ArrayList<Button> listOptions;
-
 	private ArrayList<ImageView> optionList;
 	
 	public Clip click;
@@ -61,23 +60,21 @@ public class GUI {
 		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		root.setBackground(new Background(bg));
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
-		//scene.setFill(Color.DARKBLUE);
-//		listOptions = new ArrayList<Button>();
-//		optionList = new ArrayList<ImageView>();
 		
+		//Get Sounds and store them in field variables
 		try {
 			URL url = this.getClass().getResource("sound/laser.wav");
 			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
 			Clip clip = AudioSystem.getClip();
 			clip.open(sound);
-			click = clip;
+			click = clip; 
 			
 			url = this.getClass().getResource("sound/sound1.wav");
 			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url);
 			clip = AudioSystem.getClip();
 			clip.open(sound2);
 			cycle = clip;
-			//clip.start();
+			
 		} catch (UnsupportedAudioFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,25 +93,20 @@ public class GUI {
 
 	private void addComponents(AnchorPane pane) {
 		
-		
-		listOptions = new ArrayList<Button>();
 		optionList = new ArrayList<ImageView>();
 		//Setup home screen nodes
-		double minWidthFromNodes = 40.0;
-		double minHeightFromNodes = 50.0;
+		double minDistFromNodes = 50.0;
 
 		//Title
 		//Prob implement custom fonts
 		Image title = new Image(getClass().getResourceAsStream("bg/title.png"));
 		ImageView titleView = new ImageView(title);
 		titleView.setX((SCENE_WIDTH-title.getWidth())*0.5);
-		titleView.setY(minHeightFromNodes);
+		titleView.setY(minDistFromNodes);
 		titleView.setScaleX(0.75);
 		titleView.setScaleY(0.75);
-//		Text title = new Text();
-//		title.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));//font not changing
-//		title.setFill(Color.AZURE);
-//		title.setText("Pacman: SPACE Edition");
+		pane.getChildren().add(titleView);
+		//not specific to title view i think
 		titleView.setFocusTraversable(true); //IMPORTANT, this allows keyevent recognisition w/o the buttons
 											//https://stackoverflow.com/questions/31320018/javafx-key-press-not-captured
 		
@@ -123,6 +115,7 @@ public class GUI {
 		
 		Image btn0 = new Image(getClass().getResourceAsStream("bg/btn0.png"));
 		ImageView btn0View = new ImageView(btn0);
+		btn0View.setEffect(shadow); //Initial choice
 		optionList.add(btn0View);
 		
 		Image btn1 = new Image(getClass().getResourceAsStream("bg/btn1.png"));
@@ -149,7 +142,7 @@ public class GUI {
 			optionList.get(i).setScaleX(0.4);
 			optionList.get(i).setScaleY(0.4);
 			optionList.get(i).setX((SCENE_WIDTH-optionList.get(i).getLayoutBounds().getWidth())*0.5);
-			optionList.get(i).setY((minHeightFromNodes*(i+2)+title.getHeight()*titleView.getScaleY()+optionList.get(i).getLayoutBounds().getHeight()*i*0.4));
+			optionList.get(i).setY((minDistFromNodes*(i+2)+title.getHeight()*titleView.getScaleY()+optionList.get(i).getLayoutBounds().getHeight()*i*0.4));
 //			optionList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
 //			     @Override
 //			     public void handle(MouseEvent event) {
@@ -165,69 +158,39 @@ public class GUI {
 			pane.getChildren().add(optionList.get(i));
 		}
 		
-		btn0View.setEffect(shadow);
-		pane.getChildren().add(titleView);
-
+		//Can prob be a function
 		//key event
 		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
 			@Override
 			public void handle(KeyEvent event) {
 				
-				if (cycle.isRunning()) { //seems fine as of 12/4/18 1PM
+				if (cycle.isRunning()) {
 					cycle.stop();
 					cycle.setFramePosition(0);
 				}
-//				try {//crashes if i hold down up or down heaps
-//					
-//					URL url2 = this.getClass().getResource("sound/sound1.wav");
-//					AudioInputStream sound2 = AudioSystem.getAudioInputStream(url2);
-//					Clip clip2 = AudioSystem.getClip();
-//					clip2.open(sound2);
-//					cycle = clip2;
-//					//clip.start();
-//				} catch (UnsupportedAudioFileException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (IOException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				} catch (LineUnavailableException e) {
-//					// TODO Auto-generated catch blockaudioIn
-//					e.printStackTrace();
-//				}
+			
 				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
 					if (option> 0) {
-						//cycle.setFramePosition(0);
-						//cycle.setFramePosition(0);
-						cycle.loop(0);
-						//cycle.setFramePosition(0);
+						cycle.loop(0); // use insteadof start();
 						optionList.get(option).setEffect(null);
-						//listOptions.get(option).setVisible(true);
 						option--;
-						System.out.print("changed option (up)");
-						System.out.println(option);
-
 					}
+					
 				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
 					if (option < 5) {
-						//cycle.setFramePosition(0);
 						cycle.loop(0);
-						//cycle.setFramePosition(0);
 						optionList.get(option).setEffect(null);
-						//listOptions.get(option).setVisible(true);
 						option++;
-						System.out.print("changed option (down)");
-						System.out.println(option);
-						//button1.setVisible(false);
 					}
+					
 				} else if (event.getCode() == KeyCode.ENTER) {
 					System.out.print("Generate gameoption");
 					System.out.println(option);
 					click.setFramePosition(0);
 					click.loop(0);
-					controller.executeProcess(option); //prob change process in controller to 0 to 5 instead of 1 to 6
+					controller.executeProcess(option); 
 				}
-				//listOptions.get(option).setVisible(false);
+				
 				optionList.get(option).setEffect(shadow);
 				
 			}
