@@ -1,6 +1,14 @@
 package view;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.LevelController;
 
@@ -37,19 +45,27 @@ public class LevelVisuals {
 	double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 	
 	private LevelController controller;
+	
 	private Scene scene;
 	private Group root;
+	private Group pauseMenu;
+	private Group gameView;
+	private Group countDownView;
+	public Spaceman spaceman;
+	
 	private ArrayList<Pellet> pelletsRendered;
 	private ArrayList<PowerUp> powerUpsRendered;
+	private ArrayList<ImageView> pauseOptions;
+	
 	private Text score;
 	private Text time;
 	private Text message;
-	public Spaceman spaceman;
-	private Group setting;
-	private Group gameView;
+	
 	private GaussianBlur blur;
 	private DropShadow shadow;
-	private ArrayList<ImageView> pauseOptions;
+	
+	private Clip countdown;
+	private Clip cycle;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
@@ -60,6 +76,31 @@ public class LevelVisuals {
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
 		
+		//Gets and stores sounds
+		try {
+			URL url = this.getClass().getResource("sound/countdown.wav");
+			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
+			Clip clip = AudioSystem.getClip();
+			clip.open(sound);
+			countdown = clip;
+			
+			url = this.getClass().getResource("sound/sound1.wav");
+			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url);
+			clip = AudioSystem.getClip();
+			clip.open(sound2);
+			cycle = clip;
+			
+		} catch (UnsupportedAudioFileException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (LineUnavailableException e) {
+			// TODO Auto-generated catch blockaudioIn
+			e.printStackTrace();
+		}
+		
 		//Setup Scene for game visuals
 		root = new Group(); 
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
@@ -67,10 +108,6 @@ public class LevelVisuals {
 		
 //		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 //		root.setBackground(new Background(bg));
-	}
-
-	public Scene returnScene() {
-		return scene;
 	}
 	
 	public void generateMap() {
@@ -80,16 +117,16 @@ public class LevelVisuals {
 		root.getChildren().clear();
 		
 		gameView = addGameComponents();
+		gameView.setEffect(blur);
 		root.getChildren().add(gameView);
 		
+		countDownView = addCountDown();
+		root.getChildren().add(countDownView);
 		
+		pauseMenu = addPauseMenu();
+		pauseMenu.setVisible(false);
+		root.getChildren().add(pauseMenu);
 		
-		setting = addPauseMenu();
-		setting.setVisible(false);
-		root.getChildren().add(setting);
-		
-				
-		//setting.setVisible(false);
 	}	
 	
 	private Group addGameComponents() {
@@ -99,7 +136,7 @@ public class LevelVisuals {
 		
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
-				System.out.print(controller.getLevel().getCurrentMap().getData(row, col));
+				
 				int currentElement = controller.getLevel().getCurrentMap().getData(row, col);
 				//Walls
 				if (currentElement == 1) {
@@ -118,9 +155,6 @@ public class LevelVisuals {
 				} 
 				//Magic Pellet	
 				else if (currentElement == 3) {
-//					Circle powerup = new Circle(mapOffsetX+tileWidth*col+tileWidth*0.5, mapOffsetY+tileHeight*row+tileHeight*0.5, tileWidth*0.35);
-//					powerup.setFill(Color.CRIMSON);
-//					group.getChildren().add(powerup);
 					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
 					//we can have a class 'Theme' to have a combination of preset colours to use
 					powerUp.returnPowerUp().setFill(Color.CRIMSON); 
@@ -141,13 +175,10 @@ public class LevelVisuals {
 					startY = row;
 				}
 			}
-			System.out.println("");
 		}
 		
-		//Add Spaceman after map added to scene
 		spaceman = new Spaceman(controller, startX, startY);
 		group.getChildren().add(spaceman);
-		//spaceman.start(); // NOTE: Change start spaceman animation after countdown
 		
 		//Add Aliens after map added to scene
 		Alien red = new Alien(controller,this,10,7,-1,0);
@@ -166,17 +197,15 @@ public class LevelVisuals {
 		
 		
 		
-		//add other level objects
-		Text lives = new Text();
-		lives.setText("Lives");
+		//Add parameter displays
+		Text lives = new Text("Lives");
 		lives.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
 		lives.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		lives.setY(100.0);
 		group.getChildren().add(lives);
 		
 		
-		Text timeLabel = new Text();
-		timeLabel.setText("Time:");
+		Text timeLabel = new Text("Time:");
 		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
 		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
 		timeLabel.setY(100.0);
@@ -190,21 +219,33 @@ public class LevelVisuals {
 		group.getChildren().add(time);
 		this.time = time;
 		
-		Text score = new Text();
-		//score.setText(Integer.toString(controller.getLevel().getScore()));
-		score.setText("0");
+		Text score = new Text("0");
 		score.setFont(Font.font("Comic Sans MS",50));
-		//score.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-score.getLayoutBounds().getWidth())*0.5));
-		//score.setY(100+scoreLabel.getLayoutBounds().getHeight()+10);
 		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		score.setY(500);
 		group.getChildren().add(score);
 		this.score = score;
 		
-		Text message = new Text();
-		message.setText("Press Enter to start");
+		return group;
+	}
+	
+	private Group addCountDown() {
+		Group group = new Group();
+		Rectangle frame = new Rectangle(1440,300);
+		frame.setFill(Color.BLACK);
+		frame.setStroke(Color.WHITE);
+		frame.setStrokeWidth(2.0);
+//		frame.setArcHeight(15);
+//		frame.setArcWidth(15);
+		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
+		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
+		group.getChildren().add(frame);
+		
+		Text message = new Text("Press Enter to start");
+		message.setFont(Font.font("Comic Sans MS",100));
+		message.setFill(Color.WHITE);
 		message.setX((SCENE_WIDTH-message.getLayoutBounds().getWidth())*0.5);
-		message.setY((SCENE_HEIGHT-message.getLayoutBounds().getHeight())*0.5);
+		message.setY((SCENE_HEIGHT-message.getLayoutBounds().getHeight())*0.5+100);
 		group.getChildren().add(message);
 		this.message = message;
 		
@@ -244,24 +285,25 @@ public class LevelVisuals {
 		closeButton.setX(frame.getX()+frame.getLayoutBounds().getWidth()-closeButton.getLayoutBounds().getWidth()-100);
 		closeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
 		pauseOptions.add(closeButton);
-		//Image exit = new Image(getClass().getResourceAsStream("misc/exit.png"));
-		//closeButton.set
-//		closeButton.setScaleX(0.35);
-//		closeButton.setScaleY(0.35);
+
 		group.getChildren().add(closeButton);
 		group.getChildren().add(resumeButton);
-		//System.out.println(closeButton.getLayoutX());
 		
 		return group;
 	}
 	
+	public Scene returnScene() {
+		return scene;
+	}
+	
 	public void hideCorrespondingPellet(int charX, int charY) {
 		for (int index = 0; index < pelletsRendered.size(); index++) {
+			//Hides corresponding pellet matching destination of spaceman
 			if ((pelletsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					pelletsRendered.get(index).returnPellet().setVisible(false);
 				
-					spaceman.pelletSound.loop(0);// play sound once
+					spaceman.pelletSound.loop(0);
 					
 				}
 			}
@@ -270,6 +312,7 @@ public class LevelVisuals {
 	//change for powerup after making powerup class
 	public void hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
+			//Hides corresponding power up matching destination of spaceman
 			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
@@ -286,29 +329,31 @@ public class LevelVisuals {
 		this.time.setText(Integer.toString(controller.getLevel().timeRemaining));
 	}
 	
+	//Controls countDown display
 	public void updateMessage(int value) {
-		System.out.print("dsdsd");
-		System.out.println(value);
+		gameView.setEffect(null);
 		if (value>0) {
 			message.setText(Integer.toString(value));
+			
 		} else if (value==0) {
 			message.setText("START!!");
+			
 		} else {
-			System.out.println("ggddg");
-			message.setVisible(false);
+			countDownView.setVisible(false);
+			countdown.setFramePosition(0);
 		}
 		message.setX((SCENE_WIDTH-message.getLayoutBounds().getWidth())*0.5);
 	}
 
 	public void updatePauseScreen(boolean wasPaused) {
-		// TODO Auto-generated method stub
+		
 		if (wasPaused) {
 			gameView.setEffect(blur);
-			setting.setVisible(true);
+			pauseMenu.setVisible(true);
 			
 		} else {
 			gameView.setEffect(null);
-			setting.setVisible(false);
+			pauseMenu.setVisible(false);
 			
 		}
 		
@@ -323,5 +368,25 @@ public class LevelVisuals {
 			pauseOptions.get(option-1).setEffect(null);
 		}
 	}
-
+	
+	public void playCountdown() {
+		countdown.loop(0); //for soem reason loop(0) works better than start()
+	}
+	
+	public void pauseCountdown() {
+		countdown.stop();
+	}
+	
+	public void playCycleSound( ) {
+		cycle.loop(0);	//for soem reason loop(0) works better than start()
+	}
+	
+	public void stopCycleClip( ) {
+		if (cycle.isRunning()) {
+			cycle.stop();
+			cycle.setFramePosition(0);
+		}
+	}
+	
+	
 }

@@ -115,7 +115,10 @@ public class Spaceman extends CharacterAnimate{
 		}
 		
 		if (status == MOVING) {
-			pelletSound.setFramePosition(0);//reset sound to 0 seconds
+			if (pelletSound.isRunning()) {
+				pelletSound.stop();
+				pelletSound.setFramePosition(0);//reset sound to 0 seconds
+			}
 			if (dx != 0 && dy == 0) {
 				moveXAxis();
 			} 

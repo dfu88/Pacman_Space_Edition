@@ -20,101 +20,190 @@ public class LevelController {
 	private InterfaceController interfaceCtrl;
 	private LevelVisuals currentView;
 	private Level levelModel;
-	//public Spaceman spaceman;
+	
 	private Timeline timeline;
-	private int startTimer;
-	private boolean paused;
-	private int pauseMenuOption;
+	private int startTimer = 3;
+	
+	private boolean paused = false;
+	private int pauseMenuOption = 0;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
 		currentView = new LevelVisuals(this);
 		levelModel = new Level();
-		timeline = makeTimeline();
-		startTimer = 3;
-		paused = false;
 		
-		//levelModel.makeMaps();
-
+		timeline = makeTimeline();
+		
+		//maybe make this a function
 		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
 			public void handle(KeyEvent input) {
+				
+				//temp, trying to get cycle sound to work consistently
+				currentView.stopCycleClip();
+				
 				if (input.getCode() == KeyCode.LEFT) {
+					//When in pause screen controls option selection instead
 					if (paused) {
 						if (pauseMenuOption > 0) {
 							pauseMenuOption--;
+							currentView.playCycleSound();
+//							currentView.playCycle();
 						}
-						System.out.println("a");
 						currentView.cycleOptions(pauseMenuOption);
+							
 					} else {
 						currentView.spaceman.setKeyInput(0);
+						
 					}
+					
+					
 				} else if(input.getCode() == KeyCode.RIGHT) {
+					//When in pause screen controls option selection instead
 					if (paused) {
 						if (pauseMenuOption < 1) {
 							pauseMenuOption++;
+							//currentView.playCycle();
+							currentView.playCycleSound();
 						}
-						System.out.println("b");
+						
 						currentView.cycleOptions(pauseMenuOption);
+						
 					} else {
 						currentView.spaceman.setKeyInput(2);
+						
 					}
+					
 				} else if(input.getCode() == KeyCode.UP) {
 					currentView.spaceman.setKeyInput(1);
+					
 				} else if(input.getCode() == KeyCode.DOWN) {
 					currentView.spaceman.setKeyInput(3);
+					
 				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
 					levelModel.timeRemaining = 0;
 					currentView.updateTime(levelModel.timeRemaining);
 					currentView.spaceman.stop();
+					//disp gameover screen?
 					
-				} else if(input.getCode() == KeyCode.H) {
-					currentView.spaceman.stop();
-					timeline.stop();
-					startTimer = 3;
-					controller.showHome();
 				} else if(input.getCode() == KeyCode.ENTER) {
+					
+					//When in pause screen controls option selection instead
 					if (paused) {
-						//resume
+						//Resumes the game
 						if (pauseMenuOption == 0) {
-							timeline.play();
+							//Resumes the Countdown Sound if paused during it
+							if (startTimer>= 0) {
+								currentView.playCountdown(); 
+							}
+							
 						//maybe make a bool var isCountdown isntead for clarity
-							if (levelModel.timeRemaining>0 & startTimer<= -1) { 
+							//Spaceman starts moving when not in CountDown stage and there is time left
+							if (levelModel.timeRemaining>0 & startTimer<= -2) { 
 								currentView.spaceman.start();
 							}
-							paused = !paused;
-							currentView.updatePauseScreen(paused);
+							
+							timeline.play();
+							currentView.updatePauseScreen(!paused);
+						
+						//Quits the game
 						} else if (pauseMenuOption == 1){
-							//exit
+							
 							currentView.spaceman.stop();
 							timeline.stop();
+							
+							//Resets initial level states //consider an init() func instead
 							startTimer = 3;
+							pauseMenuOption = 0;
+							
 							controller.showHome();
 						}
+						
+						paused = !paused;
+					
+					//Start CountDown
 					} else {
+						
 						timeline.play();
 					}
-					//currentView.spaceman.start();
-					///countdown.schedule(startGame,1000l); //starts after 3 seconds prob use timeline instead
-					//currentView.spaceman.start();//enter to start timer goes before this
-				} else if(input.getCode() == KeyCode.P) { //seems to bug out the countdown
+
+				} else if(input.getCode() == KeyCode.P) {
+					
 					paused = !paused;
 					pauseMenuOption = 0;
+					
+					//Pauses the game
 					if (paused) {
+						currentView.pauseCountdown();
 						timeline.pause();
 						currentView.spaceman.pause();
-			
+					
+					//Resumes the game
 					} else {
+						
 						timeline.play();
+						
+						//Resumes Countdown Sound if interrupted
+						if (startTimer>= 0) {
+							currentView.playCountdown();
+
+						}
+						
 						//maybe make a bool var isCountdown isntead for clarity
-						if (levelModel.timeRemaining>0 & startTimer<= -1) { 
+						//Spaceman starts moving when not in Countdown Stage and there is time remaining
+						if (levelModel.timeRemaining>0 & startTimer<= -2) { 
 							currentView.spaceman.start();
 						}
 					}
+					
 					currentView.updatePauseScreen(paused);
 					
 				}
 			}
 		});
+	}
+	
+	private Timeline makeTimeline() {
+		timeline = new Timeline();
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
+
+			@Override
+			public void handle(ActionEvent event) {
+				if (levelModel.timeRemaining !=0) {
+					//Play initial CountDown sound
+					if (startTimer == 3) { //seems to be synchronised with the countdown here
+						currentView.playCountdown();
+					}
+					
+					//While still in CountDown State
+					if (startTimer >= -1) {
+						currentView.updateMessage(startTimer);
+						if ((startTimer == 0)) {
+							currentView.spaceman.start();
+						}
+						startTimer--;
+					
+					//In game timer
+					} else if (levelModel.timeRemaining > 0) {
+						levelModel.timeRemaining--;
+						currentView.updateTime(levelModel.timeRemaining);
+						
+					}
+				
+				//When time runs out
+				} else {
+					currentView.updateMessage(-1);
+					timeline.stop();
+					currentView.pauseCountdown();
+					//prob stop sounds here
+					//gameover screen
+				}
+			}
+
+		});
+		timeline.getKeyFrames().add(keyFrame);
+
+		return timeline;
 	}
 	
 	public Level getLevel() {
@@ -135,15 +224,15 @@ public class LevelController {
 		
 		if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 2) {
 			currentView.hideCorrespondingPellet(posX+dx, posY + dy);
+			
 			levelModel.addPoints(100);
 			currentView.updateScore(levelModel.getScore());
-			//update score visual?
-			//System.out.println(levelModel.getScore()); //temp
 			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
+			
 		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
 			//do power up stuff
 			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
-			System.out.println("lol");
+
 			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
@@ -151,48 +240,7 @@ public class LevelController {
 		//but if using updateData function then must be in the if statements
 	}
 	
-	private Timeline makeTimeline() {
-		timeline = new Timeline();
-		timeline.setCycleCount(Timeline.INDEFINITE);
-		KeyFrame keyFrame = new KeyFrame(Duration.millis(1000), new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent event) {
-				//moveOneStep();
-				if (levelModel.timeRemaining !=0) {
-					if (startTimer >= -1) {
-						currentView.updateMessage(startTimer);
-						if ((startTimer == 0)) {
-							currentView.spaceman.start();
-						}
-						startTimer--;
-						System.out.println(startTimer);
-						//if (startTimer == 0) {
-							//currentView.updateMessage(startTimer);
-							
-						//}
-					} else if (levelModel.timeRemaining > 0) {
-						levelModel.timeRemaining--;
-						currentView.updateTime(levelModel.timeRemaining);
-						//System.out.println(levelModel.timeRemaining);
-					} else {
-						System.out.println("Gameover");
-						timeline.stop(); //not stopping as intended
-					}
-				} else {
-					System.out.println("assas");
-					//int temp = -1;
-					currentView.updateMessage(-1);
-					System.out.println("OwO");
-					timeline.stop();
-				}
-			}
-
-		});
-		timeline.getKeyFrames().add(keyFrame);
-
-		return timeline;
-	}
+	
 	
 	public int getCountdown() {
 		return startTimer;
