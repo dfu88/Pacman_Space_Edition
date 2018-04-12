@@ -86,7 +86,7 @@ public class LevelController {
 					//disp gameover screen?
 					
 				} else if(input.getCode() == KeyCode.ENTER) {
-					
+					currentView.playCycleSound();
 					//When in pause screen controls option selection instead
 					if (paused) {
 						//Resumes the game
@@ -127,7 +127,7 @@ public class LevelController {
 					}
 
 				} else if(input.getCode() == KeyCode.P) {
-					
+					currentView.playCycleSound();
 					paused = !paused;
 					pauseMenuOption = 0;
 					
@@ -162,6 +162,7 @@ public class LevelController {
 		});
 	}
 	
+	//consider seperating timelines for time and countdown
 	private Timeline makeTimeline() {
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);

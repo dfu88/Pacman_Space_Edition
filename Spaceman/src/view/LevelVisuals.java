@@ -23,6 +23,7 @@ import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
@@ -65,7 +66,7 @@ public class LevelVisuals {
 	private DropShadow shadow;
 	
 	private Clip countdown;
-	private Clip cycle;
+	private AudioClip cycle;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
@@ -76,20 +77,14 @@ public class LevelVisuals {
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
 		
-		//Gets and stores sounds
+		//Countdown must be Clip instead of AudioClip since I need to pause it
+		URL url = this.getClass().getResource("sound/countdown.wav");
+		AudioInputStream sound;
 		try {
-			URL url = this.getClass().getResource("sound/countdown.wav");
-			AudioInputStream sound = AudioSystem.getAudioInputStream(url);
-			Clip clip = AudioSystem.getClip();
-			clip.open(sound);
-			countdown = clip;
-			
-			url = this.getClass().getResource("sound/sound1.wav");
-			AudioInputStream sound2 = AudioSystem.getAudioInputStream(url);
-			clip = AudioSystem.getClip();
-			clip.open(sound2);
-			cycle = clip;
-			
+			sound = AudioSystem.getAudioInputStream(url);
+			Clip soundClip = AudioSystem.getClip();
+			soundClip.open(sound);
+			countdown = soundClip;
 		} catch (UnsupportedAudioFileException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -97,9 +92,13 @@ public class LevelVisuals {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch blockaudioIn
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		
+		url = this.getClass().getResource("sound/sound1.wav");
+		cycle = new AudioClip(url.toString());
 		
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -298,7 +297,8 @@ public class LevelVisuals {
 				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					pelletsRendered.get(index).returnPellet().setVisible(false);
 				
-					spaceman.pelletSound.loop(0);
+					//spaceman.pelletSound.loop(0);
+					spaceman.playPelletSound();
 					
 				}
 			}
@@ -335,7 +335,7 @@ public class LevelVisuals {
 			
 		} else {
 			countDownView.setVisible(false);
-			countdown.setFramePosition(0);
+			//countdown.setFramePosition(0);
 		}
 		message.setX((SCENE_WIDTH-message.getLayoutBounds().getWidth())*0.5);
 	}
@@ -364,8 +364,9 @@ public class LevelVisuals {
 		}
 	}
 	
+	
 	public void playCountdown() {
-		countdown.loop(0); //for soem reason loop(0) works better than start()
+		countdown.start(); //for soem reason loop(0) works better than start()
 	}
 	
 	public void pauseCountdown() {
@@ -373,13 +374,12 @@ public class LevelVisuals {
 	}
 	
 	public void playCycleSound( ) {
-		cycle.loop(0);	//for soem reason loop(0) works better than start()
+		cycle.play();
 	}
 	
 	public void stopCycleClip( ) {
-		if (cycle.isRunning()) {
+		if (cycle.isPlaying()) {
 			cycle.stop();
-			cycle.setFramePosition(0);
 		}
 	}
 	
