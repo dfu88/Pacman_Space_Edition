@@ -60,8 +60,9 @@ public class GUI {
 		
 		//Load sound clips
 		//https://stackoverflow.com/questions/22648793/how-to-play-a-lots-of-sound-effects 
-		URL url = this.getClass().getResource("sound/laser.wav");
+		URL url = this.getClass().getResource("sound/laser1.wav");
 		click = new AudioClip(url.toString());
+		click.setVolume(0.4);
 		
 		url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());

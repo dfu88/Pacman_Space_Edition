@@ -19,6 +19,7 @@ import javafx.scene.media.AudioClip;
 public class Spaceman extends CharacterAnimate{
 
 	public LevelController levelController;
+	//private LevelVisuals view;
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
 	private int rotationIndex;
 	public ImageView imageView;
@@ -30,10 +31,12 @@ public class Spaceman extends CharacterAnimate{
 	//public Clip pelletSound;
 	
 	private AudioClip pelletSound;
-
+	
 	public Spaceman(LevelController levelController, int x, int y) {
+	//public Spaceman(LevelController levelController, int x, int y) {
 		keyInput = -1;
 		
+		//this.view = view;
 		this.levelController = levelController;
 
 		// Intialise Spaceman grid position
@@ -88,14 +91,14 @@ public class Spaceman extends CharacterAnimate{
 //			// TODO Auto-generated catch blockaudioIn
 //			e.printStackTrace();
 //		}
-		URL url = this.getClass().getResource("sound/sound1.wav");
+		URL url = this.getClass().getResource("sound/boop.wav");
 		pelletSound = new AudioClip(url.toString());
 
 	}
 
 	@Override
 	public void moveOneStep() {
-
+		levelController.respawnCollectables();
 		if (imageIndex == 0) {
 			changeCurrentDirection(keyInput);
 		}

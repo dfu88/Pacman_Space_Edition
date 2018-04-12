@@ -52,9 +52,12 @@ public class LevelVisuals {
 	private Group pauseMenu;
 	private Group gameView;
 	private Group countDownView;
+	private Group timeComponent;
 	public Spaceman spaceman;
+	private Pellet currentPellet;
 	
 	private ArrayList<Pellet> pelletsRendered;
+	private ArrayList<Pellet> despawnedPellets;
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> pauseOptions;
 	
@@ -73,6 +76,7 @@ public class LevelVisuals {
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
 		pauseOptions = new ArrayList<ImageView>();
+		despawnedPellets = new ArrayList<Pellet>();
 		
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
@@ -175,8 +179,8 @@ public class LevelVisuals {
 				}
 			}
 		}
-		
 		spaceman = new Spaceman(controller, startX, startY);
+		//spaceman = new Spaceman(controller, startX, startY);
 		group.getChildren().add(spaceman);
 		
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
@@ -198,27 +202,29 @@ public class LevelVisuals {
 		lives.setY(100.0);
 		group.getChildren().add(lives);
 		
-		
-		Text timeLabel = new Text("Time:");
-		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
-		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
-		timeLabel.setY(100.0);
-		group.getChildren().add(timeLabel);
-		
-		Text time = new Text();
-		time.setText(Integer.toString(controller.getLevel().timeRemaining));
-		time.setFont(Font.font("Comic Sans MS",50));
-		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
-		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
-		group.getChildren().add(time);
-		this.time = time;
-		
 		Text score = new Text("0");
 		score.setFont(Font.font("Comic Sans MS",50));
 		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		score.setY(500);
 		group.getChildren().add(score);
 		this.score = score;
+		
+		timeComponent = new Group();
+		Text timeLabel = new Text("Time:");
+		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
+		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
+		timeLabel.setY(100.0);
+		timeComponent.getChildren().add(timeLabel);
+		
+		Text time = new Text();
+		time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
+		time.setFont(Font.font("Comic Sans MS",50));
+		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
+		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
+		timeComponent.getChildren().add(time);
+		this.time = time;
+		
+		group.getChildren().add(timeComponent);
 		
 		return group;
 	}
@@ -293,17 +299,41 @@ public class LevelVisuals {
 	public void hideCorrespondingPellet(int charX, int charY) {
 		for (int index = 0; index < pelletsRendered.size(); index++) {
 			//Hides corresponding pellet matching destination of spaceman
-			if ((pelletsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
-				if ((pelletsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
+			currentPellet = pelletsRendered.get(index);
+			//Respawn pellets at set time
+			if (currentPellet.getRespawnTime() == controller.getTimeElapsed()) {
+				pelletsRendered.get(index).returnPellet().setVisible(true);
+			} 
+			
+			if ((currentPellet.getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+				if ((currentPellet.getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					pelletsRendered.get(index).returnPellet().setVisible(false);
 				
 					//spaceman.pelletSound.loop(0);
 					spaceman.playPelletSound();
+					//Endless mode: set respawn
+					if (controller.getMode() == 3) {
+						despawnedPellets.add(pelletsRendered.get(index));
+						pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);//temp
+					}
 					
 				}
 			}
+			
+		}
+		currentPellet = null;
+	}
+	
+	public void respawnPellet() {
+		for (int index = 0; index < despawnedPellets.size(); index++) {
+			//Respawn pellets at set time
+			if (pelletsRendered.get(index).getRespawnTime() == controller.getTimeElapsed()) {
+				pelletsRendered.get(index).returnPellet().setVisible(true);
+				despawnedPellets.remove(index);
+			} 
 		}
 	}
+	
 	//change for powerup after making powerup class
 	public void hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
@@ -311,6 +341,7 @@ public class LevelVisuals {
 			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
+					
 				}
 			}
 		}
@@ -321,7 +352,11 @@ public class LevelVisuals {
 	}
 	
 	public void updateTime(int time) {
-		this.time.setText(Integer.toString(controller.getLevel().timeRemaining));
+		if (time <= -1) {
+			timeComponent.setVisible(false);
+		} else {
+			this.time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
+		}
 	}
 	
 	//Controls countDown display
@@ -372,6 +407,11 @@ public class LevelVisuals {
 	public void pauseCountdown() {
 		countdown.stop();
 	}
+	
+	public void resetCountdown() {
+		countdown.setFramePosition(0);
+	}
+	
 	
 	public void playCycleSound( ) {
 		cycle.play();

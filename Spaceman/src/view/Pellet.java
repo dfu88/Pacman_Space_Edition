@@ -6,7 +6,7 @@ public class Pellet {
 	private double graphicalX;
 	private double graphicalY;
 	private Circle model;
-	private int nextRespawnTime;
+	private int nextRespawnTime = -1;
 	
 	public Pellet(double graphicalX, double graphicalY, double radius) {
 		this.graphicalX = graphicalX;

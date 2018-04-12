@@ -23,9 +23,11 @@ public class LevelController {
 	
 	private Timeline timeline;
 	private int startTimer = 3;
+	private int timeElapsed = 0;
 	
 	private boolean paused = false;
 	private int pauseMenuOption = 0;
+	private int currentMode;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -80,10 +82,13 @@ public class LevelController {
 					currentView.spaceman.setKeyInput(3);
 					
 				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
-					levelModel.timeRemaining = 0;
-					currentView.updateTime(levelModel.timeRemaining);
-					currentView.spaceman.stop();
-					//disp gameover screen?
+					if (currentMode != 3) {
+						timeElapsed = levelModel.getTimeLimit();
+						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
+						currentView.spaceman.stop();
+						//disp gameover screen?
+					}
+					
 					
 				} else if(input.getCode() == KeyCode.ENTER) {
 					currentView.playCycleSound();
@@ -98,7 +103,7 @@ public class LevelController {
 							
 						//maybe make a bool var isCountdown isntead for clarity
 							//Spaceman starts moving when not in CountDown stage and there is time left
-							if (levelModel.timeRemaining>0 & startTimer<= -2) { 
+							if (timeElapsed!=levelModel.getTimeLimit() & startTimer<= -2) { 
 								currentView.spaceman.start();
 							}
 							
@@ -114,7 +119,8 @@ public class LevelController {
 							//Resets initial level states //consider an init() func instead
 							startTimer = 3;
 							pauseMenuOption = 0;
-							
+							timeElapsed = 0;
+							currentView.resetCountdown();
 							controller.showHome();
 						}
 						
@@ -150,7 +156,7 @@ public class LevelController {
 						
 						//maybe make a bool var isCountdown isntead for clarity
 						//Spaceman starts moving when not in Countdown Stage and there is time remaining
-						if (levelModel.timeRemaining>0 & startTimer<= -2) { 
+						if (levelModel.getTimeLimit()!=timeElapsed & startTimer<= -2) { 
 							currentView.spaceman.start();
 						}
 					}
@@ -170,7 +176,7 @@ public class LevelController {
 
 			@Override
 			public void handle(ActionEvent event) {
-				if (levelModel.timeRemaining !=0) {
+				if (levelModel.getTimeLimit() != timeElapsed) {
 					//Play initial CountDown sound
 					if (startTimer == 3) { //seems to be synchronised with the countdown here
 						currentView.playCountdown();
@@ -179,15 +185,16 @@ public class LevelController {
 					//While still in CountDown State
 					if (startTimer >= -1) {
 						currentView.updateMessage(startTimer);
-						if ((startTimer == 0)) {
+						if ((startTimer == -1)) {
 							currentView.spaceman.start();
 						}
 						startTimer--;
 					
 					//In game timer
-					} else if (levelModel.timeRemaining > 0) {
-						levelModel.timeRemaining--;
-						currentView.updateTime(levelModel.timeRemaining);
+					} else if (levelModel.getTimeLimit() != timeElapsed) {
+						currentView.spaceman.start();
+						timeElapsed++;
+						currentView.updateTime(levelModel.getTimeLimit());
 						
 					}
 				
@@ -212,8 +219,13 @@ public class LevelController {
 	}
 	public void setLevel(int type){
 		//levelModel.makeMaps();
-		levelModel.setMap(type);
+		currentMode = type;
+		//levelModel.setMap(type);
+		levelModel.initLevel(type);
 		currentView.generateMap();
+		if (currentMode == 3) {
+			currentView.updateTime(-1);
+		}
 		interfaceCtrl.getMainApp().changeScene(currentView.returnScene()); // possible dont call getmainAPp()
 	}																		//create method in intCtrller to change scenes
 	
@@ -241,9 +253,19 @@ public class LevelController {
 		//but if using updateData function then must be in the if statements
 	}
 	
-	
+	public int getTimeElapsed() {
+		return timeElapsed;
+	}
 	
 	public int getCountdown() {
 		return startTimer;
+	}
+	
+	public int getMode() {
+		return currentMode;
+	}
+	
+	public void respawnCollectables() {
+		currentView.respawnPellet();
 	}
 }
