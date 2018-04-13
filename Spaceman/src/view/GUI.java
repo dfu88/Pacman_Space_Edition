@@ -73,7 +73,7 @@ public class GUI {
 		setKeyInput(root);
 		
 		subFrame = addSubFrame();
-		//root.getChildren().add(subFrame);
+		root.getChildren().add(subFrame);
 
 		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		root.setBackground(new Background(bg));
