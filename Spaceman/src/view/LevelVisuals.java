@@ -54,6 +54,11 @@ public class LevelVisuals {
 	private Group countDownView;
 	private Group timeComponent;
 	public Spaceman spaceman;
+
+	public Alien red;
+	public Alien pink;
+	public Alien blue;
+	public Alien orange;
 	private Pellet currentPellet;
 	
 	private ArrayList<Pellet> pelletsRendered;
@@ -185,9 +190,9 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 		
 		//Add Aliens after map added to scene
-		Alien red = new Alien(controller,this,10,7,-1,0);
+		red = new Alien(controller,this,10,7,-1,0);
 		group.getChildren().add(red);
-		red.start();
+		//red.start();
 		
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
 		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);

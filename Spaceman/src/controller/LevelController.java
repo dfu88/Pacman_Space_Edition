@@ -82,13 +82,14 @@ public class LevelController {
 					currentView.spaceman.setKeyInput(3);
 					
 				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
+
 					if (currentMode != 3) {
 						timeElapsed = levelModel.getTimeLimit();
 						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
 						currentView.spaceman.stop();
+						currentView.red.stop();
 						//disp gameover screen?
 					}
-					
 					
 				} else if(input.getCode() == KeyCode.ENTER) {
 					currentView.playCycleSound();
@@ -105,6 +106,7 @@ public class LevelController {
 							//Spaceman starts moving when not in CountDown stage and there is time left
 							if (timeElapsed!=levelModel.getTimeLimit() & startTimer<= -2) { 
 								currentView.spaceman.start();
+								currentView.red.start();
 							}
 							
 							timeline.play();
@@ -114,6 +116,7 @@ public class LevelController {
 						} else if (pauseMenuOption == 1){
 							
 							currentView.spaceman.stop();
+							currentView.red.stop();
 							timeline.stop();
 							
 							//Resets initial level states //consider an init() func instead
@@ -142,6 +145,7 @@ public class LevelController {
 						currentView.pauseCountdown();
 						timeline.pause();
 						currentView.spaceman.pause();
+						currentView.red.pause();
 					
 					//Resumes the game
 					} else {
@@ -158,6 +162,7 @@ public class LevelController {
 						//Spaceman starts moving when not in Countdown Stage and there is time remaining
 						if (levelModel.getTimeLimit()!=timeElapsed & startTimer<= -2) { 
 							currentView.spaceman.start();
+							currentView.red.start();
 						}
 					}
 					
@@ -187,6 +192,7 @@ public class LevelController {
 						currentView.updateMessage(startTimer);
 						if ((startTimer == -1)) {
 							currentView.spaceman.start();
+							currentView.red.start();
 						}
 						startTimer--;
 					
