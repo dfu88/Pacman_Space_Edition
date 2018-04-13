@@ -273,22 +273,39 @@ public class GUI {
 		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
 		group.getChildren().add(label);
 		
-		Image player2 = new Image(getClass().getResourceAsStream("misc/resume.png"));
-		ImageView player2Disp = new ImageView(player2);
-		player2Disp.setX(frame.getX()+(frame.getLayoutBounds().getWidth()-player2.getWidth())*0.5);
-		player2Disp.setY(frame.getY()+(frame.getLayoutBounds().getHeight()-player2.getHeight())*0.5);
-		player2Disp.setEffect(shadow);
-		multiplayerOptions.add(player2Disp);
-		group.getChildren().add(player2Disp);
 		
-		Image player3 = new Image(getClass().getResourceAsStream("misc/close2.png"));
+		Image player1 = new Image(getClass().getResourceAsStream("bg/choose1.png"));
+		ImageView player1Disp = new ImageView(player1);
+		multiplayerOptions.add(player1Disp);
+		
+		Image player2 = new Image(getClass().getResourceAsStream("bg/choose2.png"));
+		ImageView player2Disp = new ImageView(player2);
+		multiplayerOptions.add(player2Disp);
+		
+		Image player3 = new Image(getClass().getResourceAsStream("bg/choose3.png"));
 		ImageView player3Disp = new ImageView(player3);
-		player3Disp.setX(frame.getX()+(frame.getLayoutBounds().getWidth()-player2.getWidth())*0.5);
-		player3Disp.setY(frame.getY()+(frame.getLayoutBounds().getHeight()-player2.getHeight())*0.5);
-		//player3Disp.setEffect(shadow);
-		player3Disp.setVisible(false);
 		multiplayerOptions.add(player3Disp);
-		group.getChildren().add(player3Disp);
+		
+		for (int i = 0; i < multiplayerOptions.size(); i++) {
+			multiplayerOptions.get(i).setX(40*(i+1) + player1Disp.getLayoutBounds().getWidth()*i+frame.getX());
+			multiplayerOptions.get(i).setY(100+label.getLayoutBounds().getHeight());
+			group.getChildren().add(multiplayerOptions.get(i));
+		}
+		
+//		player2Disp.setX(frame.getX()+(frame.getLayoutBounds().getWidth()-player2.getWidth())*0.5);
+//		player2Disp.setY(frame.getY()+(frame.getLayoutBounds().getHeight()-player2.getHeight())*0.5);
+//		player2Disp.setEffect(shadow);
+//		multiplayerOptions.add(player2Disp);
+//		group.getChildren().add(player2Disp);
+//		
+////		Image player3 = new Image(getClass().getResourceAsStream("bg/choose2.png"));
+////		ImageView player3Disp = new ImageView(player3);
+//		player3Disp.setX(frame.getX()+(frame.getLayoutBounds().getWidth()-player2.getWidth())*0.5);
+//		player3Disp.setY(frame.getY()+(frame.getLayoutBounds().getHeight()-player2.getHeight())*0.5);
+//		//player3Disp.setEffect(shadow);
+//		//player3Disp.setVisible(false);
+//		multiplayerOptions.add(player3Disp);
+//		group.getChildren().add(player3Disp);
 		
 		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
 		ImageView closeBtn = new ImageView(close);
