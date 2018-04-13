@@ -86,8 +86,19 @@ public class Alien extends CharacterAnimate{
 			dy = 0;
 			System.out.println("LEFTRIGHT--RIGHT");
 		} else {
-			System.out.println("LEFTRIGHT--CONTINUE");
-			return;
+			if (mustMove) {
+				double chance = Math.random();
+				if (chance < 0.5) {
+					dx = -1;
+					dy = 0;
+				} else if (chance >= 0.5) {
+					dx = 1;
+					dy = 0;
+				}
+			} else {
+				System.out.println("UPDOWN--CONTINUE");
+				return;
+			}
 		}
 	}
 
@@ -118,8 +129,20 @@ public class Alien extends CharacterAnimate{
 			dy = 1;
 			System.out.println("UPDOWN--DOWN");
 		} else {
-			System.out.println("UPDOWN--CONTINUE");
-			return;
+			if (mustMove) {
+				double chance = Math.random();
+				if (chance < 0.5) {
+					dx = 0;
+					dy = -1;
+				} else if (chance >= 0.5) {
+					dx = 0;
+					dy = 1;
+				}
+			} else {
+				System.out.println("UPDOWN--CONTINUE");
+				return;
+			}
+			
 		}
 	}
 
