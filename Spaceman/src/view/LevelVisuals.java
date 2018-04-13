@@ -336,32 +336,25 @@ public class LevelVisuals {
 	
 	public void respawnPellet() {
 
-		for (int i = 0; i < despawnIndex.size(); i++) {
-			//testing prints
-			System.out.print("     ElapsedT: ");
-			System.out.println(controller.getTimeElapsed());
-			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() > controller.getTimeElapsed()) {
-				break; //seems to break a little early, need to fix this condition but still works fine-ish
-			}
-			//testing prints, remove next commit
-			System.out.print(i);
-			System.out.print(": ");
-			System.out.print(pelletsRendered.get(despawnIndex.get(i)).getRespawnTime());
-			System.out.print("     ElapsedT: ");
-			System.out.println(controller.getTimeElapsed());
+//		for (int i = 0; i < despawnIndex.size(); i++) {
+//			//Respawn pellets at set time
+//			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
+//				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
+//				despawnIndex.remove(i);
+//				//break;
+//				return;
+//			} 
+//		}
+		
 			//Respawn pellets at set time
-			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
-				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
-				//testing prints, remove next commit
-				System.out.print("indexRemoved: ");
-				System.out.println(i);
-				despawnIndex.remove(i);
-				
+		if (!despawnIndex.isEmpty()) {
+			if (pelletsRendered.get(despawnIndex.get(0)).getRespawnTime() <= controller.getTimeElapsed()) {
+				pelletsRendered.get(despawnIndex.get(0)).returnPellet().setVisible(true);
+				despawnIndex.remove(0);
+				//break;
+				return;
 			} 
-			
 		}
-		//testing print
-		System.out.println("------");
 	}
 	
 	//change for powerup after making powerup class

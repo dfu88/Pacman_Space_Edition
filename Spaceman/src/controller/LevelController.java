@@ -132,7 +132,7 @@ public class LevelController {
 						timeline.play();
 					}
 
-				} else if(input.getCode() == KeyCode.P) {
+				} else if(input.getCode() == KeyCode.ESCAPE) {
 					currentView.playCycleSound();
 					paused = !paused;
 					pauseMenuOption = 0;
@@ -195,7 +195,7 @@ public class LevelController {
 						currentView.spaceman.start();
 						timeElapsed++;
 						currentView.updateTime(levelModel.getTimeLimit());
-						respawnCollectables();
+//						respawnCollectables();
 						
 					}
 				
