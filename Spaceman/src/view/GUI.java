@@ -3,7 +3,8 @@ package view;
 import java.net.URL;
 import java.util.ArrayList;
 
-import controller.InterfaceController;//>??
+import controller.InterfaceController;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
@@ -11,11 +12,13 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.text.*;
-import javafx.scene.control.Button;
+
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
@@ -37,60 +40,60 @@ public class GUI {
 	private double SCENE_HEIGHT = 768;
 	private double SCENE_WIDTH = 1024.0;
 	private Scene scene;
-
-	private int option = 0;
-	private ArrayList<ImageView> optionList;
 	
-	private ArrayList<ImageView> multiplayerOptions;
-	private ArrayList<ImageView> playerOptions;
-
-	//	public Clip click;
-	//	public Clip cycle;
-	//	
-	private AudioClip cycle;
-	private AudioClip click;
-
+	//Nodes
 	private Group menu;
 	private Group subFrame;
 	private Group multiMenu;
 	private Group setting;
 	
+	private AudioClip cycle;
+	private AudioClip click;
+	
 	private DropShadow shadow;
 	private GaussianBlur blur;
+	
+	//Main Menu options
+	private int option = 0;
+	private ArrayList<ImageView> optionList;
+	
+	//Multiplayer Menu
+	private int multiplayerSel=0;
+	private ArrayList<ImageView> multiplayerControls; //play and exit on multiMenu
+	private ArrayList<ImageView> joinedIndicator;
+	
+	private ArrayList<ImageView> playerOptions;
+	
+	
 
 	public GUI (InterfaceController controller) {
 		this.controller = controller;
-
-		AnchorPane root = new AnchorPane(); //Layout based on coordinate from edge
-		//root.setStyle("-fx-background-color: null;"); //controls add default css so need to remove
-		//addComponents(root); //add nodes to the layout (buttons, text etc)
-
+		
 		shadow = new DropShadow(50, Color.YELLOW);
 		blur = new GaussianBlur();
 		
+		AnchorPane root = new AnchorPane();
+
 		menu = addComponents();
 		root.getChildren().add(menu);
-		setKeyInput(root);
 		
 		subFrame = addSubFrame();
+		subFrame.setVisible(false);
 		root.getChildren().add(subFrame);
+		
+		setKeyInput(root);
 
 		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		root.setBackground(new Background(bg));
+		
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 
-
-
-		//Load sound clips
-		//https://stackoverflow.com/questions/22648793/how-to-play-a-lots-of-sound-effects 
 		URL url = this.getClass().getResource("sound/laser1.wav");
 		click = new AudioClip(url.toString());
 		click.setVolume(0.4);
 
 		url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
-
-
 	}
 
 	public Scene returnScene() {
@@ -99,13 +102,10 @@ public class GUI {
 
 	private Group addComponents() {
 		Group group = new Group();
-
-		optionList = new ArrayList<ImageView>();
-		//Setup home screen nodes
+		
 		double minDistFromNodes = 50.0;
-
-		//Title
-		//Prob implement custom fonts
+		optionList = new ArrayList<ImageView>();
+		
 		Image title = new Image(getClass().getResourceAsStream("bg/title.png"));
 		ImageView titleView = new ImageView(title);
 		titleView.setX((SCENE_WIDTH-title.getWidth())*0.5);
@@ -113,12 +113,8 @@ public class GUI {
 		titleView.setScaleX(0.75);
 		titleView.setScaleY(0.75);
 		group.getChildren().add(titleView);
-		//not specific to title view i think
-		titleView.setFocusTraversable(true); //IMPORTANT, this allows keyevent recognisition w/o the buttons
-		//https://stackoverflow.com/questions/31320018/javafx-key-press-not-captured
-
-
-
+		
+		titleView.setFocusTraversable(true);	//not specific to title view i think
 
 		Image btn0 = new Image(getClass().getResourceAsStream("bg/btn0.png"));
 		ImageView btn0View = new ImageView(btn0);
@@ -162,82 +158,110 @@ public class GUI {
 			////			         optionList.get(i).setEffect(shadow);
 			//			     }
 			//			});
-
 			group.getChildren().add(optionList.get(i));
 		}
-		//Can prob be a function
-		//key event
-		//		pane.setOnKeyPressed(new EventHandler <KeyEvent> () {
-		//			@Override
-		//			public void handle(KeyEvent event) {
-		//				
-		////				if (cycle.isRunning()) {
-		////					cycle.stop();
-		////					cycle.setFramePosition(0);
-		////				}
-		//			
-		//				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
-		//					if (option> 0) {
-		//						//cycle.loop(0); // use insteadof start();
-		//						cycle.play();
-		//						optionList.get(option).setEffect(null);
-		//						option--;
-		//					}
-		//					
-		//				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
-		//					if (option < 5) {
-		//						cycle.play();
-		//						optionList.get(option).setEffect(null);
-		//						option++;
-		//					}
-		//					
-		//				} else if (event.getCode() == KeyCode.ENTER) {
-		//					click.play();
-		//					controller.executeProcess(option); 
-		//				}
-		//				
-		//				optionList.get(option).setEffect(shadow);
-		//			}
-		//
-		//		});
 		return group;
 	}
+	
 	private void setKeyInput(AnchorPane root) {
 		root.setOnKeyPressed(new EventHandler <KeyEvent> () {
 			@Override
 			public void handle(KeyEvent event) {
-
-				//					if (cycle.isRunning()) {
-				//						cycle.stop();
-				//						cycle.setFramePosition(0);
-				//					}
-
-				if (event.getCode() == KeyCode.W || event.getCode() == KeyCode.UP ) {
-					if (option> 0) {
-						//cycle.loop(0); // use insteadof start();
-						cycle.play();
-						optionList.get(option).setEffect(null);
-						option--;
-					}
-
-				} else if (event.getCode() == KeyCode.S || event.getCode() == KeyCode.DOWN) {
-					if (option < 5) {
-						cycle.play();
-						optionList.get(option).setEffect(null);
-						option++;
+				
+				if (event.getCode() == KeyCode.UP ) {
+					//Cycles options upwards based on which frame is active
+					if (multiMenu.isVisible()) {
+						if (multiplayerSel < 1) {
+							cycle.play();
+							multiplayerControls.get(multiplayerSel).setEffect(null);
+							multiplayerSel++;
+						}	
+					} else {
+						if (option> 0) {
+							cycle.play();
+							optionList.get(option).setEffect(null);
+							option--;
+						}
+					}	
+					
+				} else if (event.getCode() == KeyCode.DOWN) {
+					//Cycles options downwards based on which frame is active
+					if (multiMenu.isVisible()) {
+						if (multiplayerSel > 0) {
+							cycle.play();
+							multiplayerControls.get(multiplayerSel).setEffect(null);
+							multiplayerSel--;
+						}
+						
+					} else {
+						if (option < 5) {
+							cycle.play();
+							optionList.get(option).setEffect(null);
+							option++;
+						}
+						
 					}
 
 				} else if (event.getCode() == KeyCode.ENTER) {
+					//Executes a command based on which frame and option is active
 					click.play();
-					controller.executeProcess(option); 
-				}
+					//Opens up multiplayer menu
+					if (!multiMenu.isVisible() & option == 2) {
+						subFrame.setVisible(true);
+						multiMenu.setVisible(true);
+						
+						menu.setEffect(blur);
+						multiplayerSel = 0;
+						multiplayerControls.get(0).setEffect(shadow);
+					//Closes multiplayer menu
+					} else if (multiMenu.isVisible() & multiplayerSel == 1) {
+						subFrame.setVisible(false);
+						multiMenu.setVisible(false);
+						
+						menu.setEffect(null);
 
+					} else {
+						if (joinedIndicator.get(1).isVisible()) {
+							//enable ghost1 player
+						}
+						if (joinedIndicator.get(2).isVisible()) {
+							//enable ghost2 player
+						}
+						controller.executeProcess(option);
+						subFrame.setVisible(false);
+						multiMenu.setVisible(false);
+						menu.setEffect(null);
+					}
+					joinedIndicator.get(1).setVisible(false);
+					joinedIndicator.get(2).setVisible(false);
+				
+				//Join/Leave as first ghost
+				} else if (event.getCode() == KeyCode.W||event.getCode() == KeyCode.A||event.getCode() == KeyCode.S||event.getCode() == KeyCode.D) {
+					cycle.play();
+					if (joinedIndicator.get(1).isVisible()) {
+						joinedIndicator.get(1).setVisible(false);
+					} else {
+						joinedIndicator.get(1).setVisible(true);
+					}
+				//Join/Leave as second ghost
+				} else if (event.getCode() == KeyCode.I||event.getCode() == KeyCode.J||event.getCode() == KeyCode.K||event.getCode() == KeyCode.L) {
+					cycle.play();
+					if (joinedIndicator.get(2).isVisible()) {
+						joinedIndicator.get(2).setVisible(false);
+					} else {
+						joinedIndicator.get(2).setVisible(true);
+					}
+				}
+				
+				//Highlights options
 				optionList.get(option).setEffect(shadow);
+				multiplayerControls.get(multiplayerSel).setEffect(shadow);
 			}
 
 		});
 	}
 
+	//Frame for multiplayer menu or player settings
 	private Group addSubFrame() {
 		Group group = new Group();
 		
@@ -252,27 +276,29 @@ public class GUI {
 		group.getChildren().add(frame);
 		
 		multiMenu = addMultiplayerOptions(frame);
+		multiMenu.setVisible(false);
 		group.getChildren().add(multiMenu);
 		
 		setting = addSettings(frame);
 		setting.setVisible(false);
 		group.getChildren().add(setting);
 		
-		
 		return group;
 	}
 	
 	private Group addMultiplayerOptions(Rectangle frame) {
 		Group group = new Group();
-		multiplayerOptions = new ArrayList<ImageView>();
 		
-		Text label = new Text("Select Number of Players");
-		label.setFont(Font.font(50));
+		ArrayList<ImageView> multiplayerOptions = new ArrayList<ImageView>();
+		multiplayerControls = new ArrayList<ImageView>();	//Stores play/close objects
+		joinedIndicator = new ArrayList<ImageView>();		//Stores obejcts to inidicate join/leave
+		
+		Text label = new Text("Press One of the Listed Keys to Join/Leave");
+		label.setFont(Font.font(30));
 		label.setFill(Color.WHITE);
-		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+		label.setX(frame.getX()+50);
 		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
 		group.getChildren().add(label);
-		
 		
 		Image player1 = new Image(getClass().getResourceAsStream("bg/choose1.png"));
 		ImageView player1Disp = new ImageView(player1);
@@ -286,26 +312,29 @@ public class GUI {
 		ImageView player3Disp = new ImageView(player3);
 		multiplayerOptions.add(player3Disp);
 		
+		Image tick = new Image(getClass().getResourceAsStream("misc/tick2.png"));
+		
 		for (int i = 0; i < multiplayerOptions.size(); i++) {
 			multiplayerOptions.get(i).setX(40*(i+1) + player1Disp.getLayoutBounds().getWidth()*i+frame.getX());
 			multiplayerOptions.get(i).setY(100+label.getLayoutBounds().getHeight());
 			group.getChildren().add(multiplayerOptions.get(i));
+			
+			ImageView joined = new ImageView(tick);
+			joined.setX(multiplayerOptions.get(i).getX());
+			joined.setY(multiplayerOptions.get(i).getY());
+			joinedIndicator.add(joined);
+			group.getChildren().add(joined);
 		}
+		joinedIndicator.get(1).setVisible(false);
+		joinedIndicator.get(2).setVisible(false);
 		
-//		player2Disp.setX(frame.getX()+(frame.getLayoutBounds().getWidth()-player2.getWidth())*0.5);
-//		player2Disp.setY(frame.getY()+(frame.getLayoutBounds().getHeight()-player2.getHeight())*0.5);
-//		player2Disp.setEffect(shadow);
-//		multiplayerOptions.add(player2Disp);
-//		group.getChildren().add(player2Disp);
-//		
-////		Image player3 = new Image(getClass().getResourceAsStream("bg/choose2.png"));
-////		ImageView player3Disp = new ImageView(player3);
-//		player3Disp.setX(frame.getX()+(frame.getLayoutBounds().getWidth()-player2.getWidth())*0.5);
-//		player3Disp.setY(frame.getY()+(frame.getLayoutBounds().getHeight()-player2.getHeight())*0.5);
-//		//player3Disp.setEffect(shadow);
-//		//player3Disp.setVisible(false);
-//		multiplayerOptions.add(player3Disp);
-//		group.getChildren().add(player3Disp);
+		Image play = new Image(getClass().getResourceAsStream("misc/playBtn.png"));
+		ImageView playBtn = new ImageView(play);
+		playBtn.setX((SCENE_WIDTH-playBtn.getLayoutBounds().getWidth())*0.5);
+		playBtn.setY(frame.getY()+frame.getLayoutBounds().getHeight()-play.getHeight()-40);
+		playBtn.setEffect(shadow);
+		multiplayerControls.add(playBtn);
+		group.getChildren().add(playBtn);
 		
 		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
 		ImageView closeBtn = new ImageView(close);
@@ -313,9 +342,7 @@ public class GUI {
 		closeBtn.setScaleY(0.3);
 		closeBtn.setX((frame.getLayoutBounds().getWidth()-90));
 		closeBtn.setY(frame.getY()-50);
-		//closeBtn.setEffect(shadow);
-		//System.out.println(frame.getX());
-		multiplayerOptions.add(closeBtn);
+		multiplayerControls.add(closeBtn);
 		group.getChildren().add(closeBtn);
 		
 		return group;
