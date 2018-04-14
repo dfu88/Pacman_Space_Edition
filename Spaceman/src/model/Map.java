@@ -12,8 +12,9 @@ public class Map {
 	private int PELLET 	= 2;
 	private int POWERUP 	= 3;
 	private int TELE = 5;
-	private int PACMAN_SPAWN = 7;//maybe add ghost spawn aswell
-	private int GATE = 8;
+	private int SPACEMAN_SPAWN = 7;//maybe add ghost spawn aswell
+	private int ALIEN_SPAWN = 8;
+	private int GATE = 9;
 	
 	
 	public void initMap(int type) {
@@ -28,8 +29,8 @@ public class Map {
 								{ 1, 1, 2, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 1, 2, 2, 2, 2, 1, 1 },		//		5
 								{ 1, 1, 1, 1, 1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1 },		//		6
 								{ 1, 0, 0, 0, 1, 2, 1, 2, 2, 2, 0, 2, 2, 2, 1, 2, 1, 0, 0, 0, 1 },		//		7
-								{ 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 8, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1 },		//		8
-								{ 5, 0, 0, 0, 0, 2, 2, 2, 1, 0, 0, 0, 1, 2, 2, 2, 0, 0, 0, 0, 5 },		//		9
+								{ 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 9, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1 },		//		8
+								{ 5, 0, 0, 0, 0, 2, 2, 2, 1, 0, 8, 0, 1, 2, 2, 2, 0, 0, 0, 0, 5 },		//		9
 								{ 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1 },		//		10
 								{ 1, 0, 0, 0, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 1, 2, 1, 0, 0, 0, 1 },		//		11
 								{ 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 1, 1, 1 },		//		12

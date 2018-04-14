@@ -33,10 +33,10 @@ import javafx.scene.text.*;
 
 
 public class LevelVisuals {
-	
+
 	private double SCENE_WIDTH = 1440;
 	private double SCENE_HEIGHT = 900;
-	
+
 	//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
 	double tileWidth = 40;
 	double tileHeight = 40;
@@ -44,9 +44,9 @@ public class LevelVisuals {
 	//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
 	double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
 	double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
-	
+
 	private LevelController controller;
-	
+
 	private Scene scene;
 	
 	private Group root;
@@ -73,11 +73,13 @@ public class LevelVisuals {
 	public Alien orange;
 	
 	private Pellet currentPellet;
+
 	private ArrayList<Pellet> pelletsRendered;
 	private ArrayList<Integer> despawnIndex;
-	
+
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> pauseOptions;
+	
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
@@ -88,10 +90,10 @@ public class LevelVisuals {
 		powerUpsRendered = new ArrayList<PowerUp>();
 		
 		despawnIndex = new ArrayList<Integer>();
-		
+
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
-		
+
 		//Countdown must be Clip instead of AudioClip since I need to pause it
 		URL url = this.getClass().getResource("sound/countdown.wav");
 		AudioInputStream sound;
@@ -107,19 +109,19 @@ public class LevelVisuals {
 		} catch (LineUnavailableException e) {
 			e.printStackTrace();
 		}
-		
+
 		url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
-		
+
 		//Setup Scene for game visuals
 		root = new Group(); 
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 		scene.setFill(Color.LIGHTBLUE);
-		
-//		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-//		root.setBackground(new Background(bg));
+
+		//		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+		//		root.setBackground(new Background(bg));
 	}
-	
+
 	public void generateMap() {
 		pelletsRendered.clear();
 		powerUpsRendered.clear();
@@ -132,28 +134,28 @@ public class LevelVisuals {
 //		bg.
 //		bg.setScaleY(0.7);
 		root.getChildren().add(bgView);
-		
+
 		gameView = addGameComponents();
 		gameView.setEffect(blur);
 		root.getChildren().add(gameView);
-		
+
 		countDownView = addCountDown();
 		root.getChildren().add(countDownView);
-		
+
 		pauseMenu = addPauseMenu();
 		pauseMenu.setVisible(false);
 		root.getChildren().add(pauseMenu);
-		
+
 	}	
-	
+
 	private Group addGameComponents() {
 		Group group = new Group();
-		
-		int startX = 0, startY = 0, tunnelXLeft = 0, tunnelXRight = 0;
-		
+
+		int startX = 0, startY = 0, tunnelXLeft = 0, tunnelXRight = 0, alienX = 0, alienY = 0;
+
 		for (int row = 0; row < 21; row++) {
 			for (int col = 0; col < 21; col++) {
-				
+
 				int currentElement = controller.getLevel().getCurrentMap().getData(row, col);
 				//Walls
 				if (currentElement == 1) {
@@ -191,24 +193,38 @@ public class LevelVisuals {
 					startX = col;
 					startY = row;
 				}
+				//Set Alien spawn x and y loaction
+				else if (currentElement == 8) {
+					alienX = col;
+					alienY = row;
+				}
+				//Gate
+				else if (currentElement == 9) {
+					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
+					wall.setFill(Color.GREY); //fill
+					wall.setStroke(Color.GREY);//outline
+					group.getChildren().add(wall);	
+				}
 			}
 		}
 		spaceman = new Spaceman(controller, startX, startY);
 		//spaceman = new Spaceman(controller, startX, startY);
 		group.getChildren().add(spaceman);
-		
+
 		//Add Aliens after map added to scene
-		blue = new Alien(controller,this,10,7,-1,0); //was red
+		blue = new Alien(0,controller,this,10,7,-1,0); //was red
 		group.getChildren().add(blue);				//was red
 		//red.start();
 		
 		//include parameter in constructor to set as ai or player
-		red = new Alien(controller,this,10,7,-1,0); //was red
-		group.getChildren().add(red);
 		
-		pink = new Alien(controller,this,10,7,-1,0); //was red
+		pink = new Alien(0,controller,this,10,7,-1,0); //was red
 		group.getChildren().add(pink);
 		
+		red = new Alien(0,controller,this,alienX,alienY,-1,0);
+		group.getChildren().add(red);
+		//red.start();
+
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
 		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
 		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
@@ -218,30 +234,30 @@ public class LevelVisuals {
 		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
 		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
 		group.getChildren().add(tunnelWallRight);
-		
-		
-		
+
+
+
 		//Add parameter displays
 		Text lives = new Text("Lives");
 		lives.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
 		lives.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		lives.setY(100.0);
 		group.getChildren().add(lives);
-		
+
 		Text score = new Text("0");
 		score.setFont(Font.font("Comic Sans MS",50));
 		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
 		score.setY(500);
 		group.getChildren().add(score);
 		this.score = score;
-		
+
 		timeComponent = new Group();
 		Text timeLabel = new Text("Time:");
 		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
 		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
 		timeLabel.setY(100.0);
 		timeComponent.getChildren().add(timeLabel);
-		
+
 		Text time = new Text();
 		time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
 		time.setFont(Font.font("Comic Sans MS",50));
@@ -249,24 +265,24 @@ public class LevelVisuals {
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
 		timeComponent.getChildren().add(time);
 		this.time = time;
-		
+
 		group.getChildren().add(timeComponent);
-		
+
 		return group;
 	}
-	
+
 	private Group addCountDown() {
 		Group group = new Group();
 		Rectangle frame = new Rectangle(1440,300);
 		frame.setFill(Color.BLACK);
 		frame.setStroke(Color.WHITE);
 		frame.setStrokeWidth(2.0);
-//		frame.setArcHeight(15);
-//		frame.setArcWidth(15);
+		//		frame.setArcHeight(15);
+		//		frame.setArcWidth(15);
 		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
 		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
 		group.getChildren().add(frame);
-		
+
 		Text message = new Text("Press Enter to start");
 		message.setFont(Font.font("Comic Sans MS",100));
 		message.setFill(Color.WHITE);
@@ -274,13 +290,13 @@ public class LevelVisuals {
 		message.setY((SCENE_HEIGHT-message.getLayoutBounds().getHeight())*0.5+100);
 		group.getChildren().add(message);
 		this.message = message;
-		
+
 		return group;
 	}
-	
+
 	private Group addPauseMenu() {
 		Group group = new Group();
-		
+
 		Rectangle frame = new Rectangle(700,400);
 		frame.setFill(Color.BLACK);
 		frame.setStroke(Color.WHITE);
@@ -290,22 +306,22 @@ public class LevelVisuals {
 		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
 		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
 		group.getChildren().add(frame);
-		
-		
+
+
 		Text label = new Text("Paused");
 		label.setFont(Font.font(50));
 		label.setFill(Color.WHITE);
 		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
 		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
 		group.getChildren().add(label);
-		
+
 		Image resume = new Image(getClass().getResourceAsStream("misc/resume.png"));
 		ImageView resumeButton = new ImageView(resume);
 		resumeButton.setX(frame.getX()+100);
 		resumeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
 		resumeButton.setEffect(shadow);
 		pauseOptions.add(resumeButton);
-		
+
 		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
 		ImageView closeButton = new ImageView(close);
 		closeButton.setX(frame.getX()+frame.getLayoutBounds().getWidth()-closeButton.getLayoutBounds().getWidth()-100);
@@ -314,14 +330,14 @@ public class LevelVisuals {
 
 		group.getChildren().add(closeButton);
 		group.getChildren().add(resumeButton);
-		
+
 		return group;
 	}
-	
+
 	public Scene returnScene() {
 		return scene;
 	}
-	
+
 	public boolean hideCorrespondingPellet(int charX, int charY) {
 		for (int index = 0; index < pelletsRendered.size(); index++) {
 			//Hides corresponding pellet matching destination of spaceman
@@ -330,30 +346,30 @@ public class LevelVisuals {
 			if (currentPellet.getRespawnTime() == controller.getTimeElapsed()) {
 				pelletsRendered.get(index).returnPellet().setVisible(true);
 			} 
-			
+
 			if ((currentPellet.getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((currentPellet.getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
-					
+
 					if (currentPellet.returnPellet().isVisible()) {
 						pelletsRendered.get(index).returnPellet().setVisible(false);
 						spaceman.playPelletSound();
-						
+
 						//Endless mode: set respawn
 						if (controller.getMode() == 3) {
 							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
 							despawnIndex.add(index);
 						}
-						
+
 						return true;
 					}
 				}
 			}
-			
+
 		}
 		currentPellet = null;
 		return false;
 	}
-	
+
 	public void respawnPellet() {
 
 //		for (int i = 0; i < despawnIndex.size(); i++) {
@@ -366,7 +382,6 @@ public class LevelVisuals {
 //			} 
 //		}
 		
-			//Respawn pellets at set time
 		if (!despawnIndex.isEmpty()) {
 			if (pelletsRendered.get(despawnIndex.get(0)).getRespawnTime() <= controller.getTimeElapsed()) {
 				pelletsRendered.get(despawnIndex.get(0)).returnPellet().setVisible(true);
@@ -376,7 +391,7 @@ public class LevelVisuals {
 			} 
 		}
 	}
-	
+
 	//change for powerup after making powerup class
 	public void hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
@@ -384,16 +399,16 @@ public class LevelVisuals {
 			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
-					
+
 				}
 			}
 		}
 	}
-	
+
 	public void updateScore(int score) {
 		this.score.setText(Integer.toString(controller.getLevel().getScore()));
 	}
-	
+
 	public void updateTime(int time) {
 		if (time <= -1) {
 			timeComponent.setVisible(false);
@@ -401,16 +416,16 @@ public class LevelVisuals {
 			this.time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
 		}
 	}
-	
+
 	//Controls countDown display
 	public void updateMessage(int value) {
 		gameView.setEffect(null);
 		if (value>0) {
 			message.setText(Integer.toString(value));
-			
+
 		} else if (value==0) {
 			message.setText("START!!");
-			
+
 		} else {
 			countDownView.setVisible(false);
 			//countdown.setFramePosition(0);
@@ -419,19 +434,19 @@ public class LevelVisuals {
 	}
 
 	public void updatePauseScreen(boolean wasPaused) {
-		
+
 		if (wasPaused) {
 			gameView.setEffect(blur);
 			pauseMenu.setVisible(true);
-			
+
 		} else {
 			gameView.setEffect(null);
 			pauseMenu.setVisible(false);
-			
+
 		}
-		
+
 	}
-	
+
 	public void cycleOptions(int option) {
 		if (option == 0) {
 			pauseOptions.get(option).setEffect(shadow);
@@ -441,47 +456,29 @@ public class LevelVisuals {
 			pauseOptions.get(option-1).setEffect(null);
 		}
 	}
-	
-	
+
+
 	public void playCountdown() {
 		countdown.start(); //for soem reason loop(0) works better than start()
 	}
-	
+
 	public void pauseCountdown() {
 		countdown.stop();
 	}
-	
+
 	public void resetCountdown() {
 		countdown.setFramePosition(0);
 	}
-	
-	
+
+
 	public void playCycleSound( ) {
 		cycle.play();
 	}
-	
+
 	public void stopCycleClip( ) {
 		if (cycle.isPlaying()) {
 			cycle.stop();
 		}
 	}
-	
-	
-//	public void createGhostPlayer(int ghostColor) {
-//		if (ghostColor == 1) {
-//			//add contructor parameter for different keyboard input
-//			pink = new Alien(controller, this, 11, 7, 0, 0);
-//			pink.imageView.setRotate(90);
-//			//gameView.getChildren().remo
-//			gameView.getChildren().add(pink);
-//		} else if (ghostColor == 2) {
-//			//add contructor parameter for different keyboard input
-//			red = new Alien(controller, this, 12, 7, 0, 0);
-//			red.imageView.setRotate(-90);
-//			gameView.getChildren().add(red);
-//		}
-//		
-//		
-//	}
-	
+
 }
