@@ -79,7 +79,7 @@ public class Spaceman extends CharacterAnimate{
 
 	@Override
 	public void moveOneStep() {
-//		levelController.respawnCollectables();
+		levelController.respawnCollectables();
 		if (imageIndex == 0) {
 			changeCurrentDirection(keyInput);
 		}
@@ -91,7 +91,7 @@ public class Spaceman extends CharacterAnimate{
 //			imageView.setX(graphicalX);
 //			imageView.setY(graphicalY);
 //			imageView.setRotate(currentRotation);
-			
+			//levelController.respawnCollectables();
 
 		} else {
 			imageIndex = 0;
@@ -100,6 +100,7 @@ public class Spaceman extends CharacterAnimate{
 //			imageView.setX(graphicalX);
 //			imageView.setY(graphicalY);
 //			imageView.setRotate(currentRotation);
+			
 			
 		}
 		
