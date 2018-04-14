@@ -25,11 +25,15 @@ public class Alien extends CharacterAnimate{
 	private int frightModeCounter;
 	private int chaseModeCounter;
 	private int scatterModeCounter;	
+	private int trapCounter;
+	private int spawnX;
+	private int spawnY;
 	private double graphicalX;
 	private double graphicalY;
 	private boolean frightenedFlag = false;
+	private int initialTrapTime;
+	private static final int TRAPPED = 2;
 	private static final int FRIGHT_MODE_MAX_TIME = 160;
-	private static final int TRAP_TIME = 10;
 	private final Image[] FRIGHTENED_IMAGES = new Image[] {
 			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
 			new Image(getClass().getResourceAsStream("res/frightalien2.png")),
@@ -67,15 +71,22 @@ public class Alien extends CharacterAnimate{
 			new Image(getClass().getResourceAsStream("res/orangealien2.png"))
 	};
 
-	public Alien(int alienType, LevelController levelController, LevelVisuals levelView, int x, int y, int dx, int dy) {
+	public Alien(int alienType, LevelController levelController, LevelVisuals levelView, int x, int y, int dx, int dy, int initialTrapTime) {
 		this.levelController = levelController;
 		this.levelView = levelView;
-		
+
 		this.alienType = alienType;
+		frightModeCounter = 0;
+		chaseModeCounter = 0;
+		scatterModeCounter = 0;	
+		trapCounter = 0;
+		this.initialTrapTime = initialTrapTime;
 
 		// Intialise Alien grid position
 		this.x = x;
 		this.y = y;
+		spawnX = x;
+		spawnY = y;
 		graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
@@ -107,7 +118,7 @@ public class Alien extends CharacterAnimate{
 		timeline.setRate(0.95);
 
 		// remove later when movement logic is completed
-		status = MOVING;
+		status = TRAPPED;
 	}
 
 	// If moving in y-axis, move in x-axis or continue
@@ -202,7 +213,7 @@ public class Alien extends CharacterAnimate{
 				dx = 0;
 				dy = -1;
 				System.out.println("UPDOWN--UP");
-	
+
 			} else if (moveDown < moveUp && moveDown < moveContinue) {
 				dx = 0;
 				dy = 1;
@@ -227,7 +238,7 @@ public class Alien extends CharacterAnimate{
 				dx = 0;
 				dy = -1;
 				System.out.println("UPDOWN--UP");
-	
+
 			} else if (moveDown != Integer.MAX_VALUE && moveUp == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = 0;
 				dy = 1;
@@ -255,7 +266,7 @@ public class Alien extends CharacterAnimate{
 	private void moveXAxis() {
 		//Wallcheck logic: If next destination is wall, do not move, else move as normal
 		int nextX = x + dx;
-		if (levelController.checkMap(nextX, y) == 1) {
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
 			//must change direction
 			moveUpOrDown(true);
 		} else {
@@ -281,21 +292,34 @@ public class Alien extends CharacterAnimate{
 			}
 		}
 	}
+	
+	private void moveCageXAxis() {
+		//Wallcheck logic: If next destination is wall, do not move, else move as normal
+		int nextX = x + dx;
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
+			//must change direction
+			dx = -(dx);
+			dy = 0;
+		} else {
+			moveCounter++;
+			if (moveCounter < ANIMATION_STEP) {
+				graphicalX = graphicalX + (dx * MOVE_SPEED);
+			} else {
+				//levelController.updateMap(dx,dy,x,y);
 
-	public void changeToFrightMode() {
-		frightModeCounter = 0;
-		frightenedFlag = true;
+				moveCounter = 0;
+				trapCounter++;
+				x = x + dx;
 
-		images = FRIGHTENED_IMAGES;
-		// make it move slower
-		timeline.stop();
-		timeline.setRate(0.6);
-		timeline.play();
+				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+				//moveUpOrDown(false);
+			}
+		}
 	}
 
 	private void moveYAxis() {
 		int nextY = y + dy;
-		if (levelController.checkMap(x,nextY) == 1) {
+		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x, nextY) == 9) {
 			moveLeftOrRight(true);
 		} else {
 			moveCounter++;
@@ -311,6 +335,50 @@ public class Alien extends CharacterAnimate{
 		}
 	}
 
+	public void resetAlien() {
+		moveCounter = 0;
+		trapCounter = 0;
+		chaseModeCounter = 0;
+		imageIndex = 0;
+
+		// Intialise Alien grid position
+		this.x = spawnX;
+		this.y = spawnY;
+		graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+
+		// Intialise Alien current direction
+		this.dx = -1;
+		this.dy = 0;
+
+		//Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
+		if (alienType == 0) {
+			images = RED_IMAGES;
+		} else if (alienType == 1) {
+			images = PINK_IMAGES;
+		} else if (alienType == 2) {
+			images = BLUE_IMAGES;
+		} else if (alienType == 3) {
+			images = ORANGE_IMAGES;
+		}
+		imageIndex = 0;
+		currentImage = images[imageIndex];
+
+		imageView.setX(graphicalX);
+		imageView.setY(graphicalY);
+	}
+
+	public void changeToFrightMode() {
+		frightModeCounter = 0;
+		frightenedFlag = true;
+
+		images = FRIGHTENED_IMAGES;
+		// make it move slower
+		timeline.stop();
+		timeline.setRate(0.6);
+		timeline.play();
+	}
+
 	public void moveOneStep() {
 		if (imageIndex < images.length-1) {
 			imageIndex++;
@@ -321,8 +389,29 @@ public class Alien extends CharacterAnimate{
 			currentImage = images[imageIndex];
 			imageView.setImage(currentImage);
 		}
+		
+		if (status == TRAPPED) {
+			
 
-		if (status == MOVING) {
+			if (trapCounter > initialTrapTime && x == spawnX && y == spawnY) {
+				// go out of the cage
+				x = spawnX;
+				y = spawnY - 2;
+				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+
+				moveCounter = 0;
+				dx = -1;
+				dy = 0;
+				status = MOVING;;
+			} else {
+				moveCageXAxis();
+			}
+			imageView.setX(graphicalX);
+			imageView.setY(graphicalY);
+		}
+
+		if (status == MOVING ) {
 			if (dx != 0 && dy == 0) {
 				moveXAxis();
 			} 
@@ -333,7 +422,7 @@ public class Alien extends CharacterAnimate{
 			imageView.setX(graphicalX);
 			imageView.setY(graphicalY);
 		}
-
+		
 		if (frightenedFlag) {
 
 			frightModeCounter++;
