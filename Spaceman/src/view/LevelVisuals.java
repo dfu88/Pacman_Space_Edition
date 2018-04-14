@@ -48,17 +48,30 @@ public class LevelVisuals {
 	private LevelController controller;
 
 	private Scene scene;
+	
 	private Group root;
 	private Group pauseMenu;
 	private Group gameView;
 	private Group countDownView;
 	private Group timeComponent;
+	
+	private GaussianBlur blur;
+	private DropShadow shadow;
+	
+	private Clip countdown;
+	private AudioClip cycle;
+	
+	private Text score;
+	private Text time;
+	private Text message;
+	
 	public Spaceman spaceman;
-
+	
 	public Alien red;
 	public Alien pink;
 	public Alien blue;
 	public Alien orange;
+	
 	private Pellet currentPellet;
 
 	private ArrayList<Pellet> pelletsRendered;
@@ -66,22 +79,16 @@ public class LevelVisuals {
 
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> pauseOptions;
-
-	private Text score;
-	private Text time;
-	private Text message;
-
-	private GaussianBlur blur;
-	private DropShadow shadow;
-
-	private Clip countdown;
-	private AudioClip cycle;
-
+	
+	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
+		
+		pauseOptions = new ArrayList<ImageView>();
+		
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
-		pauseOptions = new ArrayList<ImageView>();
+		
 		despawnIndex = new ArrayList<Integer>();
 
 		blur = new GaussianBlur();
@@ -96,16 +103,12 @@ public class LevelVisuals {
 			soundClip.open(sound);
 			countdown = soundClip;
 		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 
 		url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
@@ -122,8 +125,15 @@ public class LevelVisuals {
 	public void generateMap() {
 		pelletsRendered.clear();
 		powerUpsRendered.clear();
+		despawnIndex.clear();
 		pauseOptions.clear();
 		root.getChildren().clear();
+		
+		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
+		ImageView bgView = new ImageView(bg);
+//		bg.
+//		bg.setScaleY(0.7);
+		root.getChildren().add(bgView);
 
 		gameView = addGameComponents();
 		gameView.setEffect(blur);
@@ -467,6 +477,5 @@ public class LevelVisuals {
 			cycle.stop();
 		}
 	}
-
 
 }

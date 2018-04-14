@@ -27,7 +27,10 @@ public class LevelController {
 	
 	private boolean paused = false;
 	private int pauseMenuOption = 0;
+	
 	private int currentMode;
+	public boolean ghostPlayerRed = false;
+	public boolean ghostPlayerPink = false;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -87,6 +90,8 @@ public class LevelController {
 						timeElapsed = levelModel.getTimeLimit();
 						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
 						currentView.spaceman.stop();
+						
+						//added with createghostPlayer
 						currentView.red.stop();
 						currentView.pink.stop();
 						currentView.blue.stop();
@@ -109,6 +114,8 @@ public class LevelController {
 							//Spaceman starts moving when not in CountDown stage and there is time left
 							if (timeElapsed!=levelModel.getTimeLimit() & startTimer<= -2) { 
 								currentView.spaceman.start();
+								
+								//added with createghostPlayer
 								currentView.red.start();
 								currentView.pink.start();
 								currentView.blue.start();
@@ -122,6 +129,7 @@ public class LevelController {
 						} else if (pauseMenuOption == 1){
 							
 							currentView.spaceman.stop();
+
 							currentView.red.stop();
 							currentView.pink.stop();
 							currentView.blue.stop();
@@ -132,6 +140,8 @@ public class LevelController {
 							startTimer = 3;
 							pauseMenuOption = 0;
 							timeElapsed = 0;
+							ghostPlayerRed = false;
+							ghostPlayerPink = false;
 							currentView.resetCountdown();
 							controller.showHome();
 						}
@@ -154,6 +164,8 @@ public class LevelController {
 						currentView.pauseCountdown();
 						timeline.pause();
 						currentView.spaceman.pause();
+						
+						//added with createghostPlayer
 						currentView.red.pause();
 						currentView.pink.pause();
 						currentView.blue.pause();
@@ -174,6 +186,8 @@ public class LevelController {
 						//Spaceman starts moving when not in Countdown Stage and there is time remaining
 						if (levelModel.getTimeLimit()!=timeElapsed & startTimer<= -2) { 
 							currentView.spaceman.start();
+							
+							//added with createghostPlayer
 							currentView.red.start();
 							currentView.pink.start();
 							currentView.blue.start();
@@ -207,10 +221,12 @@ public class LevelController {
 						currentView.updateMessage(startTimer);
 						if ((startTimer == -1)) {
 							currentView.spaceman.start();
+							//player or ai ones
 							currentView.red.start();
 							currentView.pink.start();
 							currentView.blue.start();
 							currentView.orange.start();
+
 						}
 						startTimer--;
 					
@@ -272,6 +288,9 @@ public class LevelController {
 			//do power up stuff
 			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
 			currentView.red.changeToFrightMode();
+			currentView.pink.changeToFrightMode();
+			currentView.blue.changeToFrightMode();
+			currentView.orange.changeToFrightMode();
 			levelModel.addPoints(100);
 			currentView.updateScore(levelModel.getScore());
 			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
@@ -296,4 +315,14 @@ public class LevelController {
 	public void respawnCollectables() {
 		currentView.respawnPellet();
 	}
+	
+//	public void addGhost(int ghostType) {
+//		if (ghostType == 0) {
+//			currentView.createGhostPlayer(0);
+//		} else if (ghostType == 1) {
+//			currentView.createGhostPlayer(1);
+//		}  else if (ghostType == 2) {
+//			currentView.createGhostPlayer(2);
+//		}
+//	}
 }

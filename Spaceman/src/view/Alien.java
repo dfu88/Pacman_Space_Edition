@@ -104,6 +104,7 @@ public class Alien extends CharacterAnimate{
 		} else if (alienType == 3) {
 			images = ORANGE_IMAGES;
 		}
+
 		imageIndex = 0;
 		currentImage = images[imageIndex];
 
