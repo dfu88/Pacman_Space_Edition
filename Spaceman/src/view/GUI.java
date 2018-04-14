@@ -62,6 +62,7 @@ public class GUI {
 	private ArrayList<ImageView> multiplayerControls; //play and exit on multiMenu
 	private ArrayList<ImageView> joinedIndicator;
 	
+	//Not yet implemented //For skins and themes
 	private ArrayList<ImageView> playerOptions;
 	
 	
@@ -221,13 +222,15 @@ public class GUI {
 						menu.setEffect(null);
 
 					} else {
+						controller.executeProcess(option);
 						if (joinedIndicator.get(1).isVisible()) {
 							//enable ghost1 player
+							controller.executeProcess(69);
 						}
 						if (joinedIndicator.get(2).isVisible()) {
 							//enable ghost2 player
+							controller.executeProcess(420);
 						}
-						controller.executeProcess(option);
 						subFrame.setVisible(false);
 						multiMenu.setVisible(false);
 						menu.setEffect(null);

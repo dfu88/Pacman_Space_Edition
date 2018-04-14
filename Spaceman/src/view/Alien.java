@@ -39,12 +39,12 @@ public class Alien extends CharacterAnimate{
 		this.dx = dx;
 		this.dy = dy;
 
-		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
+		Image startImage = new Image(getClass().getResourceAsStream("res/pinkalien1.png"));
 		images = new Image[] {
 				startImage,
-				new Image(getClass().getResourceAsStream("res/left1.png")),
-				new Image(getClass().getResourceAsStream("res/round.png")),
-				new Image(getClass().getResourceAsStream("res/left1.png"))
+				new Image(getClass().getResourceAsStream("res/pinkalien2.png")),
+//				new Image(getClass().getResourceAsStream("res/round.png")),
+//				new Image(getClass().getResourceAsStream("res/left1.png"))
 		};
 		imageIndex = 0;
 		currentImage = images[imageIndex];

@@ -48,28 +48,12 @@ public class LevelVisuals {
 	private LevelController controller;
 	
 	private Scene scene;
+	
 	private Group root;
 	private Group pauseMenu;
 	private Group gameView;
 	private Group countDownView;
 	private Group timeComponent;
-	public Spaceman spaceman;
-
-	public Alien red;
-	public Alien pink;
-	public Alien blue;
-	public Alien orange;
-	private Pellet currentPellet;
-	
-	private ArrayList<Pellet> pelletsRendered;
-	private ArrayList<Integer> despawnIndex;
-	
-	private ArrayList<PowerUp> powerUpsRendered;
-	private ArrayList<ImageView> pauseOptions;
-	
-	private Text score;
-	private Text time;
-	private Text message;
 	
 	private GaussianBlur blur;
 	private DropShadow shadow;
@@ -77,11 +61,32 @@ public class LevelVisuals {
 	private Clip countdown;
 	private AudioClip cycle;
 	
+	private Text score;
+	private Text time;
+	private Text message;
+	
+	public Spaceman spaceman;
+	
+	public Alien red;
+	public Alien pink;
+	public Alien blue;
+	public Alien orange;
+	
+	private Pellet currentPellet;
+	private ArrayList<Pellet> pelletsRendered;
+	private ArrayList<Integer> despawnIndex;
+	
+	private ArrayList<PowerUp> powerUpsRendered;
+	private ArrayList<ImageView> pauseOptions;
+	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
+		
+		pauseOptions = new ArrayList<ImageView>();
+		
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
-		pauseOptions = new ArrayList<ImageView>();
+		
 		despawnIndex = new ArrayList<Integer>();
 		
 		blur = new GaussianBlur();
@@ -96,16 +101,12 @@ public class LevelVisuals {
 			soundClip.open(sound);
 			countdown = soundClip;
 		} catch (UnsupportedAudioFileException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (LineUnavailableException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		
 		url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
@@ -122,8 +123,15 @@ public class LevelVisuals {
 	public void generateMap() {
 		pelletsRendered.clear();
 		powerUpsRendered.clear();
+		despawnIndex.clear();
 		pauseOptions.clear();
 		root.getChildren().clear();
+		
+		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
+		ImageView bgView = new ImageView(bg);
+//		bg.
+//		bg.setScaleY(0.7);
+		root.getChildren().add(bgView);
 		
 		gameView = addGameComponents();
 		gameView.setEffect(blur);
@@ -190,9 +198,16 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 		
 		//Add Aliens after map added to scene
-		red = new Alien(controller,this,10,7,-1,0);
-		group.getChildren().add(red);
+		blue = new Alien(controller,this,10,7,-1,0); //was red
+		group.getChildren().add(blue);				//was red
 		//red.start();
+		
+		//include parameter in constructor to set as ai or player
+		red = new Alien(controller,this,10,7,-1,0); //was red
+		group.getChildren().add(red);
+		
+		pink = new Alien(controller,this,10,7,-1,0); //was red
+		group.getChildren().add(pink);
 		
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
 		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
@@ -451,5 +466,22 @@ public class LevelVisuals {
 		}
 	}
 	
+	
+//	public void createGhostPlayer(int ghostColor) {
+//		if (ghostColor == 1) {
+//			//add contructor parameter for different keyboard input
+//			pink = new Alien(controller, this, 11, 7, 0, 0);
+//			pink.imageView.setRotate(90);
+//			//gameView.getChildren().remo
+//			gameView.getChildren().add(pink);
+//		} else if (ghostColor == 2) {
+//			//add contructor parameter for different keyboard input
+//			red = new Alien(controller, this, 12, 7, 0, 0);
+//			red.imageView.setRotate(-90);
+//			gameView.getChildren().add(red);
+//		}
+//		
+//		
+//	}
 	
 }
