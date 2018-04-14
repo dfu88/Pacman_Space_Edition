@@ -4,6 +4,7 @@ import model.Level;
 import view.Alien;
 import view.LevelVisuals;
 import view.Spaceman;
+import view.StorySlides;
 import javafx.scene.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,6 +20,7 @@ public class LevelController {
 
 	private InterfaceController interfaceCtrl;
 	private LevelVisuals currentView;
+	private StorySlides scenarioDisp;
 	private Level levelModel;
 	
 	public Timeline timeline;
@@ -28,16 +30,19 @@ public class LevelController {
 	public boolean paused = false;
 	//private int pauseMenuOption = 0;
 	
-	private boolean exitScreenOn = false;
+	//private boolean exitScreenOn = false;
 	public int exitOption = 0;
 	
 	private int currentMode;
 	public boolean ghostPlayerRed = false;
 	public boolean ghostPlayerPink = false;
+	
+	public int levelWins = 0;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
 		currentView = new LevelVisuals(this);
+		scenarioDisp = new StorySlides(this);
 		levelModel = new Level();
 		
 		timeline = makeTimeline();
@@ -214,7 +219,7 @@ public class LevelController {
 		//levelModel.makeMaps();
 		currentMode = type;
 		//levelModel.setMap(type);
-		levelModel.initLevel(type);
+		levelModel.initLevel(type, levelWins);
 		currentView.generateMap();
 		if (currentMode == 3) {
 			currentView.updateTime(-1);
@@ -245,7 +250,7 @@ public class LevelController {
 			currentView.orange.changeToFrightMode();
 			levelModel.addPoints(50);
 			currentView.updateScore(levelModel.getScore());
-			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
+			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);//this doesnt do anyhting btw
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
 		//this function is messing up the tunnel because its removing tele
@@ -327,12 +332,14 @@ public class LevelController {
 		startTimer = 3;
 		exitOption = 0;
 		timeElapsed = 0;
+//		levelWins = 0;
 		ghostPlayerRed = false;
 		ghostPlayerPink = false;
 		currentView.resetCountdown();
 		interfaceCtrl.showHome();
 		paused = false;
 	}
+
 
 	private boolean ifSpacemanMetAlien (Alien alien) {
 		int alienX = alien.getX();
@@ -365,6 +372,12 @@ public class LevelController {
 				}
 			}
 		}
+	}
 		
+	public void playStory(int levelWins) {
+		// TODO Auto-generated method stub
+		scenarioDisp.setScenario(levelWins);
+		scenarioDisp.generateScenario();
+		interfaceCtrl.changeScene(scenarioDisp.returnScene());
 	}
 }

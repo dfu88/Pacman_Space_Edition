@@ -11,7 +11,9 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.LevelController;
+
 import javafx.event.EventHandler;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -20,11 +22,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
 import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
@@ -63,6 +60,7 @@ public class LevelVisuals {
 	
 	private Clip countdown;
 	private AudioClip cycle;
+	private AudioClip win1;
 	
 	private Text score;
 	private Text time;
@@ -84,6 +82,7 @@ public class LevelVisuals {
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> exitOptions;
 	
+	private int pelletsCollected = 0;
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
@@ -116,6 +115,9 @@ public class LevelVisuals {
 
 		url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/win1.wav");
+		win1 = new AudioClip(url.toString());
 
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -133,6 +135,7 @@ public class LevelVisuals {
 		despawnIndex.clear();
 		exitOptions.clear();
 		root.getChildren().clear();
+		pelletsCollected = 0;
 		
 		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
 		ImageView bgView = new ImageView(bg);
@@ -277,7 +280,7 @@ public class LevelVisuals {
 
 	private Group addCountDown() {
 		Group group = new Group();
-		Rectangle frame = new Rectangle(SCENE_WIDTH,SCENE_HEIGHT/3);
+		Rectangle frame = new Rectangle(SCENE_WIDTH,SCENE_HEIGHT/4);
 		frame.setFill(Color.BLACK);
 		frame.setStroke(Color.WHITE);
 		frame.setStrokeWidth(2.0);
@@ -434,7 +437,32 @@ public class LevelVisuals {
 					if (currentPellet.returnPellet().isVisible()) {
 						pelletsRendered.get(index).returnPellet().setVisible(false);
 						spaceman.playPelletSound();
-
+						pelletsCollected++;
+						
+						if (pelletsCollected == pelletsRendered.size() & controller.getMode() != 3) {
+							//end game, next level here
+							stopAllChars();
+							controller.timeline.stop();
+							//disp screen
+							//play soud clip
+							win1.play();
+							//do nothing while sound clip is playing
+							while (win1.isPlaying());
+							//change level
+							controller.resetToStartState();
+							controller.levelWins++;
+							controller.setLevel(controller.getMode());
+							//increase difficulty here?
+							
+							
+							
+							//testing scenes
+							if (controller.getMode() == 1) {
+								controller.playStory(controller.levelWins);
+							}
+							
+						}
+						
 						//Endless mode: set respawn
 						if (controller.getMode() == 3) {
 							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
@@ -624,12 +652,13 @@ public class LevelVisuals {
 				if (controller.getMode() != 3 & controller.startTimer <= -1) { //doesnt seem to stop when countdown hasnt started
 					controller.timeElapsed = controller.getTimeLimit();
 					updateTime(controller.getTimeLimit() - controller.timeElapsed);
-					spaceman.stop();
-					blue.stop(); //changed from red
-					
-					//added with createghostPlayer
-					red.stop();
-					pink.stop();
+//					spaceman.stop();
+//					blue.stop(); //changed from red
+//					
+//					//added with createghostPlayer
+//					red.stop();
+//					pink.stop();
+					stopAllChars();
 					controller.timeline.stop();
 					//disp gameover screen here
 				}
@@ -640,17 +669,21 @@ public class LevelVisuals {
 				if (exitPopUp.isVisible()) {		
 					//Quits the game if yes is selected, otherwise will go back to pause menu
 					if (controller.exitOption == 1){
-						spaceman.stop();
-						blue.stop(); //was red
-						
-						//added with createghostPlayer
-						red.stop();
-						pink.stop();
+//						spaceman.stop();
+//						blue.stop(); //was red
+//						
+//						//added with createghostPlayer
+//						red.stop();
+//						pink.stop();
+						stopAllChars();
 						controller.timeline.stop();
 						
 						//Resets initial level states //consider an init() func instead
 						controller.resetToStartState();
+						controller.levelWins = 0;
 //						paused = !paused;
+					} else {
+						pauseMenu.setEffect(null);
 					}
 //					exitScreenOn = !exitScreenOn;
 //					currentView.updateExitScreen(exitScreenOn);
@@ -671,7 +704,10 @@ public class LevelVisuals {
 				if (!exitPopUp.isVisible()) {
 					controller.paused = true;
 					controlPause();
+					pauseMenu.setEffect(blur);
 						
+				} else {
+					pauseMenu.setEffect(null);
 				}
 				playCycleSound();
 				exitPopUp.setVisible(!exitPopUp.isVisible());
@@ -689,13 +725,15 @@ public class LevelVisuals {
 			//Pauses the game
 			pauseCountdown();
 			controller.timeline.pause();
-			spaceman.pause();
-			blue.pause();
-			orange.pause();
-			
-			//added with createghostPlayer
-			red.pause();
-			pink.pause();
+
+//			spaceman.pause();
+//			blue.pause();
+//			orange.pause();
+//			//added with createghostPlayer
+//			red.pause();
+//			pink.pause();
+			stopAllChars();
+
 		
 		} else {
 			//Resumes the level is counted was started
@@ -710,13 +748,14 @@ public class LevelVisuals {
 				//maybe make a bool var isCountdown isntead for clarity
 				//Spaceman starts moving when not in Countdown Stage and there is time remaining
 				if (controller.getTimeLimit()!=controller.timeElapsed & controller.startTimer<= -2) { 
-					spaceman.start();
-					blue.start();
-					orange.pause();
 
-					//added with createghostPlayer
-					red.start();
-					pink.start();
+					startAllChars();
+//					spaceman.start();
+//					blue.start();
+//
+//					//added with createghostPlayer
+//					red.start();
+//					pink.start();
 				}
 			}
 		}
@@ -728,6 +767,20 @@ public class LevelVisuals {
 //		// TODO Auto-generated method stub
 //		
 //	}
+
+	public void stopAllChars() {
+		spaceman.stop();
+		red.stop();
+		pink.stop();
+		blue.stop();
+		orange.stop();
+	}
 	
-	
+	public void startAllChars() {
+		spaceman.start();
+		pink.start();
+		red.start();
+		blue.start();
+		orange.start();
+	}
 }

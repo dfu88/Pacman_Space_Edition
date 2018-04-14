@@ -53,12 +53,20 @@ public class Spaceman extends CharacterAnimate{
 		dx = -1;
 		dy = 0;
 
-		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png")); 
+//		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png")); 
+//		images = new Image[] {
+//				startImage,
+//				new Image(getClass().getResourceAsStream("res/left1.png")),
+//				new Image(getClass().getResourceAsStream("res/round.png")),
+//				new Image(getClass().getResourceAsStream("res/left1.png"))
+//		};
+		
+		Image startImage = new Image(getClass().getResourceAsStream("res/spacepac2.png")); 
 		images = new Image[] {
 				startImage,
-				new Image(getClass().getResourceAsStream("res/left1.png")),
-				new Image(getClass().getResourceAsStream("res/round.png")),
-				new Image(getClass().getResourceAsStream("res/left1.png"))
+				new Image(getClass().getResourceAsStream("res/spacepac.png")),
+				new Image(getClass().getResourceAsStream("res/spacepac3.png")),
+				new Image(getClass().getResourceAsStream("res/spacepac.png"))
 		};
 		imageIndex = 0;
 		currentImage = images[imageIndex];
