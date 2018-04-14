@@ -28,12 +28,14 @@ public class LevelController {
 	public boolean paused = false;
 	//private int pauseMenuOption = 0;
 	
-	private boolean exitScreenOn = false;
+	//private boolean exitScreenOn = false;
 	public int exitOption = 0;
 	
 	private int currentMode;
 	public boolean ghostPlayerRed = false;
 	public boolean ghostPlayerPink = false;
+	
+	public int levelWins = 0;
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -214,7 +216,7 @@ public class LevelController {
 		//levelModel.makeMaps();
 		currentMode = type;
 		//levelModel.setMap(type);
-		levelModel.initLevel(type);
+		levelModel.initLevel(type, levelWins);
 		currentView.generateMap();
 		if (currentMode == 3) {
 			currentView.updateTime(-1);
@@ -327,6 +329,7 @@ public class LevelController {
 		startTimer = 3;
 		exitOption = 0;
 		timeElapsed = 0;
+//		levelWins = 0;
 		ghostPlayerRed = false;
 		ghostPlayerPink = false;
 		currentView.resetCountdown();

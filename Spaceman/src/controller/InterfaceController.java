@@ -39,13 +39,15 @@ public class InterfaceController {
 			
 		} else if (option == 3) {
 			System.out.println("1269");
-			lvlCtrl.setLevel(3);
+			lvlCtrl.setLevel(option);
 			
 		} else if (option == 4) {
 			System.out.println("nice");
+			lvlCtrl.setLevel(option);
 			
 		} else if (option == 5) {
 			System.out.println("xd");
+			
 			
 		} else if (option == 69) {
 			System.out.println("sets pink to player");
