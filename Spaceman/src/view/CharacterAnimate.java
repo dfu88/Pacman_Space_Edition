@@ -71,6 +71,14 @@ public abstract class CharacterAnimate extends Parent{
 
 		return timeline;
 	}
+	
+	public int getX() {
+		return x;
+	}
+	
+	public int getY() {
+		return y;
+	}
 
 	public void stop() {
 		timeline.stop();

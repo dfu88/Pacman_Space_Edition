@@ -74,6 +74,7 @@ public class LevelVisuals {
 	public Alien pink;
 	public Alien blue;
 	public Alien orange;
+	public Alien[] aliens;
 	
 	private Pellet currentPellet;
 
@@ -223,10 +224,9 @@ public class LevelVisuals {
 		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15);
 		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35);
 		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60);
-		group.getChildren().add(red);
-		group.getChildren().add(pink);
-		group.getChildren().add(blue);
-		group.getChildren().add(orange);
+		aliens = new Alien[] {red,pink,blue,orange};
+		group.getChildren().addAll(aliens);
+		
 		//red.start();
 
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
@@ -691,6 +691,7 @@ public class LevelVisuals {
 			controller.timeline.pause();
 			spaceman.pause();
 			blue.pause();
+			orange.pause();
 			
 			//added with createghostPlayer
 			red.pause();
@@ -711,6 +712,7 @@ public class LevelVisuals {
 				if (controller.getTimeLimit()!=controller.timeElapsed & controller.startTimer<= -2) { 
 					spaceman.start();
 					blue.start();
+					orange.pause();
 
 					//added with createghostPlayer
 					red.start();
@@ -722,4 +724,10 @@ public class LevelVisuals {
 		updatePauseScreen(controller.paused);
 	}
 
+//	public void checkSpacemanAndAliens() {
+//		// TODO Auto-generated method stub
+//		
+//	}
+	
+	
 }
