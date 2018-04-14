@@ -88,6 +88,9 @@ public class LevelController {
 						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
 						currentView.spaceman.stop();
 						currentView.red.stop();
+						currentView.pink.stop();
+						currentView.blue.stop();
+						currentView.orange.stop();
 						//disp gameover screen?
 					}
 					
@@ -107,6 +110,9 @@ public class LevelController {
 							if (timeElapsed!=levelModel.getTimeLimit() & startTimer<= -2) { 
 								currentView.spaceman.start();
 								currentView.red.start();
+								currentView.pink.start();
+								currentView.blue.start();
+								currentView.orange.start();
 							}
 							
 							timeline.play();
@@ -117,6 +123,9 @@ public class LevelController {
 							
 							currentView.spaceman.stop();
 							currentView.red.stop();
+							currentView.pink.stop();
+							currentView.blue.stop();
+							currentView.orange.stop();
 							timeline.stop();
 							
 							//Resets initial level states //consider an init() func instead
@@ -146,6 +155,9 @@ public class LevelController {
 						timeline.pause();
 						currentView.spaceman.pause();
 						currentView.red.pause();
+						currentView.pink.pause();
+						currentView.blue.pause();
+						currentView.orange.pause();
 					
 					//Resumes the game
 					} else {
@@ -163,6 +175,9 @@ public class LevelController {
 						if (levelModel.getTimeLimit()!=timeElapsed & startTimer<= -2) { 
 							currentView.spaceman.start();
 							currentView.red.start();
+							currentView.pink.start();
+							currentView.blue.start();
+							currentView.orange.start();
 						}
 					}
 					
@@ -193,6 +208,9 @@ public class LevelController {
 						if ((startTimer == -1)) {
 							currentView.spaceman.start();
 							currentView.red.start();
+							currentView.pink.start();
+							currentView.blue.start();
+							currentView.orange.start();
 						}
 						startTimer--;
 					
