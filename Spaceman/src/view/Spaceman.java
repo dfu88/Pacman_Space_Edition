@@ -313,5 +313,13 @@ public class Spaceman extends CharacterAnimate{
 			moveDown();
 		}
 	}
+	
+	public double getGraphicalX() {
+		return graphicalX;
+	}
+	
+	public double getGraphicalY() {
+		return graphicalY;
+	}
 
 }

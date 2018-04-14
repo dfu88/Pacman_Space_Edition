@@ -121,6 +121,14 @@ public class Alien extends CharacterAnimate{
 		// remove later when movement logic is completed
 		status = TRAPPED;
 	}
+	
+	public double getGraphicalX() {
+		return graphicalX;
+	}
+	
+	public double getGraphicalY() {
+		return graphicalY;
+	}
 
 	// If moving in y-axis, move in x-axis or continue
 	private void moveLeftOrRight(boolean mustMove) {
