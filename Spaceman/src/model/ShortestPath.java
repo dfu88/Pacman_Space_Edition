@@ -22,8 +22,8 @@ public class ShortestPath {
 	private int nodeIndex(Vector<Vector<Integer>> nodes, Vector<Integer> node) {
 		int x = node.get(0);
 		int y = node.get(1);
-		System.out.println("nodeIndexX "+x);
-		System.out.println("nodeIndexY "+y);
+//		System.out.println("nodeIndexX "+x);
+//		System.out.println("nodeIndexY "+y);
 		for(int i=0; i<nodes.size(); i++) {
 			Vector<Integer> currentNode = nodes.get(i);
 			int currentX = currentNode.get(0);
@@ -85,7 +85,7 @@ public class ShortestPath {
 		int sourceIndex = nodeIndex(nodes,sourceNode);
 		int targetIndex = nodeIndex(nodes,targetNode);
 		if (sourceIndex<0 || targetIndex<0) {
-			System.out.println("rip");
+//			System.out.println("rip");
 			return Integer.MAX_VALUE;
 		}
 		//		Vector<Integer> sourceNode = nodes.get(sourceIndex);
@@ -98,14 +98,14 @@ public class ShortestPath {
 		weight.set(sourceIndex, 0);
 		heuristic.set(sourceIndex, sourceHeuristic);
 		totalCost.set(sourceIndex, sourceHeuristic);
-		System.out.println("riperinno");
+//		System.out.println("riperinno");
 
 		while (!(openNodes.isEmpty())) {
 			Vector<Integer> currentNode = nodes.get(minIndex(openNodes,nodes,totalCost));
 			int currentIndex = nodeIndex(nodes,currentNode);
-			System.out.println("while "+currentIndex);
+//			System.out.println("while "+currentIndex);
 			if (compareNodes(currentNode,targetNode)) {
-				System.out.println("FFFUUUUUUU");
+//				System.out.println("FFFUUUUUUU");
 				return totalCost.get(currentIndex);
 			}
 			openNodes.remove(currentNode);
@@ -113,19 +113,19 @@ public class ShortestPath {
 			Vector<Vector<Integer>> neighbourNodes = generateNeighbours(nodes, currentNode);
 			for (int i=0; i<neighbourNodes.size(); i++) {
 				Vector<Integer> neighbourNode = neighbourNodes.get(i); 
-				System.out.println("innn");
+//				System.out.println("innn");
 				int neighbourIndex = nodeIndex(nodes,neighbourNode);
 				if (isValid(closedNodes,neighbourNode)) {
-					System.out.println("closssed");
+//					System.out.println("closssed");
 					continue;
 				}
 				if (!(isValid(openNodes, neighbourNode))) {
 					openNodes.add(neighbourNode);
-					System.out.println("addd");
+//					System.out.println("addd");
 				}
 				int tempWeight = weight.get(currentIndex) + 1;
 				if (tempWeight >= weight.get(neighbourIndex)) {
-					System.out.println("ghjhjck");
+//					System.out.println("ghjhjck");
 					continue;
 				}
 				int neighbourHeuristic = Math.abs(neighbourNode.get(0) - targetX) + Math.abs(neighbourNode.get(1) - targetY);
@@ -134,12 +134,12 @@ public class ShortestPath {
 				heuristic.set(neighbourIndex, neighbourHeuristic);
 				totalCost.set(neighbourIndex, tempWeight+neighbourHeuristic);
 
-				System.out.println(totalCost);
-				System.out.println("SUPERgood");
+//				System.out.println(totalCost);
+//				System.out.println("SUPERgood");
 			}
 			//return Integer.MAX_VALUE;
 		}
-		System.out.println("fckkkkk");
+//		System.out.println("fckkkkk");
 		return Integer.MAX_VALUE;
 	}
 
@@ -172,8 +172,8 @@ public class ShortestPath {
 				}
 			}
 		}
-		System.out.println("------");
-		System.out.println("minInd "+mIndex);
+//		System.out.println("------");
+//		System.out.println("minInd "+mIndex);
 		return mIndex;
 
 	}
@@ -181,8 +181,8 @@ public class ShortestPath {
 	private Vector<Vector<Integer>> generateNeighbours(Vector<Vector<Integer>> nodes, Vector<Integer> node){
 		int nodeX = node.get(0);
 		int nodeY = node.get(1);
-		System.out.println("genNX "+nodeX);
-		System.out.println("genNY "+nodeY);
+//		System.out.println("genNX "+nodeX);
+//		System.out.println("genNY "+nodeY);
 
 		// Generate neighbours
 		Vector<Integer> leftNeighbour = new Vector<Integer>();
@@ -202,22 +202,22 @@ public class ShortestPath {
 		Vector<Vector<Integer>> neighbourNodes = new Vector<Vector<Integer>>();
 		if (isValid(nodes,leftNeighbour)) {
 			neighbourNodes.add(leftNeighbour);
-			System.out.println("goodLeft");
+//			System.out.println("goodLeft");
 		}
 		if (isValid(nodes,rightNeighbour)) {
 			neighbourNodes.add(rightNeighbour);
-			System.out.println("goodRight");
+//			System.out.println("goodRight");
 		}
 		if (isValid(nodes,upNeighbour)) {	
 			neighbourNodes.add(upNeighbour);
-			System.out.println("goodUp");
+//			System.out.println("goodUp");
 		}	
 		if (isValid(nodes,downNeighbour)) {
 			neighbourNodes.add(downNeighbour);
-			System.out.println("goodDown");
+//			System.out.println("goodDown");
 		}
 
-		System.out.println("okay");
+//		System.out.println("okay");
 		return neighbourNodes;
 	}
 
