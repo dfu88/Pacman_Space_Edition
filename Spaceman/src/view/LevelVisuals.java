@@ -655,7 +655,7 @@ public class LevelVisuals {
 //					exitScreenOn = !exitScreenOn;
 //					currentView.updateExitScreen(exitScreenOn);
 					exitPopUp.setVisible(false);
-				} else {
+				} else  if (!pauseMenu.isVisible()){
 					controller.timeline.play();
 				}
 			} else if(input.getCode() == KeyCode.P) {
