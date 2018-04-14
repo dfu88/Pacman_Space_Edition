@@ -21,12 +21,15 @@ public class LevelController {
 	private LevelVisuals currentView;
 	private Level levelModel;
 	
-	private Timeline timeline;
-	private int startTimer = 3;
-	private int timeElapsed = 0;
+	public Timeline timeline;
+	public int startTimer = 3;
+	public int timeElapsed = 0;
 	
-	private boolean paused = false;
-	private int pauseMenuOption = 0;
+	public boolean paused = false;
+	//private int pauseMenuOption = 0;
+	
+	private boolean exitScreenOn = false;
+	public int exitOption = 0;
 	
 	private int currentMode;
 	public boolean ghostPlayerRed = false;
@@ -47,31 +50,27 @@ public class LevelController {
 				currentView.stopCycleClip();
 				
 				if (input.getCode() == KeyCode.LEFT) {
-					//When in pause screen controls option selection instead
-					if (paused) {
-						if (pauseMenuOption > 0) {
-							pauseMenuOption--;
+					//When in exit screen, controls option selection instead
+					if (exitScreenOn) {
+						if (exitOption > 0) {
+							exitOption--;
 							currentView.playCycleSound();
-//							currentView.playCycle();
 						}
-						currentView.cycleOptions(pauseMenuOption);
+						currentView.cycleOptions(exitOption);
 							
 					} else {
 						currentView.spaceman.setKeyInput(0);
 						
 					}
 					
-					
 				} else if(input.getCode() == KeyCode.RIGHT) {
-					//When in pause screen controls option selection instead
-					if (paused) {
-						if (pauseMenuOption < 1) {
-							pauseMenuOption++;
-							//currentView.playCycle();
+					//When in exit screen controls option selection instead
+					if (exitScreenOn) {
+						if (exitOption < 1) {
+							exitOption++;
 							currentView.playCycleSound();
 						}
-						
-						currentView.cycleOptions(pauseMenuOption);
+						currentView.cycleOptions(exitOption);
 						
 					} else {
 						currentView.spaceman.setKeyInput(2);
@@ -85,7 +84,8 @@ public class LevelController {
 					currentView.spaceman.setKeyInput(3);
 					
 				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
-
+					
+					//Sets time to 0 and stops the game when not in endless mode
 					if (currentMode != 3) {
 						timeElapsed = levelModel.getTimeLimit();
 						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
@@ -96,37 +96,15 @@ public class LevelController {
 						currentView.red.stop();
 						currentView.pink.stop();
 						
-						//disp gameover screen?
+						//disp gameover screen here
 					}
 					
 				} else if(input.getCode() == KeyCode.ENTER) {
 					currentView.playCycleSound();
-					//When in pause screen controls option selection instead
-					if (paused) {
-						//Resumes the game
-						if (pauseMenuOption == 0) {
-							//Resumes the Countdown Sound if paused during it
-							if (startTimer>= 0) {
-								currentView.playCountdown(); 
-							}
-							
-						//maybe make a bool var isCountdown isntead for clarity
-							//Spaceman starts moving when not in CountDown stage and there is time left
-							if (timeElapsed!=levelModel.getTimeLimit() & startTimer<= -2) { 
-								currentView.spaceman.start();
-								currentView.blue.start(); //was red
-								
-								//added with createghostPlayer
-								currentView.pink.start();
-								currentView.red.start();
-							}
-							
-							timeline.play();
-							currentView.updatePauseScreen(!paused);
-						
-						//Quits the game
-						} else if (pauseMenuOption == 1){
-							
+					//When in exit screen, executes selected options instead
+					if (exitScreenOn) {		
+						//Quits the game if yes is selected, otherwise will go back to pause menu
+						if (exitOption == 1){
 							currentView.spaceman.stop();
 							currentView.blue.stop(); //was red
 							
@@ -137,63 +115,37 @@ public class LevelController {
 							
 							//Resets initial level states //consider an init() func instead
 							startTimer = 3;
-							pauseMenuOption = 0;
+							exitOption = 0;
 							timeElapsed = 0;
 							ghostPlayerRed = false;
 							ghostPlayerPink = false;
 							currentView.resetCountdown();
 							controller.showHome();
+							paused = !paused;
 						}
-						
-						paused = !paused;
-					
-					//Start CountDown
+						exitScreenOn = !exitScreenOn;
+						currentView.updateExitScreen(exitScreenOn);
 					} else {
-						
 						timeline.play();
 					}
-
-				} else if(input.getCode() == KeyCode.ESCAPE) {
+				} else if(input.getCode() == KeyCode.P) {
 					currentView.playCycleSound();
-					paused = !paused;
-					pauseMenuOption = 0;
-					
-					//Pauses the game
-					if (paused) {
-						currentView.pauseCountdown();
-						timeline.pause();
-						currentView.spaceman.pause();
-						currentView.blue.pause();
-						
-						//added with createghostPlayer
-						currentView.red.pause();
-						currentView.pink.pause();
-					
-					//Resumes the game
-					} else {
-						
-						timeline.play();
-						
-						//Resumes Countdown Sound if interrupted
-						if (startTimer>= 0) {
-							currentView.playCountdown();
-
-						}
-						
-						//maybe make a bool var isCountdown isntead for clarity
-						//Spaceman starts moving when not in Countdown Stage and there is time remaining
-						if (levelModel.getTimeLimit()!=timeElapsed & startTimer<= -2) { 
-							currentView.spaceman.start();
-							currentView.blue.start();
-							
-							//added with createghostPlayer
-							currentView.red.start();
-							currentView.pink.start();
-						}
+					//Toggles pause screen when not in the exit screen
+					if (!exitScreenOn) {
+						paused = !paused;
+						currentView.controlPause();//add currentview.
 					}
 					
-					currentView.updatePauseScreen(paused);
-					
+				} else if (input.getCode() == KeyCode.ESCAPE) {
+					//Turns on/off exit screen and pauses if not already
+					if (!exitScreenOn) {
+						paused = true;
+						currentView.controlPause(); //added currentView.
+							
+					}
+					currentView.playCycleSound();
+					exitScreenOn = !exitScreenOn;
+					currentView.updateExitScreen(exitScreenOn);
 				}
 			}
 		});
@@ -304,6 +256,10 @@ public class LevelController {
 		return currentMode;
 	}
 	
+	public int getTimeLimit() {
+		return levelModel.getTimeLimit();
+	}
+			
 	public void respawnCollectables() {
 		currentView.respawnPellet();
 	}
@@ -317,4 +273,56 @@ public class LevelController {
 //			currentView.createGhostPlayer(2);
 //		}
 //	}
+//	private void controlPause() {
+//		//paused = !paused;
+//		//exitOption = 0;
+//		
+//		
+//		if (paused) {
+//			//Pauses the game
+//			currentView.pauseCountdown();
+//			timeline.pause();
+//			currentView.spaceman.pause();
+//			currentView.blue.pause();
+//			
+//			//added with createghostPlayer
+//			currentView.red.pause();
+//			currentView.pink.pause();
+//		
+//		} else {
+//			//Resumes the level is counted was started
+//			if (startTimer != 3) {
+//				timeline.play();
+//
+//				//Resumes Countdown Sound if interrupted
+//				if (startTimer>= 0) {
+//					currentView.playCountdown();
+//				}
+//
+//				//maybe make a bool var isCountdown isntead for clarity
+//				//Spaceman starts moving when not in Countdown Stage and there is time remaining
+//				if (levelModel.getTimeLimit()!=timeElapsed & startTimer<= -2) { 
+//					currentView.spaceman.start();
+//					currentView.blue.start();
+//
+//					//added with createghostPlayer
+//					currentView.red.start();
+//					currentView.pink.start();
+//				}
+//			}
+//		}
+//		
+//		currentView.updatePauseScreen(paused);
+//	}
+	
+	public void resetToStartState() {
+		startTimer = 3;
+		exitOption = 0;
+		timeElapsed = 0;
+		ghostPlayerRed = false;
+		ghostPlayerPink = false;
+		currentView.resetCountdown();
+		interfaceCtrl.showHome();
+		paused = false;
+	}
 }

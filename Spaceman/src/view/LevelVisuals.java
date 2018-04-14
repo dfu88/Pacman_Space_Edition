@@ -11,13 +11,15 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.LevelController;
-
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -51,6 +53,7 @@ public class LevelVisuals {
 	
 	private Group root;
 	private Group pauseMenu;
+	private Group exitPopUp;
 	private Group gameView;
 	private Group countDownView;
 	private Group timeComponent;
@@ -78,13 +81,13 @@ public class LevelVisuals {
 	private ArrayList<Integer> despawnIndex;
 
 	private ArrayList<PowerUp> powerUpsRendered;
-	private ArrayList<ImageView> pauseOptions;
+	private ArrayList<ImageView> exitOptions;
 	
 	
 	public LevelVisuals (LevelController controller) {
 		this.controller = controller;
 		
-		pauseOptions = new ArrayList<ImageView>();
+		exitOptions = new ArrayList<ImageView>();
 		
 		pelletsRendered = new ArrayList<Pellet>();
 		powerUpsRendered = new ArrayList<PowerUp>();
@@ -126,7 +129,7 @@ public class LevelVisuals {
 		pelletsRendered.clear();
 		powerUpsRendered.clear();
 		despawnIndex.clear();
-		pauseOptions.clear();
+		exitOptions.clear();
 		root.getChildren().clear();
 		
 		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
@@ -145,7 +148,10 @@ public class LevelVisuals {
 		pauseMenu = addPauseMenu();
 		pauseMenu.setVisible(false);
 		root.getChildren().add(pauseMenu);
-
+		
+		exitPopUp = addExitPopUp();
+		exitPopUp.setVisible(false);
+		root.getChildren().add(exitPopUp);
 	}	
 
 	private Group addGameComponents() {
@@ -273,7 +279,7 @@ public class LevelVisuals {
 
 	private Group addCountDown() {
 		Group group = new Group();
-		Rectangle frame = new Rectangle(1440,300);
+		Rectangle frame = new Rectangle(SCENE_WIDTH,SCENE_HEIGHT/3);
 		frame.setFill(Color.BLACK);
 		frame.setStroke(Color.WHITE);
 		frame.setStrokeWidth(2.0);
@@ -297,7 +303,7 @@ public class LevelVisuals {
 	private Group addPauseMenu() {
 		Group group = new Group();
 
-		Rectangle frame = new Rectangle(700,400);
+		Rectangle frame = new Rectangle(SCENE_WIDTH,SCENE_HEIGHT/3);
 		frame.setFill(Color.BLACK);
 		frame.setStroke(Color.WHITE);
 		frame.setStrokeWidth(2.0);
@@ -306,33 +312,110 @@ public class LevelVisuals {
 		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
 		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
 		group.getChildren().add(frame);
+		
+		Image paused = new Image(getClass().getResourceAsStream("misc/paused.png"));
+		ImageView pausedLabel = new ImageView(paused);
+		pausedLabel.setX((SCENE_WIDTH-pausedLabel.getLayoutBounds().getWidth())*0.5);
+		pausedLabel.setY(frame.getY()+pausedLabel.getLayoutBounds().getHeight()*0.25);
+		//resumeButton.setEffect(shadow);
+		group.getChildren().add(pausedLabel);
 
-
-		Text label = new Text("Paused");
+		Text label = new Text("Press 'P' to Resume the Level");
 		label.setFont(Font.font(50));
 		label.setFill(Color.WHITE);
 		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
-		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
+		label.setY(frame.getY()+frame.getLayoutBounds().getHeight()-label.getLayoutBounds().getHeight());
 		group.getChildren().add(label);
-
-		Image resume = new Image(getClass().getResourceAsStream("misc/resume.png"));
-		ImageView resumeButton = new ImageView(resume);
-		resumeButton.setX(frame.getX()+100);
-		resumeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
-		resumeButton.setEffect(shadow);
-		pauseOptions.add(resumeButton);
-
-		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
-		ImageView closeButton = new ImageView(close);
-		closeButton.setX(frame.getX()+frame.getLayoutBounds().getWidth()-closeButton.getLayoutBounds().getWidth()-100);
-		closeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
-		pauseOptions.add(closeButton);
-
-		group.getChildren().add(closeButton);
-		group.getChildren().add(resumeButton);
 
 		return group;
 	}
+	
+	private Group addExitPopUp() {
+		Group group = new Group();
+
+		Rectangle frame = new Rectangle(SCENE_WIDTH/2.5,SCENE_HEIGHT/2.5);
+		frame.setFill(Color.BLACK);
+		frame.setStroke(Color.WHITE);
+		frame.setStrokeWidth(2.0);
+		frame.setArcHeight(15);
+		frame.setArcWidth(15);
+		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
+		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
+		group.getChildren().add(frame);
+		
+		Text label = new Text("Are You Sure \nYou Want To Leave \nThis Level?");
+		label.setFont(Font.font(50));
+		label.setFill(Color.WHITE);
+		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+		label.setY(frame.getY()+100);
+		group.getChildren().add(label);
+		
+		Image no = new Image(getClass().getResourceAsStream("misc/no.png"));
+		ImageView noLabel = new ImageView(no);
+		noLabel.setEffect(shadow);
+		exitOptions.add(noLabel);
+		
+		
+		Image yes = new Image(getClass().getResourceAsStream("misc/yes.png"));
+		ImageView yesLabel = new ImageView(yes);
+		exitOptions.add(yesLabel);
+		
+		for (int i = 0; i < exitOptions.size(); i++) {
+			exitOptions.get(i).setX(frame.getX()+(i+1)*50+i*yes.getWidth());
+			exitOptions.get(i).setY(frame.getY()+frame.getLayoutBounds().getHeight()-no.getHeight()*1.5);
+			group.getChildren().add(exitOptions.get(i));
+		}
+//		pausedLabel.setX((SCENE_WIDTH-pausedLabel.getLayoutBounds().getWidth())*0.5);
+//		pausedLabel.setY(frame.getY()+pausedLabel.getLayoutBounds().getHeight()*0.25);
+		//resumeButton.setEffect(shadow);
+		//pauseOptions.add(pausedLabel);
+//		group.getChildren().add(pausedLabel);
+
+		
+
+		return group;
+	}
+	
+//	private Group addPauseMenu() {
+//		Group group = new Group();
+//
+//		Rectangle frame = new Rectangle(700,400);
+//		frame.setFill(Color.BLACK);
+//		frame.setStroke(Color.WHITE);
+//		frame.setStrokeWidth(2.0);
+//		frame.setArcHeight(15);
+//		frame.setArcWidth(15);
+//		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
+//		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
+//		group.getChildren().add(frame);
+//
+//
+//		Text label = new Text("Paused");
+//		label.setFont(Font.font(50));
+//		label.setFill(Color.WHITE);
+//		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+//		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
+//		group.getChildren().add(label);
+//
+//		Image resume = new Image(getClass().getResourceAsStream("misc/resume.png"));
+//		ImageView resumeButton = new ImageView(resume);
+//		resumeButton.setX(frame.getX()+100);
+//		resumeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
+//		resumeButton.setEffect(shadow);
+//		pauseOptions.add(resumeButton);
+//
+//		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
+//		ImageView closeButton = new ImageView(close);
+//		closeButton.setX(frame.getX()+frame.getLayoutBounds().getWidth()-closeButton.getLayoutBounds().getWidth()-100);
+//		closeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
+//		pauseOptions.add(closeButton);
+//
+//		group.getChildren().add(closeButton);
+//		group.getChildren().add(resumeButton);
+//
+//		return group;
+//	}
+	
 
 	public Scene returnScene() {
 		return scene;
@@ -446,14 +529,28 @@ public class LevelVisuals {
 		}
 
 	}
+	
+	public void updateExitScreen(boolean exitScreenOn) {
+
+		if (exitScreenOn) {
+			gameView.setEffect(blur);
+			exitPopUp.setVisible(true);
+
+		} else {
+			gameView.setEffect(null);
+			exitPopUp.setVisible(false);
+
+		}
+
+	}
 
 	public void cycleOptions(int option) {
 		if (option == 0) {
-			pauseOptions.get(option).setEffect(shadow);
-			pauseOptions.get(option+1).setEffect(null);
+			exitOptions.get(option).setEffect(shadow);
+			exitOptions.get(option+1).setEffect(null);
 		} else if (option == 1) {
-			pauseOptions.get(option).setEffect(shadow);
-			pauseOptions.get(option-1).setEffect(null);
+			exitOptions.get(option).setEffect(shadow);
+			exitOptions.get(option-1).setEffect(null);
 		}
 	}
 
@@ -479,6 +576,152 @@ public class LevelVisuals {
 		if (cycle.isPlaying()) {
 			cycle.stop();
 		}
+	}
+	
+	private void setUpKeyInput(Scene scene) {
+		
+	scene.setOnKeyPressed(new EventHandler <KeyEvent> () {
+		public void handle(KeyEvent input) {
+			
+			//temp, trying to get cycle sound to work consistently
+			stopCycleClip();
+			
+			if (input.getCode() == KeyCode.LEFT) {
+				//When in exit screen, controls option selection instead
+				if (exitPopUp.isVisible()) {
+					if (controller.exitOption > 0) {
+						controller.exitOption--;
+						playCycleSound();
+					}
+					cycleOptions(controller.exitOption);
+						
+				} else {
+					spaceman.setKeyInput(0);
+					
+				}
+				
+			} else if(input.getCode() == KeyCode.RIGHT) {
+				//When in exit screen controls option selection instead
+				if (exitPopUp.isVisible()) {
+					if (controller.exitOption < 1) {
+						controller.exitOption++;
+						playCycleSound();
+					}
+					cycleOptions(controller.exitOption);
+					
+				} else {
+					spaceman.setKeyInput(2);
+					
+				}
+				
+			} else if(input.getCode() == KeyCode.UP) {
+				spaceman.setKeyInput(1);
+				
+			} else if(input.getCode() == KeyCode.DOWN) {
+				spaceman.setKeyInput(3);
+				
+			} else if(input.getCode() == KeyCode.PAGE_DOWN) {
+				
+				//Sets time to 0 and stops the game when not in endless mode
+				if (controller.getMode() != 3 & controller.startTimer <= -1) { //doesnt seem to stop when countdown hasnt started
+					controller.timeElapsed = controller.getTimeLimit();
+					updateTime(controller.getTimeLimit() - controller.timeElapsed);
+					spaceman.stop();
+					blue.stop(); //changed from red
+					
+					//added with createghostPlayer
+					red.stop();
+					pink.stop();
+					controller.timeline.stop();
+					//disp gameover screen here
+				}
+				
+			} else if(input.getCode() == KeyCode.ENTER) {
+				playCycleSound();
+				//When in exit screen, executes selected options instead
+				if (exitPopUp.isVisible()) {		
+					//Quits the game if yes is selected, otherwise will go back to pause menu
+					if (controller.exitOption == 1){
+						spaceman.stop();
+						blue.stop(); //was red
+						
+						//added with createghostPlayer
+						red.stop();
+						pink.stop();
+						controller.timeline.stop();
+						
+						//Resets initial level states //consider an init() func instead
+						controller.resetToStartState();
+//						paused = !paused;
+					}
+//					exitScreenOn = !exitScreenOn;
+//					currentView.updateExitScreen(exitScreenOn);
+					exitPopUp.setVisible(false);
+				} else {
+					controller.timeline.play();
+				}
+			} else if(input.getCode() == KeyCode.P) {
+				playCycleSound();
+				//Toggles pause screen when not in the exit screen
+				if (!exitPopUp.isVisible()) {
+					controller.paused = !controller.paused;
+					controlPause();
+				}
+				
+			} else if (input.getCode() == KeyCode.ESCAPE) {
+				//Turns on/off exit screen and pauses if not already
+				if (!exitPopUp.isVisible()) {
+					controller.paused = true;
+					controlPause();
+						
+				}
+				playCycleSound();
+				exitPopUp.setVisible(!exitPopUp.isVisible());
+				//.updateExitScreen(exitScreenOn);
+			}
+		}
+	});
+}
+	public void controlPause() {
+		//paused = !paused;
+		//exitOption = 0;
+		
+		
+		if (controller.paused) {
+			//Pauses the game
+			pauseCountdown();
+			controller.timeline.pause();
+			spaceman.pause();
+			blue.pause();
+			
+			//added with createghostPlayer
+			red.pause();
+			pink.pause();
+		
+		} else {
+			//Resumes the level is counted was started
+			if (controller.startTimer != 3) {
+				controller.timeline.play();
+
+				//Resumes Countdown Sound if interrupted
+				if (controller.startTimer>= 0) {
+					playCountdown();
+				}
+
+				//maybe make a bool var isCountdown isntead for clarity
+				//Spaceman starts moving when not in Countdown Stage and there is time remaining
+				if (controller.getTimeLimit()!=controller.timeElapsed & controller.startTimer<= -2) { 
+					spaceman.start();
+					blue.start();
+
+					//added with createghostPlayer
+					red.start();
+					pink.start();
+				}
+			}
+		}
+		
+		updatePauseScreen(controller.paused);
 	}
 
 }
