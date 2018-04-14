@@ -245,15 +245,17 @@ public class LevelController {
 		if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 2) {
 			if (currentView.hideCorrespondingPellet(posX+dx, posY + dy)) {
 			
-				levelModel.addPoints(100);
+				levelModel.addPoints(10);
 				currentView.updateScore(levelModel.getScore());
-				levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
+				//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 			}
 			
 		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
 			//do power up stuff
 			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
-
+			currentView.red.changeToFrightMode();
+			levelModel.addPoints(100);
+			currentView.updateScore(levelModel.getScore());
 			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
