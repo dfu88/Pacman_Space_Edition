@@ -30,10 +30,10 @@ public class Alien extends CharacterAnimate{
 	private int spawnY;
 	private double graphicalX;
 	private double graphicalY;
-	private boolean frightenedFlag = false;
+	public boolean frightenedFlag = false;
 	private int initialTrapTime;
 	private static final int TRAPPED = 2;
-	private static final int FRIGHT_MODE_MAX_TIME = 160;
+	private static final int FRIGHT_MODE_MAX_TIME = 80;
 	private final Image[] FRIGHTENED_IMAGES = new Image[] {
 			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
 			new Image(getClass().getResourceAsStream("res/frightalien2.png")),
@@ -340,7 +340,6 @@ public class Alien extends CharacterAnimate{
 		moveCounter = 0;
 		trapCounter = 0;
 		chaseModeCounter = 0;
-		imageIndex = 0;
 
 		// Intialise Alien grid position
 		this.x = spawnX;
@@ -367,6 +366,10 @@ public class Alien extends CharacterAnimate{
 
 		imageView.setX(graphicalX);
 		imageView.setY(graphicalY);
+		
+		status = TRAPPED;
+		frightenedFlag = false;
+		timeline.setRate(0.95);
 	}
 
 	public void changeToFrightMode() {

@@ -23,6 +23,8 @@ public class Spaceman extends CharacterAnimate{
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
 	private int rotationIndex;
 	public ImageView imageView;
+	private int spawnX;
+	private int spawnY;
 	private double graphicalX;
 	private double graphicalY;
 	private int keyInput;
@@ -42,6 +44,8 @@ public class Spaceman extends CharacterAnimate{
 		// Intialise Spaceman grid position
 		this.x = x;
 		this.y = y;
+		spawnX = x;
+		spawnY = y;
 		graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
@@ -62,9 +66,9 @@ public class Spaceman extends CharacterAnimate{
 		currentRotation = ROTATION_DEGREE[rotationIndex];
 
 		imageView = new ImageView(startImage);
+		imageView.setImage(images[imageIndex]);
 		imageView.setX(graphicalX);
 		imageView.setY(graphicalY);
-		imageView.setImage(images[imageIndex]);
 		imageView.setRotate(currentRotation);
 
 		getChildren().add(imageView);
@@ -104,7 +108,7 @@ public class Spaceman extends CharacterAnimate{
 			
 		}
 		
-		if (status == MOVING) {
+	//	if (status == MOVING) {
 //			if (pelletSound.isRunning()) {
 //				pelletSound.stop();
 //				pelletSound.setFramePosition(0);//reset sound to 0 seconds
@@ -122,7 +126,33 @@ public class Spaceman extends CharacterAnimate{
 			imageView.setX(graphicalX);
 			imageView.setY(graphicalY);
 			imageView.setRotate(currentRotation);
-		}
+			
+			levelController.checkSpacemanAndAliens();
+//		}
+	}
+	
+	public void resetSpaceman() {
+		keyInput = -1;
+		
+		// Intialise Spaceman grid position
+		this.x = spawnX;
+		this.y = spawnY;
+		graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+
+		// Intialise Spaceman current direction
+		this.dx = -1;
+		this.dy = 0;
+		
+		imageIndex = 0;
+		currentImage = images[imageIndex];
+		imageView.setImage(currentImage);
+		rotationIndex = MOVE_LEFT;
+		currentRotation = ROTATION_DEGREE[rotationIndex];
+
+		imageView.setX(graphicalX);
+		imageView.setY(graphicalY);
+		imageView.setRotate(currentRotation);
 	}
 	
 	public void playPelletSound( ) {
@@ -132,7 +162,7 @@ public class Spaceman extends CharacterAnimate{
 	private void moveXAxis() {
 		//Wallcheck logic: If next destination is wall, do not move, else move as normal
 		int nextX = x + dx;
-		if (levelController.checkMap(nextX, y) == 1) {
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
 			//pause animation here
 			imageIndex=0;
 		} else {
@@ -170,7 +200,7 @@ public class Spaceman extends CharacterAnimate{
 
 	private void moveYAxis() {
 		int nextY = y + dy;
-		if (levelController.checkMap(x,nextY) == 1) {
+		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x, nextY) == 9) {
 			imageIndex=0;
 		} else {
 			//if (levelController.checkMap(x, nextY) == 2) {
@@ -213,7 +243,7 @@ public class Spaceman extends CharacterAnimate{
 	private void moveLeft() {
 		// Prevent invalid direction changes
 		int nextX = x - 1;
-		if (levelController.checkMap(nextX, y) == 1) {
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
 			return;
 		}
 		
@@ -229,7 +259,7 @@ public class Spaceman extends CharacterAnimate{
 	private void moveRight() {
 		// Prevent invalid direction changes
 		int nextX = x + 1;
-		if (levelController.checkMap(nextX, y) == 1) {
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
 			return;
 		}
 		// Change direction
@@ -243,7 +273,7 @@ public class Spaceman extends CharacterAnimate{
 	private void moveUp() {
 		// Prevent invalid direction changes
 		int nextY = y - 1;
-		if (levelController.checkMap(x,nextY) == 1) {
+		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x,nextY) == 9) {
 			return;
 		}
 		// Change direction
@@ -257,7 +287,7 @@ public class Spaceman extends CharacterAnimate{
 	private void moveDown() {
 		// Prevent invalid direction changes
 		int nextY = y + 1;
-		if (levelController.checkMap(x,nextY) == 1) {
+		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x,nextY) == 9) {
 			return;
 		}
 		// Change direction
