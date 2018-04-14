@@ -21,13 +21,57 @@ public class Alien extends CharacterAnimate{
 	public LevelController levelController;
 	public LevelVisuals levelView;
 	public ImageView imageView;
+	private int alienType;
+	private int frightModeCounter;
+	private int chaseModeCounter;
+	private int scatterModeCounter;	
 	private double graphicalX;
 	private double graphicalY;
-	private static final int TRAPPED = 0;
+	private boolean frightenedFlag = false;
+	private static final int FRIGHT_MODE_MAX_TIME = 160;
+	private static final int TRAP_TIME = 10;
+	private final Image[] FRIGHTENED_IMAGES = new Image[] {
+			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
+			new Image(getClass().getResourceAsStream("res/frightalien2.png")),
+			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
+			new Image(getClass().getResourceAsStream("res/frightalien2.png"))
+	};
+	private final Image[] FLASHING_IMAGES = new Image[] {
+			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
+			new Image(getClass().getResourceAsStream("res/left1.png")),
+			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
+			new Image(getClass().getResourceAsStream("res/left1.png"))
+	};
+	private final Image[] RED_IMAGES = new Image[] {
+			new Image(getClass().getResourceAsStream("res/redalien1.png")),
+			new Image(getClass().getResourceAsStream("res/redalien2.png")),
+			new Image(getClass().getResourceAsStream("res/redalien1.png")),
+			new Image(getClass().getResourceAsStream("res/redalien2.png"))
+	};
+	private final Image[] PINK_IMAGES = new Image[] {
+			new Image(getClass().getResourceAsStream("res/pinkalien1.png")),
+			new Image(getClass().getResourceAsStream("res/pinkalien2.png")),
+			new Image(getClass().getResourceAsStream("res/pinkalien1.png")),
+			new Image(getClass().getResourceAsStream("res/pinkalien2.png"))
+	};
+	private final Image[] BLUE_IMAGES = new Image[] {
+			new Image(getClass().getResourceAsStream("res/bluealien1.png")),
+			new Image(getClass().getResourceAsStream("res/bluealien2.png")),
+			new Image(getClass().getResourceAsStream("res/bluealien1.png")),
+			new Image(getClass().getResourceAsStream("res/bluealien2.png"))
+	};
+	private final Image[] ORANGE_IMAGES = new Image[] {
+			new Image(getClass().getResourceAsStream("res/orangealien1.png")),
+			new Image(getClass().getResourceAsStream("res/orangealien2.png")),
+			new Image(getClass().getResourceAsStream("res/orangealien1.png")),
+			new Image(getClass().getResourceAsStream("res/orangealien2.png"))
+	};
 
-	public Alien(LevelController levelController, LevelVisuals levelView, int x, int y, int dx, int dy) {
+	public Alien(int alienType, LevelController levelController, LevelVisuals levelView, int x, int y, int dx, int dy) {
 		this.levelController = levelController;
 		this.levelView = levelView;
+		
+		this.alienType = alienType;
 
 		// Intialise Alien grid position
 		this.x = x;
@@ -39,22 +83,28 @@ public class Alien extends CharacterAnimate{
 		this.dx = dx;
 		this.dy = dy;
 
-		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
-		images = new Image[] {
-				startImage,
-				new Image(getClass().getResourceAsStream("res/left1.png")),
-				new Image(getClass().getResourceAsStream("res/round.png")),
-				new Image(getClass().getResourceAsStream("res/left1.png"))
-		};
+		//Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
+		if (alienType == 0) {
+			images = RED_IMAGES;
+		} else if (alienType == 1) {
+			images = PINK_IMAGES;
+		} else if (alienType == 2) {
+			images = BLUE_IMAGES;
+		} else if (alienType == 3) {
+			images = ORANGE_IMAGES;
+		}
 		imageIndex = 0;
 		currentImage = images[imageIndex];
 
-		imageView = new ImageView(startImage);
+		imageView = new ImageView(currentImage);
 		imageView.setX(graphicalX);
 		imageView.setY(graphicalY);
 		imageView.setImage(images[imageIndex]);
 
 		getChildren().add(imageView);
+
+		// make alien slightly slower than spaceman
+		timeline.setRate(0.95);
 
 		// remove later when movement logic is completed
 		status = MOVING;
@@ -72,32 +122,60 @@ public class Alien extends CharacterAnimate{
 		}
 		moveLeft = moveRank.computeShortest(x-1, y, levelView.spaceman.x, levelView.spaceman.y);
 		moveRight = moveRank.computeShortest(x+1, y, levelView.spaceman.x, levelView.spaceman.y);
-		
+
 		System.out.println(moveLeft);
 		System.out.println(moveRight);
 		System.out.println(moveContinue);
 
-		if (moveLeft < moveRight && moveLeft < moveContinue) {
-			dx = -1;
-			dy = 0;
-			System.out.println("LEFTRIGHT--LEFT");
-		} else if (moveRight < moveLeft && moveRight < moveContinue) {
-			dx = 1;
-			dy = 0;
-			System.out.println("LEFTRIGHT--RIGHT");
-		} else {
-			if (mustMove) {
-				double chance = Math.random();
-				if (chance < 0.5) {
-					dx = -1;
-					dy = 0;
-				} else if (chance >= 0.5) {
-					dx = 1;
-					dy = 0;
-				}
+		if (!frightenedFlag) {
+			if (moveLeft < moveRight && moveLeft < moveContinue) {
+				dx = -1;
+				dy = 0;
+				System.out.println("LEFTRIGHT--LEFT");
+			} else if (moveRight < moveLeft && moveRight < moveContinue) {
+				dx = 1;
+				dy = 0;
+				System.out.println("LEFTRIGHT--RIGHT");
 			} else {
-				System.out.println("UPDOWN--CONTINUE");
+				if (mustMove) {
+					double chance = Math.random();
+					if (chance < 0.5) {
+						dx = -1;
+						dy = 0;
+					} else if (chance >= 0.5) {
+						dx = 1;
+						dy = 0;
+					}
+				} else {
+					System.out.println("UPDOWN--CONTINUE");
+					return;
+				}
+			}
+		} else if (frightenedFlag) {
+			if (moveLeft != Integer.MAX_VALUE && moveRight == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
+				dx = -1;
+				dy = 0;
+				System.out.println("LEFTRIGHT--LEFT");
+			} else if (moveRight != Integer.MAX_VALUE && moveLeft == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
+				dx = 1;
+				dy = 0;
+				System.out.println("LEFTRIGHT--RIGHT");
+			} else if (moveContinue != Integer.MAX_VALUE && moveLeft == Integer.MAX_VALUE && moveRight == Integer.MAX_VALUE) {
 				return;
+			} else {
+				if (mustMove) {
+					double chance = Math.random();
+					if (chance < 0.5) {
+						dx = -1;
+						dy = 0;
+					} else if (chance >= 0.5) {
+						dx = 1;
+						dy = 0;
+					}
+				} else {
+					System.out.println("UPDOWN--CONTINUE");
+					return;
+				}
 			}
 		}
 	}
@@ -118,31 +196,59 @@ public class Alien extends CharacterAnimate{
 		System.out.println(moveUp);
 		System.out.println(moveDown);
 		System.out.println(moveContinue);
-		
-		if (moveUp < moveDown && moveUp < moveContinue) {
-			dx = 0;
-			dy = -1;
-			System.out.println("UPDOWN--UP");
 
-		} else if (moveDown < moveUp && moveDown < moveContinue) {
-			dx = 0;
-			dy = 1;
-			System.out.println("UPDOWN--DOWN");
-		} else {
-			if (mustMove) {
-				double chance = Math.random();
-				if (chance < 0.5) {
-					dx = 0;
-					dy = -1;
-				} else if (chance >= 0.5) {
-					dx = 0;
-					dy = 1;
-				}
+		if (!frightenedFlag) {
+			if (moveUp < moveDown && moveUp < moveContinue) {
+				dx = 0;
+				dy = -1;
+				System.out.println("UPDOWN--UP");
+	
+			} else if (moveDown < moveUp && moveDown < moveContinue) {
+				dx = 0;
+				dy = 1;
+				System.out.println("UPDOWN--DOWN");
 			} else {
-				System.out.println("UPDOWN--CONTINUE");
-				return;
+				if (mustMove) {
+					double chance = Math.random();
+					if (chance < 0.5) {
+						dx = 0;
+						dy = -1;
+					} else if (chance >= 0.5) {
+						dx = 0;
+						dy = 1;
+					}
+				} else {
+					System.out.println("UPDOWN--CONTINUE");
+					return;
+				}
 			}
-			
+		} else if (frightenedFlag) {
+			if (moveUp != Integer.MAX_VALUE && moveDown == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
+				dx = 0;
+				dy = -1;
+				System.out.println("UPDOWN--UP");
+	
+			} else if (moveDown != Integer.MAX_VALUE && moveUp == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
+				dx = 0;
+				dy = 1;
+				System.out.println("UPDOWN--DOWN");
+			} else if (moveContinue != Integer.MAX_VALUE && moveUp == Integer.MAX_VALUE && moveDown == Integer.MAX_VALUE) {
+				return;
+			} else {
+				if (mustMove) {
+					double chance = Math.random();
+					if (chance < 0.5) {
+						dx = 0;
+						dy = -1;
+					} else if (chance >= 0.5) {
+						dx = 0;
+						dy = 1;
+					}
+				} else {
+					System.out.println("UPDOWN--CONTINUE");
+					return;
+				}
+			}
 		}
 	}
 
@@ -169,11 +275,22 @@ public class Alien extends CharacterAnimate{
 				} else {
 					x = x + dx;
 				}
-			
+
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
 				moveUpOrDown(false);
 			}
 		}
+	}
+
+	public void changeToFrightMode() {
+		frightModeCounter = 0;
+		frightenedFlag = true;
+
+		images = FRIGHTENED_IMAGES;
+		// make it move slower
+		timeline.stop();
+		timeline.setRate(0.6);
+		timeline.play();
 	}
 
 	private void moveYAxis() {
@@ -215,6 +332,31 @@ public class Alien extends CharacterAnimate{
 
 			imageView.setX(graphicalX);
 			imageView.setY(graphicalY);
+		}
+
+		if (frightenedFlag) {
+
+			frightModeCounter++;
+
+			if (frightModeCounter == FRIGHT_MODE_MAX_TIME - 30) {
+				images = FLASHING_IMAGES;
+			}
+			else if (frightModeCounter > FRIGHT_MODE_MAX_TIME) {
+				frightenedFlag = false;
+				if (alienType == 0) {
+					images = RED_IMAGES;
+				} else if (alienType == 1) {
+					images = PINK_IMAGES;
+				} else if (alienType == 2) {
+					images = BLUE_IMAGES;
+				} else if (alienType == 3) {
+					images = ORANGE_IMAGES;
+				}
+
+				timeline.stop();
+				timeline.setRate(0.95);
+				timeline.play();
+			}
 		}
 	}
 }

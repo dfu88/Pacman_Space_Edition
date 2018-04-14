@@ -59,7 +59,7 @@ public abstract class CharacterAnimate extends Parent{
 	private Timeline makeTimeline() {
 		timeline = new Timeline();
 		timeline.setCycleCount(Timeline.INDEFINITE);
-		KeyFrame keyFrame = new KeyFrame(Duration.millis(70), new EventHandler<ActionEvent>() {
+		KeyFrame keyFrame = new KeyFrame(Duration.millis(75), new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent event) {

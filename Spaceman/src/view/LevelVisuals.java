@@ -202,7 +202,7 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
-		red = new Alien(0,controller,this,10,7,-1,0);
+		red = new Alien(0,controller,this,alienX,alienY,-1,0);
 		group.getChildren().add(red);
 		//red.start();
 
