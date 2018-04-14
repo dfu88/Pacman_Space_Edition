@@ -202,8 +202,14 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
-		red = new Alien(0,controller,this,alienX,alienY,-1,0);
+		red = new Alien(0,controller,this,alienX,alienY,-1,0,1);
+		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15);
+		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35);
+		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60);
 		group.getChildren().add(red);
+		group.getChildren().add(pink);
+		group.getChildren().add(blue);
+		group.getChildren().add(orange);
 		//red.start();
 
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
@@ -353,32 +359,24 @@ public class LevelVisuals {
 
 	public void respawnPellet() {
 
-		for (int i = 0; i < despawnIndex.size(); i++) {
-			//testing prints
-			System.out.print("     ElapsedT: ");
-			System.out.println(controller.getTimeElapsed());
-			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() > controller.getTimeElapsed()) {
-				break; //seems to break a little early, need to fix this condition but still works fine-ish
-			}
-			//testing prints, remove next commit
-			System.out.print(i);
-			System.out.print(": ");
-			System.out.print(pelletsRendered.get(despawnIndex.get(i)).getRespawnTime());
-			System.out.print("     ElapsedT: ");
-			System.out.println(controller.getTimeElapsed());
-			//Respawn pellets at set time
-			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
-				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
-				//testing prints, remove next commit
-				System.out.print("indexRemoved: ");
-				System.out.println(i);
-				despawnIndex.remove(i);
-				break;
+//		for (int i = 0; i < despawnIndex.size(); i++) {
+//			//Respawn pellets at set time
+//			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
+//				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
+//				despawnIndex.remove(i);
+//				//break;
+//				return;
+//			} 
+//		}
+		
+		if (!despawnIndex.isEmpty()) {
+			if (pelletsRendered.get(despawnIndex.get(0)).getRespawnTime() <= controller.getTimeElapsed()) {
+				pelletsRendered.get(despawnIndex.get(0)).returnPellet().setVisible(true);
+				despawnIndex.remove(0);
+				//break;
+				return;
 			} 
-
 		}
-		//testing print
-		System.out.println("------");
 	}
 
 	//change for powerup after making powerup class
