@@ -237,6 +237,8 @@ public class GUI {
 							multiMenu.setVisible(false);
 							menu.setEffect(null);
 						}
+					} else {
+						controller.executeProcess(option); //important
 					}
 					joinedIndicator.get(1).setVisible(false);
 					joinedIndicator.get(2).setVisible(false);

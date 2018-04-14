@@ -4,6 +4,7 @@ import model.Level;
 
 import view.LevelVisuals;
 import view.Spaceman;
+import view.StorySlides;
 import javafx.scene.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -19,6 +20,7 @@ public class LevelController {
 
 	private InterfaceController interfaceCtrl;
 	private LevelVisuals currentView;
+	private StorySlides scenarioDisp;
 	private Level levelModel;
 	
 	public Timeline timeline;
@@ -40,6 +42,7 @@ public class LevelController {
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
 		currentView = new LevelVisuals(this);
+		scenarioDisp = new StorySlides(this);
 		levelModel = new Level();
 		
 		timeline = makeTimeline();
@@ -247,7 +250,7 @@ public class LevelController {
 			currentView.orange.changeToFrightMode();
 			levelModel.addPoints(100);
 			currentView.updateScore(levelModel.getScore());
-			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
+			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);//this doesnt do anyhting btw
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
 		//this function is messing up the tunnel because its removing tele
@@ -335,5 +338,12 @@ public class LevelController {
 		currentView.resetCountdown();
 		interfaceCtrl.showHome();
 		paused = false;
+	}
+
+	public void playStory(int levelWins) {
+		// TODO Auto-generated method stub
+		scenarioDisp.setScenario(levelWins);
+		scenarioDisp.generateScenario();
+		interfaceCtrl.changeScene(scenarioDisp.returnScene());
 	}
 }

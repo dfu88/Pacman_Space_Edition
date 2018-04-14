@@ -439,7 +439,7 @@ public class LevelVisuals {
 						spaceman.playPelletSound();
 						pelletsCollected++;
 						
-						if (pelletsCollected == pelletsRendered.size()) {
+						if (pelletsCollected == pelletsRendered.size() & controller.getMode() != 3) {
 							//end game, next level here
 							stopAllChars();
 							controller.timeline.stop();
@@ -453,6 +453,13 @@ public class LevelVisuals {
 							controller.levelWins++;
 							controller.setLevel(controller.getMode());
 							//increase difficulty here?
+							
+							
+							
+							//testing scenes
+							if (controller.getMode() == 1) {
+								controller.playStory(controller.levelWins);
+							}
 							
 						}
 						

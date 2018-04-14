@@ -1,5 +1,6 @@
 package controller;
 
+import javafx.scene.Scene;
 import view.GUI;
 
 public class InterfaceController {
@@ -65,5 +66,9 @@ public class InterfaceController {
 	
 	public void showHome() {
 		game.changeScene(startMenu.returnScene());
+	}
+	
+	public void changeScene(Scene scene) {
+		game.changeScene(scene);
 	}
 }
