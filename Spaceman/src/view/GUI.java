@@ -220,20 +220,23 @@ public class GUI {
 						multiMenu.setVisible(false);
 						
 						menu.setEffect(null);
-
-					} else {
-						controller.executeProcess(option);
-						if (joinedIndicator.get(1).isVisible()) {
-							//enable ghost1 player
-							controller.executeProcess(69);
+						
+					//Generates level when at least one ghost player has joined
+					} else if (multiMenu.isVisible() & multiplayerSel == 0){
+						if (joinedIndicator.get(1).isVisible() || joinedIndicator.get(2).isVisible()) {
+							controller.executeProcess(option);
+							if (joinedIndicator.get(1).isVisible()) {
+								//enable ghost1 player
+								controller.executeProcess(69);
+							}
+							if (joinedIndicator.get(2).isVisible()) {
+								//enable ghost2 player
+								controller.executeProcess(420);
+							}
+							subFrame.setVisible(false);
+							multiMenu.setVisible(false);
+							menu.setEffect(null);
 						}
-						if (joinedIndicator.get(2).isVisible()) {
-							//enable ghost2 player
-							controller.executeProcess(420);
-						}
-						subFrame.setVisible(false);
-						multiMenu.setVisible(false);
-						menu.setEffect(null);
 					}
 					joinedIndicator.get(1).setVisible(false);
 					joinedIndicator.get(2).setVisible(false);
