@@ -1,7 +1,7 @@
 package controller;
 
 import model.Level;
-
+import view.Alien;
 import view.LevelVisuals;
 import view.Spaceman;
 import javafx.scene.*;
@@ -243,7 +243,7 @@ public class LevelController {
 			currentView.pink.changeToFrightMode();
 			currentView.blue.changeToFrightMode();
 			currentView.orange.changeToFrightMode();
-			levelModel.addPoints(100);
+			levelModel.addPoints(50);
 			currentView.updateScore(levelModel.getScore());
 			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 		}
@@ -332,5 +332,39 @@ public class LevelController {
 		currentView.resetCountdown();
 		interfaceCtrl.showHome();
 		paused = false;
+	}
+
+	private boolean ifSpacemanMetAlien (Alien alien) {
+		int alienX = alien.getX();
+		int spacemanX = currentView.spaceman.getX();
+		int alienY = alien.getY();
+		int spacemanY = currentView.spaceman.getY();
+		
+		if (alienX == spacemanX && alienY == spacemanY) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	private void consumeAlien(Alien alien) {
+		levelModel.addPoints(200);
+		alien.stop();
+		alien.resetAlien();
+		alien.start();
+	}
+	
+	public void checkSpacemanAndAliens () {
+		Alien[] aliens = currentView.aliens;
+		for (Alien i : aliens) {
+			if (ifSpacemanMetAlien(i)) {
+				if (i.frightenedFlag) {
+					consumeAlien(i);
+				} else {
+					
+				}
+			}
+		}
+		
 	}
 }
