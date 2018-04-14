@@ -42,7 +42,7 @@ public class ShortestPath {
 		for (int row=0; row<21; row++) {
 			for (int col=0; col<21; col++) {
 				int currentElement = levelController.getLevel().getCurrentMap().getData(row, col);
-				if (currentElement != 1) {
+				if (currentElement != 1 && currentElement != 9) {
 					Vector<Integer> node = new Vector<Integer>(); 
 					node.add(col);
 					//System.out.println(col);

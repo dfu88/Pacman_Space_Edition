@@ -43,112 +43,115 @@ public class LevelController {
 		timeline = makeTimeline();
 		
 		//maybe make this a function
-		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
-			public void handle(KeyEvent input) {
-				
-				//temp, trying to get cycle sound to work consistently
-				currentView.stopCycleClip();
-				
-				if (input.getCode() == KeyCode.LEFT) {
-					//When in exit screen, controls option selection instead
-					if (exitScreenOn) {
-						if (exitOption > 0) {
-							exitOption--;
-							currentView.playCycleSound();
-						}
-						currentView.cycleOptions(exitOption);
-							
-					} else {
-						currentView.spaceman.setKeyInput(0);
-						
-					}
-					
-				} else if(input.getCode() == KeyCode.RIGHT) {
-					//When in exit screen controls option selection instead
-					if (exitScreenOn) {
-						if (exitOption < 1) {
-							exitOption++;
-							currentView.playCycleSound();
-						}
-						currentView.cycleOptions(exitOption);
-						
-					} else {
-						currentView.spaceman.setKeyInput(2);
-						
-					}
-					
-				} else if(input.getCode() == KeyCode.UP) {
-					currentView.spaceman.setKeyInput(1);
-					
-				} else if(input.getCode() == KeyCode.DOWN) {
-					currentView.spaceman.setKeyInput(3);
-					
-				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
-					
-					//Sets time to 0 and stops the game when not in endless mode
-					if (currentMode != 3) {
-						timeElapsed = levelModel.getTimeLimit();
-						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
-						currentView.spaceman.stop();
-						currentView.blue.stop(); //changed from red
-						
-						//added with createghostPlayer
-						currentView.red.stop();
-						currentView.pink.stop();
-						
-						//disp gameover screen here
-					}
-					
-				} else if(input.getCode() == KeyCode.ENTER) {
-					currentView.playCycleSound();
-					//When in exit screen, executes selected options instead
-					if (exitScreenOn) {		
-						//Quits the game if yes is selected, otherwise will go back to pause menu
-						if (exitOption == 1){
-							currentView.spaceman.stop();
-							currentView.blue.stop(); //was red
-							
-							//added with createghostPlayer
-							currentView.red.stop();
-							currentView.pink.stop();
-							timeline.stop();
-							
-							//Resets initial level states //consider an init() func instead
-							startTimer = 3;
-							exitOption = 0;
-							timeElapsed = 0;
-							ghostPlayerRed = false;
-							ghostPlayerPink = false;
-							currentView.resetCountdown();
-							controller.showHome();
-							paused = !paused;
-						}
-						exitScreenOn = !exitScreenOn;
-						currentView.updateExitScreen(exitScreenOn);
-					} else {
-						timeline.play();
-					}
-				} else if(input.getCode() == KeyCode.P) {
-					currentView.playCycleSound();
-					//Toggles pause screen when not in the exit screen
-					if (!exitScreenOn) {
-						paused = !paused;
-						currentView.controlPause();//add currentview.
-					}
-					
-				} else if (input.getCode() == KeyCode.ESCAPE) {
-					//Turns on/off exit screen and pauses if not already
-					if (!exitScreenOn) {
-						paused = true;
-						currentView.controlPause(); //added currentView.
-							
-					}
-					currentView.playCycleSound();
-					exitScreenOn = !exitScreenOn;
-					currentView.updateExitScreen(exitScreenOn);
-				}
-			}
-		});
+//		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
+//			public void handle(KeyEvent input) {
+//				
+//				//temp, trying to get cycle sound to work consistently
+//				currentView.stopCycleClip();
+//				
+//				if (input.getCode() == KeyCode.LEFT) {
+//					//When in exit screen, controls option selection instead
+//					if (exitScreenOn) {
+//						if (exitOption > 0) {
+//							exitOption--;
+//							currentView.playCycleSound();
+//						}
+//						currentView.cycleOptions(exitOption);
+//							
+//					} else {
+//						currentView.spaceman.setKeyInput(0);
+//						
+//					}
+//					
+//				} else if(input.getCode() == KeyCode.RIGHT) {
+//					//When in exit screen controls option selection instead
+//					if (exitScreenOn) {
+//						if (exitOption < 1) {
+//							exitOption++;
+//							currentView.playCycleSound();
+//						}
+//						currentView.cycleOptions(exitOption);
+//						
+//					} else {
+//						currentView.spaceman.setKeyInput(2);
+//						
+//					}
+//					
+//				} else if(input.getCode() == KeyCode.UP) {
+//					currentView.spaceman.setKeyInput(1);
+//					
+//				} else if(input.getCode() == KeyCode.DOWN) {
+//					currentView.spaceman.setKeyInput(3);
+//					
+//				} else if(input.getCode() == KeyCode.PAGE_DOWN) {
+//					
+//					//Sets time to 0 and stops the game when not in endless mode
+//					if (currentMode != 3) {
+//						timeElapsed = levelModel.getTimeLimit();
+//						currentView.updateTime(levelModel.getTimeLimit() - timeElapsed);
+//						currentView.spaceman.stop();
+//						
+//						//added with createghostPlayer
+//						currentView.red.stop();
+//						currentView.pink.stop();
+//
+//						currentView.blue.stop();
+//						currentView.orange.stop();
+//						//disp gameover screen?
+//					}
+//					
+//				} else if(input.getCode() == KeyCode.ENTER) {
+//					currentView.playCycleSound();
+//					//When in exit screen, executes selected options instead
+//					if (exitScreenOn) {		
+//						//Quits the game if yes is selected, otherwise will go back to pause menu
+//						if (exitOption == 1){
+//
+//							currentView.spaceman.stop();
+//
+//							currentView.red.stop();
+//							currentView.pink.stop();
+//							currentView.blue.stop();
+//							currentView.orange.stop();
+//							timeline.stop();
+//							
+//							//Resets initial level states //consider an init() func instead
+//							startTimer = 3;
+//							exitOption = 0;
+//							timeElapsed = 0;
+//							ghostPlayerRed = false;
+//							ghostPlayerPink = false;
+//							currentView.resetCountdown();
+//							controller.showHome();
+//							paused = !paused;
+//						}
+//						exitScreenOn = !exitScreenOn;
+//						currentView.updateExitScreen(exitScreenOn);
+//					} else {
+//						timeline.play();
+//					}
+//				} else if(input.getCode() == KeyCode.P) {
+//					currentView.playCycleSound();
+//					
+//					//Toggles pause screen when not in the exit screen
+//					if (!exitScreenOn) {
+//						paused = !paused;
+//						currentView.controlPause();//add currentview.
+//					}
+//					
+//				} else if (input.getCode() == KeyCode.ESCAPE) {
+//					//Turns on/off exit screen and pauses if not already
+//					if (!exitScreenOn) {
+//						paused = true;
+//						currentView.controlPause(); //added currentView.
+//
+//					}
+//					currentView.playCycleSound();
+//					exitScreenOn = !exitScreenOn;
+//					currentView.updateExitScreen(exitScreenOn);
+//				}
+//			}
+//		});
 	}
 	
 	//consider seperating timelines for time and countdown
@@ -170,10 +173,12 @@ public class LevelController {
 						currentView.updateMessage(startTimer);
 						if ((startTimer == -1)) {
 							currentView.spaceman.start();
-							currentView.blue.start();// was red
 							//player or ai ones
 							currentView.red.start();
 							currentView.pink.start();
+							currentView.blue.start();
+							currentView.orange.start();
+
 						}
 						startTimer--;
 					
@@ -235,6 +240,9 @@ public class LevelController {
 			//do power up stuff
 			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
 			currentView.red.changeToFrightMode();
+			currentView.pink.changeToFrightMode();
+			currentView.blue.changeToFrightMode();
+			currentView.orange.changeToFrightMode();
 			levelModel.addPoints(100);
 			currentView.updateScore(levelModel.getScore());
 			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);

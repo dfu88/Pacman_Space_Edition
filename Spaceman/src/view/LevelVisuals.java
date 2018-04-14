@@ -121,6 +121,7 @@ public class LevelVisuals {
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 		scene.setFill(Color.LIGHTBLUE);
 
+		setUpKeyInput(scene);
 		//		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		//		root.setBackground(new Background(bg));
 	}
@@ -218,17 +219,14 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
-		blue = new Alien(0,controller,this,10,7,-1,0); //was red
-		group.getChildren().add(blue);				//was red
-		//red.start();
-		
-		//include parameter in constructor to set as ai or player
-		
-		pink = new Alien(0,controller,this,10,7,-1,0); //was red
-		group.getChildren().add(pink);
-		
-		red = new Alien(0,controller,this,alienX,alienY,-1,0);
+		red = new Alien(0,controller,this,alienX,alienY,-1,0,1);
+		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15);
+		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35);
+		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60);
 		group.getChildren().add(red);
+		group.getChildren().add(pink);
+		group.getChildren().add(blue);
+		group.getChildren().add(orange);
 		//red.start();
 
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
