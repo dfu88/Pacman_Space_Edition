@@ -167,15 +167,15 @@ public class LevelVisuals {
 				//Walls
 				if (currentElement == 1) {
 					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
-					wall.setFill(Color.INDIANRED); //fill
-					wall.setStroke(Color.INDIANRED);//outline
+					wall.setFill(Color.LIGHTGREY); //fill
+					wall.setStroke(Color.LIGHTGREY);//outline
 					group.getChildren().add(wall);	
 				} 
 				//Pellets
 				else if (currentElement == 2) {
 					Pellet pellet = new Pellet(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.125);
 					//we can have a class 'Theme' to have a combination of preset colours to use
-					pellet.returnPellet().setFill(Color.BLUEVIOLET); 
+					pellet.returnPellet().setFill(Color.PEACHPUFF); 
 					group.getChildren().add(pellet.returnPellet());
 					pelletsRendered.add(pellet);
 				} 
@@ -183,7 +183,7 @@ public class LevelVisuals {
 				else if (currentElement == 3) {
 					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
 					//we can have a class 'Theme' to have a combination of preset colours to use
-					powerUp.returnPowerUp().setFill(Color.CRIMSON); 
+					powerUp.returnPowerUp().setFill(Color.YELLOW); 
 					group.getChildren().add(powerUp.returnPowerUp());
 					powerUpsRendered.add(powerUp);
 				}
@@ -208,8 +208,8 @@ public class LevelVisuals {
 				//Gate
 				else if (currentElement == 9) {
 					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
-					wall.setFill(Color.GREY); //fill
-					wall.setStroke(Color.GREY);//outline
+					wall.setFill(Color.WHITE); //fill
+					wall.setStroke(Color.WHITE);//outline
 					group.getChildren().add(wall);	
 				}
 			}
@@ -230,14 +230,14 @@ public class LevelVisuals {
 		//red.start();
 
 		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
-		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
-		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
-		group.getChildren().add(tunnelWallLeft);
-		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
-		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
-		group.getChildren().add(tunnelWallRight);
+//		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+//		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
+//		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
+//		group.getChildren().add(tunnelWallLeft);
+//		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
+//		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
+//		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
+//		group.getChildren().add(tunnelWallRight);
 
 
 

@@ -150,9 +150,9 @@ public class Spaceman extends CharacterAnimate{
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-				if (nextX <= 1  && dx == -1 ) {
+				if (nextX < 1  && dx == -1 ) {
 					x = 19;
-				} else if (nextX >= 19 && dx == 1 ) {
+				} else if (nextX > 19 && dx == 1 ) {
 					x = 1;
 				} else {
 					x = x + dx;

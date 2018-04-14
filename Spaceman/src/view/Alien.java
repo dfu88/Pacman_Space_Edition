@@ -280,9 +280,9 @@ public class Alien extends CharacterAnimate{
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-				if (nextX <= 1  && dx == -1 ) {
+				if (nextX < 1  && dx == -1 ) {
 					x = 19;
-				} else if (nextX >= 19 && dx == 1 ) {
+				} else if (nextX > 19 && dx == 1 ) {
 					x = 1;
 				} else {
 					x = x + dx;
@@ -293,7 +293,7 @@ public class Alien extends CharacterAnimate{
 			}
 		}
 	}
-	
+
 	private void moveCageXAxis() {
 		//Wallcheck logic: If next destination is wall, do not move, else move as normal
 		int nextX = x + dx;
@@ -390,9 +390,9 @@ public class Alien extends CharacterAnimate{
 			currentImage = images[imageIndex];
 			imageView.setImage(currentImage);
 		}
-		
+
 		if (status == TRAPPED) {
-			
+
 
 			if (trapCounter > initialTrapTime && x == spawnX && y == spawnY) {
 				// go out of the cage
@@ -423,7 +423,7 @@ public class Alien extends CharacterAnimate{
 			imageView.setX(graphicalX);
 			imageView.setY(graphicalY);
 		}
-		
+
 		if (frightenedFlag) {
 
 			frightModeCounter++;
