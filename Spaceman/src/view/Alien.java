@@ -21,6 +21,7 @@ public class Alien extends CharacterAnimate{
 	public LevelController levelController;
 	public LevelVisuals levelView;
 	public ImageView imageView;
+	private int keyInput;
 	private int alienType;
 	private int frightModeCounter;
 	private int chaseModeCounter;
@@ -30,6 +31,7 @@ public class Alien extends CharacterAnimate{
 	private int spawnY;
 	private double graphicalX;
 	private double graphicalY;
+	private boolean isPlayer;
 	public boolean frightenedFlag = false;
 	private int initialTrapTime;
 	private static final int TRAPPED = 2;
@@ -71,16 +73,19 @@ public class Alien extends CharacterAnimate{
 			new Image(getClass().getResourceAsStream("res/orangealien2.png"))
 	};
 
-	public Alien(int alienType, LevelController levelController, LevelVisuals levelView, int x, int y, int dx, int dy, int initialTrapTime) {
+	public Alien(int alienType, LevelController levelController, LevelVisuals levelView, int x, int y, int dx, int dy, int initialTrapTime, boolean isPlayer) {
 		this.levelController = levelController;
 		this.levelView = levelView;
 
+		keyInput = -1;
+		
 		this.alienType = alienType;
 		frightModeCounter = 0;
 		chaseModeCounter = 0;
 		scatterModeCounter = 0;	
 		trapCounter = 0;
 		this.initialTrapTime = initialTrapTime;
+		this.isPlayer = isPlayer;
 
 		// Intialise Alien grid position
 		this.x = x;
@@ -366,7 +371,9 @@ public class Alien extends CharacterAnimate{
 		int nextX = x + dx;
 		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
 			//must change direction
-			moveUpOrDown(true);
+			if (!isPlayer) {
+				moveUpOrDown(true);
+			}
 		} else {
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
@@ -386,7 +393,9 @@ public class Alien extends CharacterAnimate{
 				}
 
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
-				moveUpOrDown(false);
+				if (!isPlayer) {
+					moveUpOrDown(false);
+				}
 			}
 		}
 	}
@@ -418,7 +427,9 @@ public class Alien extends CharacterAnimate{
 	private void moveYAxis() {
 		int nextY = y + dy;
 		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x, nextY) == 9) {
-			moveLeftOrRight(true);
+			if (!isPlayer) {
+				moveLeftOrRight(true);
+			}
 		} else {
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
@@ -428,7 +439,9 @@ public class Alien extends CharacterAnimate{
 				moveCounter = 0;
 				y = y + dy;
 				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
-				moveLeftOrRight(false);
+				if (!isPlayer) {
+					moveLeftOrRight(false);
+				}
 			}
 		}
 	}
@@ -481,6 +494,22 @@ public class Alien extends CharacterAnimate{
 	}
 
 	public void moveOneStep() {
+		
+		if (imageIndex == 0) {
+			System.out.println("WORKING12313!!!!!");
+			System.out.println("WORKING31231!!!!!");
+			System.out.println("WORKING13121!!!!!");
+			System.out.println("WORKING!213132!!!!");
+			System.out.println("WORKING!31123!!!!");
+			if (isPlayer) {
+				changeCurrentDirection(keyInput);
+				System.out.println("WORKING!!!!!");
+				System.out.println("WORKING!!!!!");
+				System.out.println("WORKING!!!!!");
+				System.out.println("WORKING!!!!!");
+				System.out.println("WORKING!!!!!");
+			}			
+		}
 		if (imageIndex < images.length-1) {
 			imageIndex++;
 			currentImage = images[imageIndex];
@@ -549,4 +578,74 @@ public class Alien extends CharacterAnimate{
 			}
 		}
 	}
+	
+	private void moveLeft() {
+		// Prevent invalid direction changes
+		int nextX = x - 1;
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
+			return;
+		}
+		
+		// Change direction
+		dx = -1;
+		dy = 0;
+		
+		status = MOVING;
+	}
+
+	private void moveRight() {
+		// Prevent invalid direction changes
+		int nextX = x + 1;
+		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
+			return;
+		}
+		// Change direction
+		dx = 1;
+		dy = 0;
+
+		status = MOVING;
+	}
+
+	private void moveUp() {
+		// Prevent invalid direction changes
+		int nextY = y - 1;
+		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x,nextY) == 9) {
+			return;
+		}
+		// Change direction
+		dx = 0;
+		dy = -1;
+
+		status = MOVING;
+	}
+
+	private void moveDown() {
+		// Prevent invalid direction changes
+		int nextY = y + 1;
+		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x,nextY) == 9) {
+			return;
+		}
+		// Change direction
+		dx = 0;
+		dy = 1;
+
+		status = MOVING;
+	}
+
+	public void setKeyInput(int keyInput) {
+		this.keyInput  = keyInput;
+	}
+
+	private void changeCurrentDirection(int keyInput) {
+		if (keyInput == MOVE_LEFT) {
+			moveLeft();
+		} else if (keyInput == MOVE_RIGHT) {
+			moveRight();
+		} else if (keyInput == MOVE_UP) {
+			moveUp();
+		} else if (keyInput == MOVE_DOWN) {
+			moveDown();
+		}
+	}
+	
 }
