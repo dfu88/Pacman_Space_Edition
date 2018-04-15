@@ -491,7 +491,12 @@ public class LevelVisuals {
 						spaceman.playPelletSound();
 						pelletsCollected++;
 						
-						if (pelletsCollected == pelletsRendered.size() & controller.getMode() != 3) {
+						
+						if (controller.getMode() == 3) {
+							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
+							despawnIndex.add(index);
+							
+						} else if (pelletsCollected == pelletsRendered.size()) {
 							//end game, next level here
 							stopAllChars();
 							controller.timeline.stop();
@@ -516,10 +521,7 @@ public class LevelVisuals {
 						}
 						
 						//Endless mode: set respawn
-						if (controller.getMode() == 3) {
-							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
-							despawnIndex.add(index);
-						}
+						
 
 						return true;
 					}
@@ -554,16 +556,22 @@ public class LevelVisuals {
 	}
 
 	//change for powerup after making powerup class
-	public void hideCorrespondingPowerUp(int charX, int charY) {
+	public boolean hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
 			//Hides corresponding power up matching destination of spaceman
 			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
-					powerUpsRendered.get(index).returnPowerUp().setVisible(false);
+					
+					if (powerUpsRendered.get(index).returnPowerUp().isVisible()) {
+						powerUpsRendered.get(index).returnPowerUp().setVisible(false);
+						return true;
+					}
+					
 
 				}
 			}
 		}
+		return false;
 	}
 
 	public void updateLives(int lives) {
