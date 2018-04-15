@@ -192,6 +192,7 @@ public class LevelController {
 						currentView.spaceman.start();
 						timeElapsed++;
 						currentView.updateTime(levelModel.getTimeLimit());
+						currentView.updateLives(levelModel.lives);
 //						respawnCollectables();
 						
 					}
@@ -368,7 +369,35 @@ public class LevelController {
 				if (i.frightenedFlag) {
 					consumeAlien(i);
 				} else {
-					
+					levelModel.minusLives(1);
+					currentView.updateLives(levelModel.lives);
+					if (levelModel.lives > 0) {
+						currentView.stopAllChars();
+						timeline.pause();
+						currentView.spaceman.resetSpaceman();
+						currentView.red.resetAlien();
+						currentView.pink.resetAlien();
+						currentView.blue.resetAlien();
+						currentView.orange.resetAlien();
+//						currentView.generateMap();
+						currentView.countDownView = currentView.addCountDown();
+						currentView.root.getChildren().add(currentView.countDownView);
+						startTimer = 3;
+						currentView.resetCountdown();
+						currentView.countDownView.setVisible(true);
+					}
+					else if (levelModel.lives == 0) {
+						currentView.stopAllChars();
+						timeline.pause();
+						currentView.spaceman.resetSpaceman();
+						currentView.red.resetAlien();
+						currentView.pink.resetAlien();
+						currentView.blue.resetAlien();
+						currentView.orange.resetAlien();
+						resetToStartState();
+						setLevel(getMode());
+						currentView.gameOverPopUp.setVisible(true);
+					}
 				}
 			}
 		}

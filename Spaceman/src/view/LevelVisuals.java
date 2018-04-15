@@ -48,11 +48,12 @@ public class LevelVisuals {
 
 	private Scene scene;
 	
-	private Group root;
+	public Group root;
 	private Group pauseMenu;
 	private Group exitPopUp;
 	private Group gameView;
-	private Group countDownView;
+	public Group countDownView;
+	public Group gameOverPopUp;
 	private Group timeComponent;
 	
 	private GaussianBlur blur;
@@ -64,6 +65,7 @@ public class LevelVisuals {
 	
 	private Text score;
 	private Text time;
+	private Text lives;
 	private Text message;
 	
 	public Spaceman spaceman;
@@ -154,9 +156,15 @@ public class LevelVisuals {
 		pauseMenu.setVisible(false);
 		root.getChildren().add(pauseMenu);
 		
+		gameOverPopUp = addGameOverPopUp();
+		gameOverPopUp.setVisible(false);
+		root.getChildren().add(gameOverPopUp);
+		
 		exitPopUp = addExitPopUp();
 		exitPopUp.setVisible(false);
 		root.getChildren().add(exitPopUp);
+		
+		
 	}	
 
 	private Group addGameComponents() {
@@ -245,15 +253,27 @@ public class LevelVisuals {
 
 
 		//Add parameter displays
-		Text lives = new Text("Lives");
-		lives.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
-		lives.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
-		lives.setY(100.0);
+		Text livesLabel= new Text("Lives:");
+		livesLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
+		livesLabel.setFill(Color.WHITE);
+		livesLabel.setX((mapOffsetX-livesLabel.getLayoutBounds().getWidth())*0.5);
+		livesLabel.setY(100.0);
+		group.getChildren().add(livesLabel);
+		
+		Text lives = new Text();
+		lives.setText(Integer.toString(controller.getLevel().lives));
+		lives.setFont(Font.font("Comic Sans MS",50));
+		lives.setFill(Color.WHITE);
+		lives.setX((mapOffsetX-livesLabel.getLayoutBounds().getWidth())*0.5);
+		lives.setY(100+livesLabel.getLayoutBounds().getHeight()+10);
 		group.getChildren().add(lives);
+		this.lives = lives;
 
 		Text score = new Text("0");
+		score.setText(Integer.toString(controller.getLevel().getScore()));
 		score.setFont(Font.font("Comic Sans MS",50));
-		score.setX((mapOffsetX-lives.getLayoutBounds().getWidth())*0.5);
+		score.setFill(Color.WHITE);
+		score.setX((mapOffsetX-livesLabel.getLayoutBounds().getWidth())*0.5);
 		score.setY(500);
 		group.getChildren().add(score);
 		this.score = score;
@@ -261,6 +281,7 @@ public class LevelVisuals {
 		timeComponent = new Group();
 		Text timeLabel = new Text("Time:");
 		timeLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,50));
+		timeLabel.setFill(Color.WHITE);
 		timeLabel.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-timeLabel.getLayoutBounds().getWidth())*0.5));
 		timeLabel.setY(100.0);
 		timeComponent.getChildren().add(timeLabel);
@@ -268,6 +289,7 @@ public class LevelVisuals {
 		Text time = new Text();
 		time.setText(Integer.toString(controller.getLevel().getTimeLimit()-controller.getTimeElapsed()));
 		time.setFont(Font.font("Comic Sans MS",50));
+		time.setFill(Color.WHITE);
 		time.setX(SCENE_WIDTH-mapOffsetX + ((mapOffsetX-time.getLayoutBounds().getWidth())*0.5));
 		time.setY(100+timeLabel.getLayoutBounds().getHeight()+10);
 		timeComponent.getChildren().add(time);
@@ -278,7 +300,7 @@ public class LevelVisuals {
 		return group;
 	}
 
-	private Group addCountDown() {
+	public Group addCountDown() {
 		Group group = new Group();
 		Rectangle frame = new Rectangle(SCENE_WIDTH,SCENE_HEIGHT/4);
 		frame.setFill(Color.BLACK);
@@ -322,6 +344,36 @@ public class LevelVisuals {
 		group.getChildren().add(pausedLabel);
 
 		Text label = new Text("Press 'P' to Resume the Level");
+		label.setFont(Font.font(50));
+		label.setFill(Color.WHITE);
+		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+		label.setY(frame.getY()+frame.getLayoutBounds().getHeight()-label.getLayoutBounds().getHeight());
+		group.getChildren().add(label);
+
+		return group;
+	}
+	
+	private Group addGameOverPopUp() {
+		Group group = new Group();
+
+		Rectangle frame = new Rectangle(SCENE_WIDTH,SCENE_HEIGHT/3);
+		frame.setFill(Color.BLACK);
+		frame.setStroke(Color.WHITE);
+		frame.setStrokeWidth(2.0);
+		frame.setArcHeight(15);
+		frame.setArcWidth(15);
+		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
+		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
+		group.getChildren().add(frame);
+		
+		Image gameOver = new Image(getClass().getResourceAsStream("misc/gameover.png"));
+		ImageView gameOverLabel = new ImageView(gameOver);
+		gameOverLabel.setX((SCENE_WIDTH-gameOverLabel.getLayoutBounds().getWidth())*0.5);
+		gameOverLabel.setY(frame.getY()+gameOverLabel.getLayoutBounds().getHeight()*0.25);
+		//resumeButton.setEffect(shadow);
+		group.getChildren().add(gameOverLabel);
+
+		Text label = new Text("Press 'Enter' To Play Again");
 		label.setFont(Font.font(50));
 		label.setFill(Color.WHITE);
 		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
@@ -514,6 +566,10 @@ public class LevelVisuals {
 		}
 	}
 
+	public void updateLives(int lives) {
+		this.lives.setText(Integer.toString(controller.getLevel().lives));
+	}
+	
 	public void updateScore(int score) {
 		this.score.setText(Integer.toString(controller.getLevel().getScore()));
 	}
@@ -582,7 +638,7 @@ public class LevelVisuals {
 
 
 	public void playCountdown() {
-		countdown.start(); //for soem reason loop(0) works better than start()
+		countdown.start();; //for soem reason loop(0) works better than start()
 	}
 
 	public void pauseCountdown() {
@@ -688,6 +744,9 @@ public class LevelVisuals {
 //					exitScreenOn = !exitScreenOn;
 //					currentView.updateExitScreen(exitScreenOn);
 					exitPopUp.setVisible(false);
+				} else if (gameOverPopUp.isVisible()) {
+					gameOverPopUp.setVisible(false);
+					controller.timeline.play();
 				} else  if (!pauseMenu.isVisible()){
 					controller.timeline.play();
 				}
