@@ -28,26 +28,33 @@ public class InterfaceController {
 	public void executeProcess(int option) {
 		if (option == 0) {
 			System.out.println("420");
+			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
 			
 		} else if (option == 1) {
 			System.out.println("69");
-			lvlCtrl.setLevel(option);
+			lvlCtrl.setMode(option);
+			lvlCtrl.playStory(lvlCtrl.levelWins);
+			//lvlCtrl.setLevel(option);
 			
 		} else if (option == 2) {
 			System.out.println("42069");
+			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
 			
 		} else if (option == 3) {
 			System.out.println("1269");
+			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
 			
 		} else if (option == 4) {
 			System.out.println("nice");
+			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
 			
 		} else if (option == 5) {
 			System.out.println("xd");
+			lvlCtrl.setMode(option);
 			
 			
 		} else if (option == 69) {

@@ -217,7 +217,7 @@ public class LevelController {
 	}
 	public void setLevel(int type){
 		//levelModel.makeMaps();
-		currentMode = type;
+		//currentMode = type;
 		//levelModel.setMap(type);
 		levelModel.initLevel(type, levelWins);
 		currentView.generateMap();
@@ -377,8 +377,14 @@ public class LevelController {
 		
 	public void playStory(int levelWins) {
 		// TODO Auto-generated method stub
-		scenarioDisp.setScenario(levelWins);
-		scenarioDisp.generateScenario();
+		//currentMode = mode;
+		//scenarioDisp.setScenario(levelWins);
+		scenarioDisp.generateScenario(levelWins);
 		interfaceCtrl.changeScene(scenarioDisp.returnScene());
+	}
+
+	public void setMode(int mode) {
+		// TODO Auto-generated method stub
+		currentMode = mode;
 	}
 }
