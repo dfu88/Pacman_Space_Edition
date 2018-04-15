@@ -243,14 +243,15 @@ public class LevelController {
 			
 		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
 			//do power up stuff
-			currentView.hideCorrespondingPowerUp(posX+dx, posY + dy);
-			currentView.red.changeToFrightMode();
-			currentView.pink.changeToFrightMode();
-			currentView.blue.changeToFrightMode();
-			currentView.orange.changeToFrightMode();
-			levelModel.addPoints(50);
-			currentView.updateScore(levelModel.getScore());
-			levelModel.getCurrentMap().updateData(dx, dy, posX, posY);//this doesnt do anyhting btw
+			if (currentView.hideCorrespondingPowerUp(posX+dx, posY + dy)) {
+				currentView.red.changeToFrightMode();
+				currentView.pink.changeToFrightMode();
+				currentView.blue.changeToFrightMode();
+				currentView.orange.changeToFrightMode();
+				levelModel.addPoints(50);
+				currentView.updateScore(levelModel.getScore());
+				levelModel.getCurrentMap().updateData(dx, dy, posX, posY);//this doesnt do anyhting btw
+			}
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
 		//this function is messing up the tunnel because its removing tele
