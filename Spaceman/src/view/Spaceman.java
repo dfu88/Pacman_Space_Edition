@@ -154,13 +154,13 @@ public class Spaceman extends CharacterAnimate{
 		
 		imageIndex = 0;
 		currentImage = images[imageIndex];
-		imageView.setImage(currentImage);
 		rotationIndex = MOVE_LEFT;
 		currentRotation = ROTATION_DEGREE[rotationIndex];
 
 		imageView.setX(graphicalX);
 		imageView.setY(graphicalY);
 		imageView.setRotate(currentRotation);
+		imageView.setImage(currentImage);
 	}
 	
 	public void playPelletSound( ) {
