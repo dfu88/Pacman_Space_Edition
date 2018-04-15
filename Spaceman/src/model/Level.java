@@ -80,6 +80,14 @@ public class Level {
 		score += pointsToAdd;
 	}
 	
+	public void addLives(int numLives) {
+		lives += numLives;
+	}
+	
+	public void minusLives(int numLives) {
+		lives -= numLives;
+	}
+	
 	public int getScore() {
 		return score;
 	}
