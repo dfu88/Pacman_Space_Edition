@@ -121,57 +121,72 @@ public class Alien extends CharacterAnimate{
 		// remove later when movement logic is completed
 		status = TRAPPED;
 	}
-	
+
 	public double getGraphicalX() {
 		return graphicalX;
 	}
-	
+
 	public double getGraphicalY() {
 		return graphicalY;
 	}
 
-	// If moving in y-axis, move in x-axis or continue
+	/* If moving in y-axis, move in x-axis or continue */
 	private void moveLeftOrRight(boolean mustMove) {
+		int targetX = 0, targetY = 0;
+		/* Each alien type has a different personality based on how it determines it target tile */
+		// alienType = 0, targets spaceman directly
+		if (alienType == 0 || frightenedFlag) {
+			targetX = levelView.spaceman.getX();
+			targetY = levelView.spaceman.getY();
+		} 
+		// alienType = 1, targets two tiles in front of spaceman
+		else if (alienType == 1) {
+			targetX = levelView.spaceman.getX();
+			if (dy == -1) {
+				targetY = levelView.spaceman.getY() - 2;
+			} else if (dy == 1) {
+				targetY = levelView.spaceman.getY() + 2;
+			}
+		} 
+		// alienType = 2, targets 2*length of vector from red ghost to spaceman
+		else if (alienType == 2) {
+			targetX = Math.abs(2*(levelView.red.getX() - levelView.spaceman.getX()));
+			if (dy == -1) {
+				targetY =  Math.abs(2*(levelView.red.getY() - levelView.spaceman.getY() - 2));
+			} else if (dy == 1) {
+				targetY = Math.abs(2*(levelView.red.getY() - levelView.spaceman.getY() + 2));
+			}
+		} 
+		// alienType = 3, targets spaceman directly, until it gets close to spaceman
+		else if (alienType == 3) {
+			targetX = levelView.spaceman.getX();
+			targetY = levelView.spaceman.getY();
+		}
+
 		//Initialise shortest path algorithm
 		ShortestPath moveRank = new ShortestPath(levelController);
 		int moveLeft = Integer.MAX_VALUE, moveRight = Integer.MAX_VALUE, moveContinue = Integer.MAX_VALUE;
 		if (dy == -1) {
-			moveContinue = moveRank.computeShortest(x, y-1, levelView.spaceman.x, levelView.spaceman.y);
+			moveContinue = moveRank.computeShortest(x, y-1, targetX, targetY);
 		} else if (dy == 1) {
-			moveContinue = moveRank.computeShortest(x, y+1, levelView.spaceman.x, levelView.spaceman.y);
+			moveContinue = moveRank.computeShortest(x, y+1, targetX, targetY);
 		}
-		moveLeft = moveRank.computeShortest(x-1, y, levelView.spaceman.x, levelView.spaceman.y);
-		moveRight = moveRank.computeShortest(x+1, y, levelView.spaceman.x, levelView.spaceman.y);
+		moveLeft = moveRank.computeShortest(x-1, y, targetX, targetY);
+		moveRight = moveRank.computeShortest(x+1, y, targetX, targetY);
 
 		System.out.println(moveLeft);
 		System.out.println(moveRight);
 		System.out.println(moveContinue);
+		
+		boolean closeToSpaceman = false;
+		// Change flag for alienType = 3, when to close to spaceman
+		if (alienType == 3 && (moveLeft <= 8 || moveRight <= 8 || moveContinue <= 8)) {
+			closeToSpaceman = true;
+		}
 
-		if (!frightenedFlag) {
-			if (moveLeft < moveRight && moveLeft < moveContinue) {
-				dx = -1;
-				dy = 0;
-				System.out.println("LEFTRIGHT--LEFT");
-			} else if (moveRight < moveLeft && moveRight < moveContinue) {
-				dx = 1;
-				dy = 0;
-				System.out.println("LEFTRIGHT--RIGHT");
-			} else {
-				if (mustMove) {
-					double chance = Math.random();
-					if (chance < 0.5) {
-						dx = -1;
-						dy = 0;
-					} else if (chance >= 0.5) {
-						dx = 1;
-						dy = 0;
-					}
-				} else {
-					System.out.println("UPDOWN--CONTINUE");
-					return;
-				}
-			}
-		} else if (frightenedFlag) {
+
+		// Move away randomly when alien is frightened or when alienType = 3 is too close to spaceman
+		if (frightenedFlag || closeToSpaceman) {
 			if (moveLeft != Integer.MAX_VALUE && moveRight == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = -1;
 				dy = 0;
@@ -197,52 +212,92 @@ public class Alien extends CharacterAnimate{
 					return;
 				}
 			}
-		}
-	}
-
-	// If moving in x-axis, move in y-axis or continue
-	private void moveUpOrDown(boolean mustMove) {
-		//Initialise shortest path algorithm
-		ShortestPath moveRank = new ShortestPath(levelController);
-		int moveUp = Integer.MAX_VALUE, moveDown = Integer.MAX_VALUE, moveContinue = Integer.MAX_VALUE;
-		if (dx == -1) {
-			moveContinue = moveRank.computeShortest(x-1, y, levelView.spaceman.x, levelView.spaceman.y);
-		} else if (dx == 1) {
-			moveContinue = moveRank.computeShortest(x+1, y, levelView.spaceman.x, levelView.spaceman.y);
-		}
-		moveUp = moveRank.computeShortest(x, y-1, levelView.spaceman.x, levelView.spaceman.y);
-		moveDown = moveRank.computeShortest(x, y+1, levelView.spaceman.x, levelView.spaceman.y);
-
-		System.out.println(moveUp);
-		System.out.println(moveDown);
-		System.out.println(moveContinue);
-
-		if (!frightenedFlag) {
-			if (moveUp < moveDown && moveUp < moveContinue) {
-				dx = 0;
-				dy = -1;
-				System.out.println("UPDOWN--UP");
-
-			} else if (moveDown < moveUp && moveDown < moveContinue) {
-				dx = 0;
-				dy = 1;
-				System.out.println("UPDOWN--DOWN");
+		} 
+		// Move based on shortest path algorithm
+		else if (!frightenedFlag) {
+			if (moveLeft < moveRight && moveLeft < moveContinue) {
+				dx = -1;
+				dy = 0;
+				System.out.println("LEFTRIGHT--LEFT");
+			} else if (moveRight < moveLeft && moveRight < moveContinue) {
+				dx = 1;
+				dy = 0;
+				System.out.println("LEFTRIGHT--RIGHT");
 			} else {
 				if (mustMove) {
-					double chance = Math.random();
-					if (chance < 0.5) {
-						dx = 0;
-						dy = -1;
-					} else if (chance >= 0.5) {
-						dx = 0;
-						dy = 1;
+					//					double chance = Math.random();
+					//					if (chance < 0.5) {
+					//						dx = -1;
+					//						dy = 0;
+					//					} else if (chance >= 0.5) {
+					//						dx = 1;
+					//						dy = 0;
+					//					}
+					if (levelController.checkMap(x-1, y) != 1 && levelController.checkMap(x-1, y) != 9) {
+						dx = -1;
+						dy = 0;
+					} else {
+						dx = 1;
+						dy = 0;
 					}
 				} else {
 					System.out.println("UPDOWN--CONTINUE");
 					return;
 				}
 			}
-		} else if (frightenedFlag) {
+		} 
+	}
+
+	/* If moving in x-axis, move in y-axis or continue */
+	private void moveUpOrDown(boolean mustMove) {
+		int targetX = 0, targetY = 0;
+		/* Each alien type has a different personality based on how it determines it target tile */
+		// alienType = 0, targets spaceman directly
+		if (alienType == 0 || frightenedFlag) {
+			targetX = levelView.spaceman.getX();
+			targetY = levelView.spaceman.getY();
+		} else if (alienType == 1) {
+			targetY = levelView.spaceman.getY();
+			if (dx == -1) {
+				targetX = levelView.spaceman.getX() - 2;
+			} else if (dx == 1) {
+				targetX = levelView.spaceman.getX() + 2;
+			}
+		} else if (alienType == 2) {
+			targetY = Math.abs(2*(levelView.red.getY() - levelView.spaceman.getY()));
+			if (dx == -1) {
+				targetX =  Math.abs(2*(levelView.red.getX() - levelView.spaceman.getX() - 2));
+			} else if (dx == 1) {
+				targetX = Math.abs(2*(levelView.red.getX() - levelView.spaceman.getX() + 2));
+			}
+		} else if (alienType == 3) {
+			targetX = levelView.spaceman.getX();
+			targetY = levelView.spaceman.getY();
+		}
+
+		//Initialise shortest path algorithm
+		ShortestPath moveRank = new ShortestPath(levelController);
+		int moveUp = Integer.MAX_VALUE, moveDown = Integer.MAX_VALUE, moveContinue = Integer.MAX_VALUE;
+		if (dx == -1) {
+			moveContinue = moveRank.computeShortest(x-1, y, targetX, targetY);
+		} else if (dx == 1) {
+			moveContinue = moveRank.computeShortest(x+1, y, targetX, targetY);
+		}
+		moveUp = moveRank.computeShortest(x, y-1, targetX, targetY);
+		moveDown = moveRank.computeShortest(x, y+1, targetX, targetY);
+
+		System.out.println(moveUp);
+		System.out.println(moveDown);
+		System.out.println(moveContinue);
+
+		boolean closeToSpaceman = false;
+		// Change flag for alienType = 3, when to close to spaceman
+		if (alienType == 3 && (moveUp <= 8 || moveDown <= 8 || moveContinue <= 8)) {
+			closeToSpaceman = true;
+		}
+
+		// Move away randomly when alien is frightened
+		if (frightenedFlag || closeToSpaceman) {
 			if (moveUp != Integer.MAX_VALUE && moveDown == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = 0;
 				dy = -1;
@@ -261,6 +316,40 @@ public class Alien extends CharacterAnimate{
 						dx = 0;
 						dy = -1;
 					} else if (chance >= 0.5) {
+						dx = 0;
+						dy = 1;
+					}
+				} else {
+					System.out.println("UPDOWN--CONTINUE");
+					return;
+				}
+			}
+		}
+		// Move based on shortest path algorithm
+		else if (!frightenedFlag) {
+			if (moveUp < moveDown && moveUp < moveContinue) {
+				dx = 0;
+				dy = -1;
+				System.out.println("UPDOWN--UP");
+
+			} else if (moveDown < moveUp && moveDown < moveContinue) {
+				dx = 0;
+				dy = 1;
+				System.out.println("UPDOWN--DOWN");
+			} else {
+				if (mustMove) {
+					//							double chance = Math.random();
+					//							if (chance < 0.5) {
+					//								dx = 0;
+					//								dy = -1;
+					//							} else if (chance >= 0.5) {
+					//								dx = 0;
+					//								dy = 1;
+					//							}
+					if (levelController.checkMap(x, y-1) != 1 && levelController.checkMap(x, y-1) != 9) {
+						dx = 0;
+						dy = -1;
+					} else {
 						dx = 0;
 						dy = 1;
 					}
@@ -374,7 +463,7 @@ public class Alien extends CharacterAnimate{
 
 		imageView.setX(graphicalX);
 		imageView.setY(graphicalY);
-		
+
 		status = TRAPPED;
 		frightenedFlag = false;
 		timeline.setRate(0.95);
