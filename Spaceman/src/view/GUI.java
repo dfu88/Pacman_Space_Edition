@@ -224,7 +224,6 @@ public class GUI {
 					//Generates level when at least one ghost player has joined
 					} else if (multiMenu.isVisible() & multiplayerSel == 0){
 						if (joinedIndicator.get(1).isVisible() || joinedIndicator.get(2).isVisible()) {
-							controller.executeProcess(option);
 							if (joinedIndicator.get(1).isVisible()) {
 								//enable ghost1 player
 								controller.executeProcess(69);
@@ -233,6 +232,7 @@ public class GUI {
 								//enable ghost2 player
 								controller.executeProcess(420);
 							}
+							controller.executeProcess(option);
 							subFrame.setVisible(false);
 							multiMenu.setVisible(false);
 							menu.setEffect(null);
