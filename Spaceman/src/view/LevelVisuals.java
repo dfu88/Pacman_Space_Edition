@@ -231,10 +231,10 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
-		red = new Alien(0,controller,this,alienX,alienY,-1,0,1);
-		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15);
-		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35);
-		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60);
+		red = new Alien(0,controller,this,alienX,alienY,-1,0,1,controller.ghostPlayerRed);
+		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15,controller.ghostPlayerPink);
+		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35,false);
+		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60,false);
 		aliens = new Alien[] {red,pink,blue,orange};
 		group.getChildren().addAll(aliens);
 		
@@ -771,6 +771,38 @@ public class LevelVisuals {
 				playCycleSound();
 				exitPopUp.setVisible(!exitPopUp.isVisible());
 				//.updateExitScreen(exitScreenOn);
+			} else if (input.getCode() == KeyCode.W) {
+				if (controller.ghostPlayerPink) {
+					pink.setKeyInput(1);
+				}
+			} else if (input.getCode() == KeyCode.A) {
+				if (controller.ghostPlayerPink) {
+					pink.setKeyInput(0);
+				}
+			} else if (input.getCode() == KeyCode.S) {
+				if (controller.ghostPlayerPink) {
+					pink.setKeyInput(3);
+				}
+			} else if (input.getCode() == KeyCode.D) {
+				if (controller.ghostPlayerPink) {
+					pink.setKeyInput(2);
+				}
+			} else if (input.getCode() == KeyCode.I) {
+				if (controller.ghostPlayerRed) {
+					red.setKeyInput(1);
+				}
+			} else if (input.getCode() == KeyCode.J) {
+				if (controller.ghostPlayerRed) {
+					red.setKeyInput(0);
+				}
+			} else if (input.getCode() == KeyCode.K) {
+				if (controller.ghostPlayerRed) {
+					red.setKeyInput(3);
+				}
+			} else if (input.getCode() == KeyCode.L) {
+				if (controller.ghostPlayerRed) {
+					red.setKeyInput(2);
+				}
 			}
 		}
 	});
