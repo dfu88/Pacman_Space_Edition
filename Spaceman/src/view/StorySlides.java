@@ -131,7 +131,13 @@ public class StorySlides {
 		//		bg.setScaleY(0.7);
 		root.getChildren().add(bgView);
 
-
+		otherCharDisp = addChar();
+//		otherCharDisp.setVisible(false);
+		root.getChildren().add(otherCharDisp);
+		
+		protagDisp = addProtag();
+		protagDisp.setVisible(false);
+		root.getChildren().add(protagDisp);	
 
 		pauseMenu = addPauseMenu();
 		pauseMenu.setVisible(false);
@@ -141,13 +147,7 @@ public class StorySlides {
 		exitPopUp.setVisible(false);
 		root.getChildren().add(exitPopUp);
 
-		otherCharDisp = addChar();
-//		otherCharDisp.setVisible(false);
-		root.getChildren().add(otherCharDisp);
 		
-		protagDisp = addProtag();
-		protagDisp.setVisible(false);
-		root.getChildren().add(protagDisp);	
 
 		
 		
@@ -159,7 +159,7 @@ public class StorySlides {
 		root.getChildren().add(scenario);
 		
 		currentDialogueSet = listOfDialogue.get(levelWins);
-		System.out.println(controller.levelWins);
+//		System.out.println(controller.levelWins);
 
 
 	}	

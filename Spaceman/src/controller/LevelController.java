@@ -9,7 +9,11 @@ import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
+
+import java.net.URL;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 //import java.util.Timer;
@@ -39,6 +43,8 @@ public class LevelController {
 	public boolean ghostPlayerPink = false;
 	
 	public int levelWins = 0;
+	
+
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
@@ -47,6 +53,8 @@ public class LevelController {
 		levelModel = new Level();
 		
 		timeline = makeTimeline();
+		
+		
 		
 		//maybe make this a function
 //		currentView.returnScene().setOnKeyPressed(new EventHandler <KeyEvent> () {
@@ -371,6 +379,7 @@ public class LevelController {
 				if (i.frightenedFlag) {
 					consumeAlien(i);
 				} else {
+					currentView.playDeathSound();
 					levelModel.minusLives(1);
 					currentView.updateLives(levelModel.lives);
 					if (levelModel.lives > 0) {
@@ -389,6 +398,7 @@ public class LevelController {
 						currentView.countDownView.setVisible(true);
 					}
 					else if (levelModel.lives == 0) {
+						currentView.playGameOver();
 						currentView.stopAllChars();
 						timeline.pause();
 						currentView.spaceman.resetSpaceman();
@@ -400,6 +410,7 @@ public class LevelController {
 						levelWins =  0;
 						setLevel(getMode());
 						currentView.gameOverPopUp.setVisible(true);
+
 					}
 				}
 			}
@@ -422,4 +433,6 @@ public class LevelController {
 	public void setBgView(Image image) {
 		currentView.setBg(image);
 	}
+	
+	
 }

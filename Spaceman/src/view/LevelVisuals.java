@@ -65,6 +65,9 @@ public class LevelVisuals {
 	private AudioClip cycle;
 	private AudioClip win1;
 	
+	private AudioClip death;
+	private AudioClip gOver;
+	
 	private Text score;
 	private Text time;
 	private Text lives;
@@ -122,6 +125,12 @@ public class LevelVisuals {
 		
 		url = this.getClass().getResource("sound/win1.wav");
 		win1 = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/gover.wav"); //maybe move sounds to controller
+		gOver = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/death.wav");
+		death = new AudioClip(url.toString());
 
 		//Setup Scene for game visuals
 		root = new Group(); 
@@ -154,13 +163,15 @@ public class LevelVisuals {
 		countDownView = addCountDown();
 		root.getChildren().add(countDownView);
 
-		pauseMenu = addPauseMenu();
-		pauseMenu.setVisible(false);
-		root.getChildren().add(pauseMenu);
+		
 		
 		gameOverPopUp = addGameOverPopUp();
 		gameOverPopUp.setVisible(false);
 		root.getChildren().add(gameOverPopUp);
+		
+		pauseMenu = addPauseMenu();
+		pauseMenu.setVisible(false);
+		root.getChildren().add(pauseMenu);
 		
 		exitPopUp = addExitPopUp();
 		exitPopUp.setVisible(false);
@@ -506,7 +517,7 @@ public class LevelVisuals {
 							//play soud clip
 							win1.play();
 							//do nothing while sound clip is playing
-							while (win1.isPlaying());
+							//while (win1.isPlaying()); //remove incase of crash?
 							//change level
 							controller.resetToStartState();
 							controller.levelWins++;
@@ -674,7 +685,9 @@ public class LevelVisuals {
 		
 	scene.setOnKeyPressed(new EventHandler <KeyEvent> () {
 		public void handle(KeyEvent input) {
-			
+			if (controller.startTimer >= -1 && controller.startTimer <3) {
+				return; //stop key input buffering which caused bugs
+			}
 			//temp, trying to get cycle sound to work consistently
 			stopCycleClip();
 			
@@ -727,6 +740,16 @@ public class LevelVisuals {
 					stopAllChars();
 					controller.timeline.stop();
 					//disp gameover screen here
+					playGameOver();
+//					spaceman.resetSpaceman();
+//					red.resetAlien();
+//					pink.resetAlien();
+//					blue.resetAlien();
+//					orange.resetAlien();
+//					controller.resetToStartState();
+//					controller.levelWins =  0;
+//					controller.setLevel(controller.getMode()); //idk?? dont need i think
+					gameOverPopUp.setVisible(true);
 				}
 				
 			} else if(input.getCode() == KeyCode.ENTER) {
@@ -756,8 +779,17 @@ public class LevelVisuals {
 					exitPopUp.setVisible(false);
 				} else if (gameOverPopUp.isVisible()) {
 					gameOverPopUp.setVisible(false);
-					controller.timeline.play();
-				} else  if (!pauseMenu.isVisible()){
+					//controller.timeline.play();
+					//new
+					spaceman.resetSpaceman();
+					red.resetAlien();
+					pink.resetAlien();
+					blue.resetAlien();
+					orange.resetAlien();
+					controller.resetToStartState();
+					controller.levelWins =  0;
+					controller.setLevel(controller.getMode());
+				} else if (!pauseMenu.isVisible()){
 					controller.timeline.play();
 				}
 			} else if(input.getCode() == KeyCode.P) {
@@ -887,5 +919,14 @@ public class LevelVisuals {
 	
 	public void setBg(Image image) {
 		bgView.setImage(image);
+	}
+	
+	public void playGameOver() {
+		gOver.play();
+	}
+	
+	public void playDeathSound() {
+		death.play();
+		//while (death.isPlaying()); //maybe reomoves?
 	}
 }
