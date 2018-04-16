@@ -5,25 +5,15 @@ import java.util.Vector;
 import controller.LevelController;
 
 public class ShortestPath {
-	//private int[][] mapArray;
 	public LevelController levelController;
-	//	private ArrayList<Integer> nextDXDY; //{dx,dy}
-
 
 	public ShortestPath(LevelController levelController) {
-		//this.mapArray = mapArray;
 		this.levelController = levelController;
 	}
-
-	//	public int[] getDXDY(int sourceX, int sourceY, int targetX, int targetY) {
-	//		return nextDXDY;
-	//	}
 
 	private int nodeIndex(Vector<Vector<Integer>> nodes, Vector<Integer> node) {
 		int x = node.get(0);
 		int y = node.get(1);
-//		System.out.println("nodeIndexX "+x);
-//		System.out.println("nodeIndexY "+y);
 		for(int i=0; i<nodes.size(); i++) {
 			Vector<Integer> currentNode = nodes.get(i);
 			int currentX = currentNode.get(0);
@@ -45,27 +35,19 @@ public class ShortestPath {
 				if (currentElement != 1 && currentElement != 9) {
 					Vector<Integer> node = new Vector<Integer>(); 
 					node.add(col);
-					//System.out.println(col);
 					node.add(row);
-					//System.out.println(row);
 					nodes.add(node);
 				}
 			}
 		}
 
-		// Intialise empty set of previous nodes
-		Vector<Vector<Integer>> previousNodes = new Vector<Vector<Integer>>(nodes.size());
-
 		// Intialise weight vector (g)
 		Vector<Integer> weight = new Vector<Integer>();
-		// Intialise heuristic vector (h) - using manhattan distance for heuristic
-		Vector<Integer> heuristic = new Vector<Integer>();
-		// Intialise total cost (f) = weight(g) + heuristic vector(h)
+		// Intialise total cost (f) = weight(g) + heuristic - manhattan dist(h)
 		Vector<Integer> totalCost = new Vector<Integer>();
 		// Set all weights, heuristics, and totalCosts to infinity
 		for (int i=0; i<nodes.size(); i++) {
 			weight.add(Integer.MAX_VALUE);
-			heuristic.add(Integer.MAX_VALUE);
 			totalCost.add(Integer.MAX_VALUE);
 		}
 
@@ -85,27 +67,20 @@ public class ShortestPath {
 		int sourceIndex = nodeIndex(nodes,sourceNode);
 		int targetIndex = nodeIndex(nodes,targetNode);
 		if (sourceIndex<0 || targetIndex<0) {
-//			System.out.println("rip");
 			return Integer.MAX_VALUE;
 		}
-		//		Vector<Integer> sourceNode = nodes.get(sourceIndex);
-		//		Vector<Integer> targetNode = nodes.get(targetIndex);
 		// Calculates heuristic of source node to target node
 		int sourceHeuristic = Math.abs(sourceX-targetX) + Math.abs(sourceY-targetY);
 		// Adds source node to the openNodes list
 		openNodes.add(sourceNode);
 		// Updates the weight, heuristic, and totalCost vectors for source node
 		weight.set(sourceIndex, 0);
-		heuristic.set(sourceIndex, sourceHeuristic);
 		totalCost.set(sourceIndex, sourceHeuristic);
-//		System.out.println("riperinno");
 
 		while (!(openNodes.isEmpty())) {
 			Vector<Integer> currentNode = nodes.get(minIndex(openNodes,nodes,totalCost));
 			int currentIndex = nodeIndex(nodes,currentNode);
-//			System.out.println("while "+currentIndex);
 			if (compareNodes(currentNode,targetNode)) {
-//				System.out.println("FFFUUUUUUU");
 				return totalCost.get(currentIndex);
 			}
 			openNodes.remove(currentNode);
@@ -113,33 +88,22 @@ public class ShortestPath {
 			Vector<Vector<Integer>> neighbourNodes = generateNeighbours(nodes, currentNode);
 			for (int i=0; i<neighbourNodes.size(); i++) {
 				Vector<Integer> neighbourNode = neighbourNodes.get(i); 
-//				System.out.println("innn");
 				int neighbourIndex = nodeIndex(nodes,neighbourNode);
 				if (isValid(closedNodes,neighbourNode)) {
-//					System.out.println("closssed");
 					continue;
 				}
 				if (!(isValid(openNodes, neighbourNode))) {
 					openNodes.add(neighbourNode);
-//					System.out.println("addd");
 				}
 				int tempWeight = weight.get(currentIndex) + 1;
 				if (tempWeight >= weight.get(neighbourIndex)) {
-//					System.out.println("ghjhjck");
 					continue;
 				}
 				int neighbourHeuristic = Math.abs(neighbourNode.get(0) - targetX) + Math.abs(neighbourNode.get(1) - targetY);
-				//previousNodes.set(neighbourIndex, currentNode);
 				weight.set(neighbourIndex, tempWeight);
-				heuristic.set(neighbourIndex, neighbourHeuristic);
 				totalCost.set(neighbourIndex, tempWeight+neighbourHeuristic);
-
-//				System.out.println(totalCost);
-//				System.out.println("SUPERgood");
 			}
-			//return Integer.MAX_VALUE;
 		}
-//		System.out.println("fckkkkk");
 		return Integer.MAX_VALUE;
 	}
 
@@ -148,11 +112,9 @@ public class ShortestPath {
 		int node1Y = node1.get(1);
 		int node2X = node2.get(0);
 		int node2Y = node2.get(1);
-
 		if (node1X == node2X && node1Y == node2Y) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -172,17 +134,12 @@ public class ShortestPath {
 				}
 			}
 		}
-//		System.out.println("------");
-//		System.out.println("minInd "+mIndex);
 		return mIndex;
-
 	}
 
 	private Vector<Vector<Integer>> generateNeighbours(Vector<Vector<Integer>> nodes, Vector<Integer> node){
 		int nodeX = node.get(0);
 		int nodeY = node.get(1);
-//		System.out.println("genNX "+nodeX);
-//		System.out.println("genNY "+nodeY);
 
 		// Generate neighbours
 		Vector<Integer> leftNeighbour = new Vector<Integer>();
@@ -202,22 +159,16 @@ public class ShortestPath {
 		Vector<Vector<Integer>> neighbourNodes = new Vector<Vector<Integer>>();
 		if (isValid(nodes,leftNeighbour)) {
 			neighbourNodes.add(leftNeighbour);
-//			System.out.println("goodLeft");
 		}
 		if (isValid(nodes,rightNeighbour)) {
 			neighbourNodes.add(rightNeighbour);
-//			System.out.println("goodRight");
 		}
 		if (isValid(nodes,upNeighbour)) {	
 			neighbourNodes.add(upNeighbour);
-//			System.out.println("goodUp");
 		}	
 		if (isValid(nodes,downNeighbour)) {
 			neighbourNodes.add(downNeighbour);
-//			System.out.println("goodDown");
 		}
-
-//		System.out.println("okay");
 		return neighbourNodes;
 	}
 
@@ -229,6 +180,5 @@ public class ShortestPath {
 		}
 		return false;
 	}
-
 
 }
