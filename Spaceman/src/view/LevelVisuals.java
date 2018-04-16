@@ -56,6 +56,8 @@ public class LevelVisuals {
 	public Group gameOverPopUp;
 	private Group timeComponent;
 	
+	private ImageView bgView;
+	
 	private GaussianBlur blur;
 	private DropShadow shadow;
 	
@@ -140,7 +142,7 @@ public class LevelVisuals {
 		pelletsCollected = 0;
 		
 		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
-		ImageView bgView = new ImageView(bg);
+		bgView = new ImageView(bg);
 //		bg.
 //		bg.setScaleY(0.7);
 		root.getChildren().add(bgView);
@@ -881,5 +883,9 @@ public class LevelVisuals {
 		red.start();
 		blue.start();
 		orange.start();
+	}
+	
+	public void setBg(Image image) {
+		bgView.setImage(image);
 	}
 }

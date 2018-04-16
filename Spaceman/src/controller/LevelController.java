@@ -6,6 +6,7 @@ import view.LevelVisuals;
 import view.Spaceman;
 import view.StorySlides;
 import javafx.scene.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Duration;
@@ -396,6 +397,7 @@ public class LevelController {
 						currentView.blue.resetAlien();
 						currentView.orange.resetAlien();
 						resetToStartState();
+						levelWins =  0;
 						setLevel(getMode());
 						currentView.gameOverPopUp.setVisible(true);
 					}
@@ -415,5 +417,9 @@ public class LevelController {
 	public void setMode(int mode) {
 		// TODO Auto-generated method stub
 		currentMode = mode;
+	}
+	
+	public void setBgView(Image image) {
+		currentView.setBg(image);
 	}
 }

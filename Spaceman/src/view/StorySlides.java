@@ -51,10 +51,16 @@ public class StorySlides {
 	private ImageView char1;
 	private ImageView char2;
 
+	private ArrayList<Image> bgList;
+	private ImageView bgView;
+	private int bgIndex = 0;
+	
 	private GaussianBlur blur;
 	private DropShadow shadow;
 
 	private AudioClip cycle;
+	private AudioClip alienLaugh;
+	private AudioClip explosion;
 
 	private ArrayList<ImageView> exitOptions;
 	private Text currentDialogue;
@@ -74,26 +80,53 @@ public class StorySlides {
 
 		URL url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/aLaugh.wav");
+		alienLaugh = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/megumin.wav");
+		explosion = new AudioClip(url.toString());
 
 		//Setup Scene for game visuals
 		root = new Group(); 
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
 		scene.setFill(Color.BLACK);
 
+		bgList = new ArrayList<Image>();
+		Image bg = new Image(getClass().getResourceAsStream("bg/hotelEdit.jpg"));
+		Image bg2 = new Image(getClass().getResourceAsStream("bg/meguminStand.jpg"));
+		Image bg3 = new Image(getClass().getResourceAsStream("bg/travel.jpg"));
+		Image bg4 = new Image(getClass().getResourceAsStream("bg/alienbg.jpg"));
+		Image bg5 = new Image(getClass().getResourceAsStream("bg/sunbg.jpg"));
+		
+		bgList.add(bg);
+		bgList.add(bg2);
+		bgList.add(bg3);
+		bgList.add(bg4);
+		bgList.add(bg5);
+		
+		bgView = new ImageView(bg);
+//		bgView.setImage(bg);
+		
 		setUpKeyInput(scene);
 		
 		
 		listOfDialogue = new ArrayList<ArrayList<String>>();
 		currentDialogueSet = new ArrayList<String>();
 		setUpDialogue();
+		
+		
+
 	}
 
 	public void generateScenario(int levelWins) {
 		exitOptions.clear();
 		root.getChildren().clear();
 
-		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
-		ImageView bgView = new ImageView(bg);
+		
+		//bgView = new ImageView(bgList.get(levelWins));
+//		bgView = new ImageView(bg);
+//		ImageView bgView = new ImageView(bg);
 		//		bg.
 		//		bg.setScaleY(0.7);
 		root.getChildren().add(bgView);
@@ -126,6 +159,7 @@ public class StorySlides {
 		root.getChildren().add(scenario);
 		
 		currentDialogueSet = listOfDialogue.get(levelWins);
+		System.out.println(controller.levelWins);
 
 
 	}	
@@ -158,7 +192,7 @@ public class StorySlides {
 
 		//Second scene
 		ArrayList<String> dialogueSet2 = new ArrayList<String>();
-		dialogueSet2.add("Finally, after getting through the \"No Pac-Man Lands\","
+		dialogueSet2.add("Finally, after getting through the \'No Pac-Man Lands\',"
 				+ " Bob landed safely \non the closet planet \'Lu-E Viton\' where the \'NRG\'"
 				+ " essence was originally found.");
 		dialogueSet2.add("Bob: \"Ugh! That was rough.\"");
@@ -451,9 +485,37 @@ public class StorySlides {
 
 				} else if(input.getCode() == KeyCode.BACK_SPACE) {
 					playCycleSound();
-					if (dialogueIndex > 0) {
-						dialogueIndex--;
-						updateDialogue(currentDialogueSet.get(dialogueIndex));
+					if (!exitPopUp.isVisible() & !pauseMenu.isVisible()) {
+						if (dialogueIndex > 0) {
+							dialogueIndex--;
+							updateDialogue(currentDialogueSet.get(dialogueIndex));
+
+						}
+						
+						if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("bob")) {
+							protagDisp.setEffect(null);
+							protagDisp.setVisible(true);
+							otherCharDisp.setEffect(blur);
+						} else if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("steve")) {
+							otherCharDisp.setEffect(null);
+							//otherCharDisp.setVisible(true);
+							char1.setVisible(true);
+							char2.setVisible(false);
+							protagDisp.setEffect(blur);
+						} else if(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("mysteriousbeing")) {
+							otherCharDisp.setEffect(null);
+							//otherCharDisp.setVisible(true);
+							char1.setVisible(false);
+							char2.setVisible(true);
+							protagDisp.setEffect(blur);
+						}
+						
+						if	(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("lads") 	||
+							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("blew")) 	||
+							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("heck"))) {
+							bgIndex--;
+						}
+						bgView.setImage(bgList.get(bgIndex));
 
 					}
 				} else if(input.getCode() == KeyCode.ENTER) {
@@ -468,6 +530,7 @@ public class StorySlides {
 							//Resets initial level states //consider an init() func instead
 							controller.resetToStartState();
 							controller.levelWins = 0;
+							bgIndex = 0;
 							//						paused = !paused;
 						} else {
 							pauseMenu.setEffect(null);
@@ -480,16 +543,22 @@ public class StorySlides {
 							dialogueIndex++;
 							updateDialogue(currentDialogueSet.get(dialogueIndex));
 						} else if (dialogueIndex == currentDialogueSet.size()-1) {
+							currentDialogue.setText("");
 							//go back to game
 							System.out.println("gasdsada");
 							dialogueIndex = -1; //reset after you switch scenes
 							if (controller.levelWins != 3) {
 								controller.setLevel(1);
+								controller.setBgView(bgList.get(bgIndex));
 							} else {
 								controller.resetToStartState();
+								controller.levelWins = 0;
+								bgIndex = 0;
+								bgView.setImage(bgList.get(bgIndex));
+//								System.out.println(controller.levelWins);
 							}
 						}
-						//maybe add function for setting focus of characters
+						//Setting focus of characters
 						if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("bob")) {
 							protagDisp.setEffect(null);
 							protagDisp.setVisible(true);
@@ -499,12 +568,31 @@ public class StorySlides {
 							//otherCharDisp.setVisible(true);
 							char1.setVisible(true);
 							protagDisp.setEffect(blur);
+//							alienLaugh.play();
+//							while (alienLaugh.isPlaying());
+							
 						} else if(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("mysteriousbeing")) {
 							otherCharDisp.setEffect(null);
 							//otherCharDisp.setVisible(true);
 							char2.setVisible(true);
 							protagDisp.setEffect(blur);
+							
+							alienLaugh.play();
+							//while (alienLaugh.isPlaying());
+							
 						}
+						
+						if	(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("flewout"	) 	||
+							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("lu-eviton")) 	||
+							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("distance")) 	||
+							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("mwuaha"	))) {
+							bgIndex++;
+						} else if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("boooooom")) {
+//							bgIndex++;
+							explosion.play();
+							//while(explosion.isPlaying());
+						}
+						bgView.setImage(bgList.get(bgIndex));
 					}
 				} else if(input.getCode() == KeyCode.P) {
 					playCycleSound();
@@ -533,10 +621,5 @@ public class StorySlides {
 	}
 	public void controlPause() {
 		updatePauseScreen(controller.paused);
-	}
-
-	public void setScenario(int levelWins) {
-		// TODO Auto-generated method stub
-
 	}
 }
