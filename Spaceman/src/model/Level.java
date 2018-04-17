@@ -48,7 +48,7 @@ public class Level {
 		mapList.add(testMap3);
 		
 		Map testMap4 = new Map();
-		testMap4.initMap(4);
+		testMap4.initMap(1);
 		mapList.add(testMap4);
 	}
 
@@ -90,5 +90,21 @@ public class Level {
 	
 	public int getScore() {
 		return score;
+	}
+
+	public int getLives() {
+		// TODO Auto-generated method stub
+		return lives;
+	}
+
+	public void setScore(int newScore) {
+		// TODO Auto-generated method stub
+		score = newScore;
+		
+	}
+
+	public void setLives(int newLives) {
+		lives = newLives;// TODO Auto-generated method stub
+		
 	}
 }
