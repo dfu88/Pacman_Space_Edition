@@ -557,15 +557,25 @@ public class LevelController {
 														//works unless you enter tunnel without pressing anything
 														//which will cause it to move up
 		
-		int tempLives = levelModel.getLives();
-		int tempScore = levelModel.getScore();
+		int prevLives = levelModel.getLives();
+		int prevScore = levelModel.getScore();
+		boolean prevShieldStat = currentView.spaceman.shieldStatus;
+		
+		//cbf tbh
+		//boolean prevFrightModeRed = currentView.red.frightenedFlag;
+		//int prevFMTime = currentView.red.
 		
 		currentView = levelList.get(levelListIndex);
 		levelModel = modelList.get(levelListIndex);
-		levelModel.setScore(tempScore);
-		currentView.updateScore(tempScore);
-		levelModel.setLives(tempLives);
-		currentView.updateLives(tempLives);
+		
+		levelModel.setScore(prevScore);
+		currentView.updateScore(prevScore);
+		
+		levelModel.setLives(prevLives);
+		currentView.updateLives(prevLives);
+		
+		currentView.spaceman.shieldStatus = prevShieldStat;
+		
 		interfaceCtrl.changeScene(currentView.returnScene());
 		//System.out.println("asas");
 		currentView.startAllChars(); //comment while testing
