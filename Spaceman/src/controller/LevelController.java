@@ -391,8 +391,9 @@ public class LevelController {
 						currentView.blue.resetAlien();
 						currentView.orange.resetAlien();
 //						currentView.generateMap();
-						currentView.countDownView = currentView.addCountDown();
-						currentView.root.getChildren().add(currentView.countDownView);
+						//currentView.countDownView = currentView.addCountDown();
+						//currentView.root.getChildren().add(currentView.countDownView);
+						
 						startTimer = 3;
 						currentView.resetCountdown();
 						currentView.countDownView.setVisible(true);

@@ -89,6 +89,8 @@ public class LevelVisuals {
 	private ArrayList<PowerUp> powerUpsRendered;
 	private ArrayList<ImageView> exitOptions;
 	
+	private ArrayList<Image> powerUpImgs;
+	
 	private int pelletsCollected = 0;
 	
 	public LevelVisuals (LevelController controller) {
@@ -100,7 +102,12 @@ public class LevelVisuals {
 		powerUpsRendered = new ArrayList<PowerUp>();
 		
 		despawnIndex = new ArrayList<Integer>();
-
+		
+		
+		
+		powerUpImgs = setUpPowerImages();
+		System.out.print(powerUpImgs.size());
+		
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
 
@@ -206,10 +213,12 @@ public class LevelVisuals {
 				} 
 				//Magic Pellet	
 				else if (currentElement == 3) {
-					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
+					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col), mapOffsetY+tileHeight*(row), powerUpImgs.get(currentElement-3) );
+//					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
 					//we can have a class 'Theme' to have a combination of preset colours to use
-					powerUp.returnPowerUp().setFill(Color.YELLOW); 
+//					powerUp.returnPowerUp().setFill(Color.YELLOW); 
 					group.getChildren().add(powerUp.returnPowerUp());
+//					group.getChildren().add(powerUp.returnPowerUp());
 					powerUpsRendered.add(powerUp);
 				}
 				//Tunnel Wall x position
@@ -572,9 +581,10 @@ public class LevelVisuals {
 	public boolean hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
 			//Hides corresponding power up matching destination of spaceman
-			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
-				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
-					
+//			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
+//				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
+			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth  == charX) {
+				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight  == charY) {		
 					if (powerUpsRendered.get(index).returnPowerUp().isVisible()) {
 						powerUpsRendered.get(index).returnPowerUp().setVisible(false);
 						return true;
@@ -895,7 +905,20 @@ public class LevelVisuals {
 		
 		updatePauseScreen(controller.paused);
 	}
-
+	
+	private ArrayList<Image> setUpPowerImages() {
+		 ArrayList<Image> imgList = new  ArrayList<Image>();
+		 Image img = new Image(getClass().getResourceAsStream("res/starxd.png"));
+		 imgList.add(img);
+		 
+		 img = new Image(getClass().getResourceAsStream("res/heart.png"));
+		 imgList.add(img);
+		 
+		 img = new Image(getClass().getResourceAsStream("res/sheild.png"));
+		 imgList.add(img);
+		 
+		return imgList;
+	}
 //	public void checkSpacemanAndAliens() {
 //		// TODO Auto-generated method stub
 //		
