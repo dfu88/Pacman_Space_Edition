@@ -2,6 +2,7 @@ package controller;
 
 import model.Level;
 import view.Alien;
+import view.Leaderboard;
 import view.LevelVisuals;
 import view.Spaceman;
 import view.StorySlides;
@@ -26,6 +27,7 @@ public class LevelController {
 	private InterfaceController interfaceCtrl;
 	private LevelVisuals currentView;
 	private StorySlides scenarioDisp;
+	private Leaderboard leaderboard;
 	private Level levelModel;
 	
 	public Timeline timeline;
@@ -50,6 +52,7 @@ public class LevelController {
 		interfaceCtrl = controller;
 		currentView = new LevelVisuals(this);
 		scenarioDisp = new StorySlides(this);
+		leaderboard = new Leaderboard(this);
 		levelModel = new Level();
 		
 		timeline = makeTimeline();
@@ -434,6 +437,11 @@ public class LevelController {
 	
 	public void setBgView(Image image) {
 		currentView.setBg(image);
+	}
+	
+	public void showLeaderboard(int gameMode) {
+		leaderboard.generateLeaderboard();
+		interfaceCtrl.changeScene(leaderboard.returnScene());
 	}
 	
 	
