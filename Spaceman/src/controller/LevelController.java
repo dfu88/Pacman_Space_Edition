@@ -5,6 +5,7 @@ import view.Alien;
 import view.LevelVisuals;
 import view.Spaceman;
 import view.StorySlides;
+//import view.levelController;
 import javafx.scene.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -13,6 +14,9 @@ import javafx.scene.media.AudioClip;
 import javafx.util.Duration;
 
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Timer;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -35,6 +39,10 @@ public class LevelController {
 	public boolean paused = false;
 	//private int pauseMenuOption = 0;
 	
+	
+	public ArrayList<LevelVisuals> levelList;
+	public int levelListIndex =0;
+	public ArrayList<Level> modelList;
 	//private boolean exitScreenOn = false;
 	public int exitOption = 0;
 	
@@ -44,13 +52,27 @@ public class LevelController {
 	
 	public int levelWins = 0;
 	
+	private int powerUpTimeOut;
+	
 
 
 	public LevelController(InterfaceController controller) {
 		interfaceCtrl = controller;
-		currentView = new LevelVisuals(this);
+		//new
+		levelList = new ArrayList<LevelVisuals>();
+		LevelVisuals primaryLevel = new LevelVisuals(this);
+		levelList.add(primaryLevel);
+		currentView = primaryLevel;
+		
+		//
+//		currentView = new LevelVisuals(this); //old
 		scenarioDisp = new StorySlides(this);
-		levelModel = new Level();
+		
+		modelList = new ArrayList<Level>();
+		Level primaryModel = new Level();
+//		levelModel = new Level();
+		modelList.add(primaryModel);
+		levelModel = primaryModel;
 		
 		timeline = makeTimeline();
 		
@@ -176,6 +198,13 @@ public class LevelController {
 
 			@Override
 			public void handle(ActionEvent event) {
+				if (timeElapsed == powerUpTimeOut & timeElapsed != 0) {
+					currentView.red.start();
+					currentView.pink.start();
+					currentView.blue.start();
+					currentView.orange.start();
+				}
+				
 				if (levelModel.getTimeLimit() != timeElapsed) {
 					//Play initial CountDown sound
 					if (startTimer == 3) { //seems to be synchronised with the countdown here
@@ -234,6 +263,37 @@ public class LevelController {
 		if (currentMode == 3) {
 			currentView.updateTime(-1);
 		}
+		
+		if ((type == 4) & (levelList.size() == 1)) {
+			Random rand = new Random();
+			
+			LevelVisuals secondMap = new LevelVisuals(this);
+//			levelModel.initLevel(4, (rand.nextInt(4)+0));
+			//currentView = secondMap;
+//			levelModel.initLevel(2, 0);
+			Level secondModel = new Level();
+			secondModel.initLevel(2, 0);
+			levelModel = secondModel;
+			modelList.add(secondModel);
+			secondMap.generateMap();
+			System.out.println("asas");
+			levelList.add(secondMap);
+			
+			LevelVisuals thirdMap = new LevelVisuals(this);
+//			levelModel.initLevel(4, (rand.nextInt(4)+0));
+			//currentView = thirdMap;
+//			levelModel.initLevel(3, 0);
+			Level thirdModel = new Level();
+			thirdModel.initLevel(3, 0);
+			levelModel = thirdModel;
+			modelList.add(thirdModel);
+			thirdMap.generateMap();
+			System.out.println("asas");
+			levelList.add(thirdMap);
+			
+			
+			currentView = levelList.get(levelListIndex);
+		}
 		interfaceCtrl.getMainApp().changeScene(currentView.returnScene()); // possible dont call getmainAPp()
 	}																		//create method in intCtrller to change scenes
 	
@@ -251,7 +311,7 @@ public class LevelController {
 				//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 			}
 			
-		} else if (checkedTile == 10 || checkedTile == 11 || checkedTile ==12 || checkedTile ==13) {
+		} else if (checkedTile == 10 || checkedTile == 11 || checkedTile ==12 || checkedTile ==13|| checkedTile ==14) {
 			//do power up stuff
 			if (currentView.hideCorrespondingPowerUp(posX+dx, posY + dy)) {
 				if (checkedTile == 10) {
@@ -277,6 +337,18 @@ public class LevelController {
 					//levelModel.addPoints(500);
 					//currentView.updateScore(levelModel.getScore());
 					currentView.spaceman.updateShieldStatus();
+				}  else if (checkedTile == 14) {
+					currentView.playCycleSound();
+					//levelModel.addPoints(500);
+					//currentView.updateScore(levelModel.getScore());
+//					currentView.spaceman.updateShieldStatus();
+					currentView.red.stop();
+					currentView.pink.stop();
+					currentView.blue.stop();
+					currentView.orange.stop();
+					powerUpTimeOut = timeElapsed + 5;
+					
+					
 				}
 			}
 		}
@@ -456,5 +528,49 @@ public class LevelController {
 		currentView.setBg(image);
 	}
 	
+	public LevelVisuals getCurrentView() {
+		return currentView;
+	}
 	
+
+	public void changeMap(int direction) {
+		// TODO Auto-generated method stub
+		if (direction < 0) {
+			if (levelListIndex == 0) {
+				levelListIndex = 2;
+			} else {
+				levelListIndex--;
+			}
+//			currentView.spaceman.setKeyInput(0);
+			//currentView.spaceman.mo
+			
+		} else if (direction > 0) {
+			if (levelListIndex == 2) {
+				levelListIndex = 0;
+			} else {
+				levelListIndex++;
+			}
+//			currentView.spaceman.setKeyInput(2);
+
+		}
+		currentView.spaceman.setKeyInput(direction); //only way it works for some reason
+														//works unless you enter tunnel without pressing anything
+														//which will cause it to move up
+		
+		int tempLives = levelModel.getLives();
+		int tempScore = levelModel.getScore();
+		
+		currentView = levelList.get(levelListIndex);
+		levelModel = modelList.get(levelListIndex);
+		levelModel.setScore(tempScore);
+		currentView.updateScore(tempScore);
+		levelModel.setLives(tempLives);
+		currentView.updateLives(tempLives);
+		interfaceCtrl.changeScene(currentView.returnScene());
+		//System.out.println("asas");
+		currentView.startAllChars(); //comment while testing
+		currentView.spaceman.setNewPosition(direction);
+//		currentView.spaceman.start(); //uncomment for testing
+		
+	}
 }

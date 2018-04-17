@@ -166,10 +166,15 @@ public class LevelVisuals {
 		gameView = addGameComponents();
 		gameView.setEffect(blur);
 		root.getChildren().add(gameView);
-
+		
+		
+//		gameView.setEffect(blur);
 		countDownView = addCountDown();
 		root.getChildren().add(countDownView);
-
+		if (controller.levelList.get(0) != this) {
+			countDownView.setVisible(false);
+			gameView.setEffect(null);
+		}
 		
 		
 		gameOverPopUp = addGameOverPopUp();
@@ -212,7 +217,7 @@ public class LevelVisuals {
 					pelletsRendered.add(pellet);
 				} 
 				//Magic Pellet	
-				else if ((currentElement == 10) || (currentElement == 11) || (currentElement == 12)||currentElement == 13) {
+				else if ((currentElement == 10) || (currentElement == 11) || (currentElement == 12)||currentElement == 13||currentElement == 14) {
 					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col), mapOffsetY+tileHeight*(row), powerUpImgs.get(currentElement-10) );
 //					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
 					//we can have a class 'Theme' to have a combination of preset colours to use
@@ -923,6 +928,9 @@ public class LevelVisuals {
 		 imgList.add(img);
 		 
 		 img = new Image(getClass().getResourceAsStream("res/shield.png"));
+		 imgList.add(img);
+		 
+		 img = new Image(getClass().getResourceAsStream("res/sWatch.png"));
 		 imgList.add(img);
 		 
 		 

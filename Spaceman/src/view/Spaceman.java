@@ -12,6 +12,7 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.LevelController;
 import javafx.animation.Animation;
+import javafx.animation.Animation.Status;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
@@ -156,8 +157,9 @@ public class Spaceman extends CharacterAnimate{
 			imageView.setX(graphicalX);
 			imageView.setY(graphicalY);
 			imageView.setRotate(currentRotation);
-			
-			levelController.checkSpacemanAndAliens();
+			if (this.timeline.getStatus() == Status.RUNNING) {
+				levelController.checkSpacemanAndAliens();
+			}
 		}
 //		}
 	}
@@ -213,13 +215,31 @@ public class Spaceman extends CharacterAnimate{
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-				if (nextX < 1  && dx == -1 ) {
-					x = 19;
-				} else if (nextX > 19 && dx == 1 ) {
-					x = 1;
+//				if (x!=0 || x!=20) {
+				if (nextX < 1 && dx == -1 ) {
+					if (levelController.getMode() == 4) {
+						levelController.getCurrentView().stopAllChars();
+						levelController.timeline.stop();
+						levelController.changeMap(-1);
+						//return;
+						
+						
+					} else {
+						x = 19;
+					}
+				} else if (nextX > 19  && dx == 1 ) {
+					if (levelController.getMode() == 4) {
+						levelController.getCurrentView().stopAllChars();
+						levelController.timeline.stop();
+						levelController.changeMap(1);
+						//return;
+					} else {
+						x = 1;
+					}
 				} else {
 					x = x + dx;
 				}
+//				}
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
 				
 				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
@@ -358,5 +378,38 @@ public class Spaceman extends CharacterAnimate{
 	public void updateShieldStatus() {
 		shieldStatus = !shieldStatus;
 	}
+	
+	
+	public void setNewPosition(int direction) {
+		for (int row = 0; row < 21; row++) {
+			for (int col = 0; col < 21; col++) {
+				if (levelController.getLevel().getCurrentMap().getData(row, col) == 5) {
+					if (direction > 0) {
+						x = col+1;
+						y = row;
+						dx = 1;
+//						changeCurrentDirection(MOVE_RIGHT);
+//						graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+//						graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+//						imageView.setX(graphicalX);
+//						imageView.setY(graphicalY);			
+					}
+				} else if (levelController.getLevel().getCurrentMap().getData(row, col) == 6) {
+					if (direction < 0) {
+						x = col-1;
+						y = row;
+						dx = -1;
+//						changeCurrentDirection(MOVE_LEFT);
 
+					}
+				}
+
+			}
+		}
+		graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
+		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
+		imageView.setX(graphicalX);
+		imageView.setY(graphicalY);	
+	
+	}
 }
