@@ -92,7 +92,7 @@ public class Spaceman extends CharacterAnimate{
 	@Override
 	public void moveOneStep() {
 		levelController.respawnCollectables();
-		if (imageIndex == 0) {
+		if (imageIndex == 0 && this.isRunning()) {
 			changeCurrentDirection(keyInput);
 		}
 		
@@ -121,6 +121,7 @@ public class Spaceman extends CharacterAnimate{
 //				pelletSound.stop();
 //				pelletSound.setFramePosition(0);//reset sound to 0 seconds
 //			}
+		if (this.isRunning()) {
 			if (pelletSound.isPlaying()) {
 				pelletSound.stop();
 			}
@@ -136,10 +137,13 @@ public class Spaceman extends CharacterAnimate{
 			imageView.setRotate(currentRotation);
 			
 			levelController.checkSpacemanAndAliens();
+		}
 //		}
 	}
 	
 	public void resetSpaceman() {
+		stop();
+		
 		keyInput = -1;
 		
 		// Intialise Spaceman grid position

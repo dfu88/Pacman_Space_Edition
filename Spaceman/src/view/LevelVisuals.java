@@ -688,8 +688,9 @@ public class LevelVisuals {
 					cycleOptions(controller.exitOption);
 						
 				} else {
-					spaceman.setKeyInput(0);
-					
+					if (spaceman.isRunning()) {
+						spaceman.setKeyInput(0);
+					}
 				}
 				
 			} else if(input.getCode() == KeyCode.RIGHT) {
@@ -702,16 +703,19 @@ public class LevelVisuals {
 					cycleOptions(controller.exitOption);
 					
 				} else {
-					spaceman.setKeyInput(2);
-					
+					if (spaceman.isRunning()) {
+						spaceman.setKeyInput(2);
+					}
 				}
 				
 			} else if(input.getCode() == KeyCode.UP) {
-				spaceman.setKeyInput(1);
-				
+				if (spaceman.isRunning()) {
+					spaceman.setKeyInput(1);
+				}
 			} else if(input.getCode() == KeyCode.DOWN) {
-				spaceman.setKeyInput(3);
-				
+				if (spaceman.isRunning()) {
+					spaceman.setKeyInput(3);
+				}
 			} else if(input.getCode() == KeyCode.PAGE_DOWN) {
 				
 				//Sets time to 0 and stops the game when not in endless mode

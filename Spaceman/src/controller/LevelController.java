@@ -375,6 +375,7 @@ public class LevelController {
 					currentView.updateLives(levelModel.lives);
 					if (levelModel.lives > 0) {
 						currentView.stopAllChars();
+						currentView.playCycleSound();
 						timeline.pause();
 						currentView.spaceman.resetSpaceman();
 						currentView.red.resetAlien();
