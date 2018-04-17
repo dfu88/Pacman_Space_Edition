@@ -242,8 +242,8 @@ public class LevelController {
 	}
 	
 	public void updateMap(int dx, int dy,int posX, int posY) {
-		
-		if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 2) {
+		int checkedTile = levelModel.getCurrentMap().getData(posY+dy, posX+dx);
+		if (checkedTile == 2) {
 			if (currentView.hideCorrespondingPellet(posX+dx, posY + dy)) {
 			
 				levelModel.addPoints(10);
@@ -251,16 +251,33 @@ public class LevelController {
 				//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);
 			}
 			
-		} else if (levelModel.getCurrentMap().getData(posY+dy, posX+dx) == 3) {
+		} else if (checkedTile == 10 || checkedTile == 11 || checkedTile ==12 || checkedTile ==13) {
 			//do power up stuff
 			if (currentView.hideCorrespondingPowerUp(posX+dx, posY + dy)) {
-				currentView.red.changeToFrightMode();
-				currentView.pink.changeToFrightMode();
-				currentView.blue.changeToFrightMode();
-				currentView.orange.changeToFrightMode();
-				levelModel.addPoints(50);
-				currentView.updateScore(levelModel.getScore());
-				levelModel.getCurrentMap().updateData(dx, dy, posX, posY);//this doesnt do anyhting btw
+				if (checkedTile == 10) {
+					currentView.playCycleSound();//temp change to another sound
+					currentView.red.changeToFrightMode();
+					currentView.pink.changeToFrightMode();
+					currentView.blue.changeToFrightMode();
+					currentView.orange.changeToFrightMode();
+					levelModel.addPoints(50);
+					currentView.updateScore(levelModel.getScore());
+					levelModel.getCurrentMap().updateData(dx, dy, posX, posY);//this doesnt do anyhting btw
+			
+				} else if (checkedTile == 11) {
+					levelModel.addLives(1);
+					currentView.playCycleSound(); //temp change to somehting else
+					currentView.updateLives(levelModel.lives);
+				} else if (checkedTile == 12) {
+					currentView.playCycleSound();
+					levelModel.addPoints(500);
+					currentView.updateScore(levelModel.getScore());
+				} else if (checkedTile == 13) {
+					currentView.playCycleSound();
+					//levelModel.addPoints(500);
+					//currentView.updateScore(levelModel.getScore());
+					currentView.spaceman.updateShieldStatus();
+				}
 			}
 		}
 		//levelModel.getCurrentMap().updateData(dx, dy, posX, posY);  no need to change map array
@@ -377,6 +394,9 @@ public class LevelController {
 		for (Alien i : aliens) {
 			if (ifSpacemanMetAlien(i)) {
 				if (i.frightenedFlag) {
+					consumeAlien(i);
+				} else if (currentView.spaceman.shieldStatus) {
+					currentView.spaceman.updateShieldStatus();
 					consumeAlien(i);
 				} else {
 					currentView.playDeathSound();

@@ -30,6 +30,11 @@ public class Spaceman extends CharacterAnimate{
 	private int keyInput;
 	private int currentRotation;
 	
+	private Image[] images;
+	private Image[] shield;
+	private Image[] imagesDefault;
+	public boolean shieldStatus = false;
+	
 	//public Clip pelletSound;
 	
 	private AudioClip pelletSound;
@@ -61,13 +66,22 @@ public class Spaceman extends CharacterAnimate{
 //				new Image(getClass().getResourceAsStream("res/left1.png"))
 //		};
 		
+		shield = new Image[] {new Image(getClass().getResourceAsStream("res/spacepac2shield.png")), 
+				new Image(getClass().getResourceAsStream("res/spacepacshield.png")),
+				new Image(getClass().getResourceAsStream("res/spacepac3shield.png")),
+				new Image(getClass().getResourceAsStream("res/spacepacshield.png"))
+		};
+		
 		Image startImage = new Image(getClass().getResourceAsStream("res/spacepac2.png")); 
-		images = new Image[] {
+		imagesDefault = new Image[] {
 				startImage,
 				new Image(getClass().getResourceAsStream("res/spacepac.png")),
 				new Image(getClass().getResourceAsStream("res/spacepac3.png")),
 				new Image(getClass().getResourceAsStream("res/spacepac.png"))
 		};
+		
+		images = imagesDefault;
+		
 		imageIndex = 0;
 		currentImage = images[imageIndex];
 		rotationIndex = MOVE_LEFT;
@@ -96,6 +110,12 @@ public class Spaceman extends CharacterAnimate{
 			changeCurrentDirection(keyInput);
 		}
 		
+		if (shieldStatus) {
+			images = shield;
+		} else {
+			images = imagesDefault;
+		}
+		
 		if (imageIndex < images.length-1) {
 			imageIndex++;
 			currentImage = images[imageIndex];
@@ -112,8 +132,9 @@ public class Spaceman extends CharacterAnimate{
 //			imageView.setX(graphicalX);
 //			imageView.setY(graphicalY);
 //			imageView.setRotate(currentRotation);
-			
-			
+//			if (shieldStatus) {
+//				imageView.setImage(shield);
+//			}
 		}
 		
 	//	if (status == MOVING) {
@@ -332,6 +353,10 @@ public class Spaceman extends CharacterAnimate{
 	
 	public double getGraphicalY() {
 		return graphicalY;
+	}
+	
+	public void updateShieldStatus() {
+		shieldStatus = !shieldStatus;
 	}
 
 }

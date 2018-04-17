@@ -212,8 +212,8 @@ public class LevelVisuals {
 					pelletsRendered.add(pellet);
 				} 
 				//Magic Pellet	
-				else if (currentElement == 3) {
-					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col), mapOffsetY+tileHeight*(row), powerUpImgs.get(currentElement-3) );
+				else if ((currentElement == 10) || (currentElement == 11) || (currentElement == 12)||currentElement == 13) {
+					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col), mapOffsetY+tileHeight*(row), powerUpImgs.get(currentElement-10) );
 //					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
 					//we can have a class 'Theme' to have a combination of preset colours to use
 //					powerUp.returnPowerUp().setFill(Color.YELLOW); 
@@ -623,6 +623,7 @@ public class LevelVisuals {
 			message.setText("START!!");
 
 		} else {
+			message.setText("Press 'Enter' to Start");
 			countDownView.setVisible(false);
 			//countdown.setFramePosition(0);
 		}
@@ -918,8 +919,13 @@ public class LevelVisuals {
 		 img = new Image(getClass().getResourceAsStream("res/heart.png"));
 		 imgList.add(img);
 		 
-		 img = new Image(getClass().getResourceAsStream("res/sheild.png"));
+		 img = new Image(getClass().getResourceAsStream("res/cherry.png"));
 		 imgList.add(img);
+		 
+		 img = new Image(getClass().getResourceAsStream("res/shield.png"));
+		 imgList.add(img);
+		 
+		 
 		 
 		return imgList;
 	}
