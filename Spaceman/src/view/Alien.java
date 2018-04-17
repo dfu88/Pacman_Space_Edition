@@ -10,10 +10,11 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-import controller.LevelController;
 import javafx.animation.Animation;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+import controller.LevelController;
 import model.ShortestPath;
 
 public class Alien extends CharacterAnimate{
@@ -178,10 +179,6 @@ public class Alien extends CharacterAnimate{
 		}
 		moveLeft = moveRank.computeShortest(x-1, y, targetX, targetY);
 		moveRight = moveRank.computeShortest(x+1, y, targetX, targetY);
-
-		System.out.println(moveLeft);
-		System.out.println(moveRight);
-		System.out.println(moveContinue);
 		
 		boolean closeToSpaceman = false;
 		// Change flag for alienType = 3, when to close to spaceman
@@ -189,17 +186,14 @@ public class Alien extends CharacterAnimate{
 			closeToSpaceman = true;
 		}
 
-
 		// Move away randomly when alien is frightened or when alienType = 3 is too close to spaceman
 		if (frightenedFlag || closeToSpaceman) {
 			if (moveLeft != Integer.MAX_VALUE && moveRight == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = -1;
 				dy = 0;
-				System.out.println("LEFTRIGHT--LEFT");
 			} else if (moveRight != Integer.MAX_VALUE && moveLeft == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = 1;
 				dy = 0;
-				System.out.println("LEFTRIGHT--RIGHT");
 			} else if (moveContinue != Integer.MAX_VALUE && moveLeft == Integer.MAX_VALUE && moveRight == Integer.MAX_VALUE) {
 				return;
 			} else {
@@ -213,7 +207,6 @@ public class Alien extends CharacterAnimate{
 						dy = 0;
 					}
 				} else {
-					System.out.println("UPDOWN--CONTINUE");
 					return;
 				}
 			}
@@ -223,21 +216,11 @@ public class Alien extends CharacterAnimate{
 			if (moveLeft < moveRight && moveLeft < moveContinue) {
 				dx = -1;
 				dy = 0;
-				System.out.println("LEFTRIGHT--LEFT");
 			} else if (moveRight < moveLeft && moveRight < moveContinue) {
 				dx = 1;
 				dy = 0;
-				System.out.println("LEFTRIGHT--RIGHT");
 			} else {
 				if (mustMove) {
-					//					double chance = Math.random();
-					//					if (chance < 0.5) {
-					//						dx = -1;
-					//						dy = 0;
-					//					} else if (chance >= 0.5) {
-					//						dx = 1;
-					//						dy = 0;
-					//					}
 					if (levelController.checkMap(x-1, y) != 1 && levelController.checkMap(x-1, y) != 9) {
 						dx = -1;
 						dy = 0;
@@ -246,7 +229,6 @@ public class Alien extends CharacterAnimate{
 						dy = 0;
 					}
 				} else {
-					System.out.println("UPDOWN--CONTINUE");
 					return;
 				}
 			}
@@ -291,10 +273,6 @@ public class Alien extends CharacterAnimate{
 		moveUp = moveRank.computeShortest(x, y-1, targetX, targetY);
 		moveDown = moveRank.computeShortest(x, y+1, targetX, targetY);
 
-		System.out.println(moveUp);
-		System.out.println(moveDown);
-		System.out.println(moveContinue);
-
 		boolean closeToSpaceman = false;
 		// Change flag for alienType = 3, when to close to spaceman
 		if (alienType == 3 && (moveUp <= 8 || moveDown <= 8 || moveContinue <= 8)) {
@@ -306,12 +284,9 @@ public class Alien extends CharacterAnimate{
 			if (moveUp != Integer.MAX_VALUE && moveDown == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = 0;
 				dy = -1;
-				System.out.println("UPDOWN--UP");
-
 			} else if (moveDown != Integer.MAX_VALUE && moveUp == Integer.MAX_VALUE && moveContinue == Integer.MAX_VALUE) {
 				dx = 0;
 				dy = 1;
-				System.out.println("UPDOWN--DOWN");
 			} else if (moveContinue != Integer.MAX_VALUE && moveUp == Integer.MAX_VALUE && moveDown == Integer.MAX_VALUE) {
 				return;
 			} else {
@@ -325,7 +300,6 @@ public class Alien extends CharacterAnimate{
 						dy = 1;
 					}
 				} else {
-					System.out.println("UPDOWN--CONTINUE");
 					return;
 				}
 			}
@@ -335,22 +309,11 @@ public class Alien extends CharacterAnimate{
 			if (moveUp < moveDown && moveUp < moveContinue) {
 				dx = 0;
 				dy = -1;
-				System.out.println("UPDOWN--UP");
-
 			} else if (moveDown < moveUp && moveDown < moveContinue) {
 				dx = 0;
 				dy = 1;
-				System.out.println("UPDOWN--DOWN");
 			} else {
 				if (mustMove) {
-					//							double chance = Math.random();
-					//							if (chance < 0.5) {
-					//								dx = 0;
-					//								dy = -1;
-					//							} else if (chance >= 0.5) {
-					//								dx = 0;
-					//								dy = 1;
-					//							}
 					if (levelController.checkMap(x, y-1) != 1 && levelController.checkMap(x, y-1) != 9) {
 						dx = 0;
 						dy = -1;
@@ -359,7 +322,6 @@ public class Alien extends CharacterAnimate{
 						dy = 1;
 					}
 				} else {
-					System.out.println("UPDOWN--CONTINUE");
 					return;
 				}
 			}
@@ -419,7 +381,6 @@ public class Alien extends CharacterAnimate{
 				x = x + dx;
 
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
-				//moveUpOrDown(false);
 			}
 		}
 	}
@@ -496,18 +457,8 @@ public class Alien extends CharacterAnimate{
 	public void moveOneStep() {
 		
 		if (imageIndex == 0) {
-			System.out.println("WORKING12313!!!!!");
-			System.out.println("WORKING31231!!!!!");
-			System.out.println("WORKING13121!!!!!");
-			System.out.println("WORKING!213132!!!!");
-			System.out.println("WORKING!31123!!!!");
-			if (isPlayer) {
+			if (isPlayer && status != TRAPPED) {
 				changeCurrentDirection(keyInput);
-				System.out.println("WORKING!!!!!");
-				System.out.println("WORKING!!!!!");
-				System.out.println("WORKING!!!!!");
-				System.out.println("WORKING!!!!!");
-				System.out.println("WORKING!!!!!");
 			}			
 		}
 		if (imageIndex < images.length-1) {
