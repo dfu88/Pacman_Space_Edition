@@ -14,3 +14,23 @@ game when most arcade games were space shooters. The aim of the game is for the 
 (i.e. Pacman, the yellow circle) to eat as many pellets (orange dotsand special cherries at times) 
 as possible to get a high score, while avoiding the ghost enemies (red, blue, pink and orange blobs) 
 and losing lives.
+
+## Final Submission Table
+|   | Features (minimum specifications) | Yes/No | Comments | Team Members |
+| --|-------|-------|----------| ---------|
+| 1  | chicken | Y   |      |  DF(00%)+QH(00%)  |
+| 2  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 3  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 4  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 5  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 6  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 7  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 8  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 9  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 10 | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 11 | chicken | Y    |		|  DF(00%)+QH(00%)  |
+|Design Elements|
+| 1  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 2  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 3  | chicken | Y    |		|  DF(00%)+QH(00%)  |
+| 4  | chicken | Y    |		|  DF(00%)+QH(00%)  |
