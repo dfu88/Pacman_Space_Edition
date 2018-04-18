@@ -89,7 +89,7 @@ public abstract class CharacterAnimate extends Parent{
 	}
 
 	public void start() {
-		timeline.playFromStart();
+		timeline.play();
 	}
 
 	public boolean isRunning() {

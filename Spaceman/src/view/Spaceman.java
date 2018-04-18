@@ -170,6 +170,7 @@ public class Spaceman extends CharacterAnimate{
 	
 	public void resetSpaceman() {
 		stop();
+		moveCounter = 0;
 		
 		keyInput = -1;
 		
