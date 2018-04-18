@@ -26,26 +26,24 @@ import javafx.scene.layout.BackgroundSize;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
-//import javafx.event.ActionEvent;
-//import javafx.event.EventHandler;
+
 import javafx.scene.media.AudioClip;
 
+import javafx.event.EventHandler;
 
 public class GUI {
 
 	private InterfaceController controller;
 
-	private double SCENE_HEIGHT = 768;
-	private double SCENE_WIDTH = 1024.0;
+	private final double SCENE_HEIGHT = 768;
+	private final double SCENE_WIDTH = 1024.0;
 	private Scene scene;
 	
-	//Nodes
+	//Nodes in this scene
 	private Group menu;
 	private Group subFrame;
 	private Group multiMenu;
-	private Group setting;
+//	private Group setting;
 	
 	private AudioClip cycle;
 	private AudioClip click;
@@ -53,17 +51,17 @@ public class GUI {
 	private DropShadow shadow;
 	private GaussianBlur blur;
 	
-	//Main Menu options
+	//Main Menu Options (Eg. Story, Classic etc)
 	private int option = 0;
 	private ArrayList<ImageView> optionList;
 	
-	//Multiplayer Menu
+	//Multiplayer Menu Controls
 	private int multiplayerSel=0;
-	private ArrayList<ImageView> multiplayerControls; //play and exit on multiMenu
+	private ArrayList<ImageView> multiplayerControls;
 	private ArrayList<ImageView> joinedIndicator;
 	
-	//Not yet implemented //For skins and themes
-	private ArrayList<ImageView> playerOptions;
+	//Not yet implemented //For skins and themes //could be scrapped
+//	private ArrayList<ImageView> playerOptions;
 	
 	
 
@@ -72,13 +70,23 @@ public class GUI {
 		
 		shadow = new DropShadow(50, Color.YELLOW);
 		blur = new GaussianBlur();
-		
-		AnchorPane root = new AnchorPane();
 
+		//Initialise Sound Clips for the GUI
+		URL url = this.getClass().getResource("sound/laser1.wav");
+		click = new AudioClip(url.toString());
+		click.setVolume(0.4);
+
+		url = this.getClass().getResource("sound/sound1.wav");
+		cycle = new AudioClip(url.toString());
+		
+		AnchorPane root = new AnchorPane(); //Parent Node
+		
+		//Child node of parent containing main menu options
 		menu = addComponents();
 		root.getChildren().add(menu);
 		
-		subFrame = addSubFrame();
+		//Child node of parent node containing the multiplayer menu options
+		subFrame = addSubFrame();	//consider moving this to child of menu instead if setting is scrapped
 		subFrame.setVisible(false);
 		root.getChildren().add(subFrame);
 		
@@ -87,18 +95,7 @@ public class GUI {
 		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		root.setBackground(new Background(bg));
 		
-		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
-
-		URL url = this.getClass().getResource("sound/laser1.wav");
-		click = new AudioClip(url.toString());
-		click.setVolume(0.4);
-
-		url = this.getClass().getResource("sound/sound1.wav");
-		cycle = new AudioClip(url.toString());
-	}
-
-	public Scene returnScene() {
-		return scene;
+		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);	
 	}
 
 	private Group addComponents() {
@@ -119,7 +116,7 @@ public class GUI {
 
 		Image btn0 = new Image(getClass().getResourceAsStream("bg/btn0.png"));
 		ImageView btn0View = new ImageView(btn0);
-		btn0View.setEffect(shadow); //Initial choice
+		btn0View.setEffect(shadow); //Highlight initial option
 		optionList.add(btn0View);
 
 		Image btn1 = new Image(getClass().getResourceAsStream("bg/btn1.png"));
@@ -141,24 +138,16 @@ public class GUI {
 		Image btn5 = new Image(getClass().getResourceAsStream("bg/btn5.png"));
 		ImageView btn5View = new ImageView(btn5);
 		optionList.add(btn5View);
-
+		
+		
+		//Setup all the buttons on the scene
 		for (int i = 0; i < optionList.size(); i++) {
 			optionList.get(i).setScaleX(0.4);
 			optionList.get(i).setScaleY(0.4);
+			//Centres the buttons on the x-axis
 			optionList.get(i).setX((SCENE_WIDTH-optionList.get(i).getLayoutBounds().getWidth())*0.5);
+			//Calculates the y-axis of each button
 			optionList.get(i).setY((minDistFromNodes*(i+2)+title.getHeight()*titleView.getScaleY()+optionList.get(i).getLayoutBounds().getHeight()*i*0.4));
-			//			optionList.get(i).addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			//			     @Override
-			//			     public void handle(MouseEvent event) {
-			//			         System.out.println("Tile pressed ");
-			//			         optionList.get(option).setEffect(null);
-			//			         optionList.get(0).get
-			////			         for (int j = 0; j < optionList.size(); j++) {
-			////			        	 if option = i;
-			////			         }
-			////			         optionList.get(i).setEffect(shadow);
-			//			     }
-			//			});
 			group.getChildren().add(optionList.get(i));
 		}
 		return group;
@@ -214,6 +203,7 @@ public class GUI {
 						menu.setEffect(blur);
 						multiplayerSel = 0;
 						multiplayerControls.get(0).setEffect(shadow);
+						
 					//Closes multiplayer menu
 					} else if (multiMenu.isVisible() & multiplayerSel == 1) {
 						subFrame.setVisible(false);
@@ -221,7 +211,7 @@ public class GUI {
 						
 						menu.setEffect(null);
 						
-					//Generates level when at least one ghost player has joined
+					//Generates level when at least one ghost player has joined in mulitplayer screen
 					} else if (multiMenu.isVisible() & multiplayerSel == 0){
 						if (joinedIndicator.get(1).isVisible() || joinedIndicator.get(2).isVisible()) {
 							if (joinedIndicator.get(1).isVisible()) {
@@ -237,8 +227,10 @@ public class GUI {
 							multiMenu.setVisible(false);
 							menu.setEffect(null);
 						}
+						
+					//When no specific case is selected, then calls controller as normal
 					} else {
-						controller.executeProcess(option); //important
+						controller.executeProcess(option); 
 					}
 					joinedIndicator.get(1).setVisible(false);
 					joinedIndicator.get(2).setVisible(false);
@@ -287,19 +279,21 @@ public class GUI {
 		multiMenu.setVisible(false);
 		group.getChildren().add(multiMenu);
 		
-		setting = addSettings(frame);
-		setting.setVisible(false);
-		group.getChildren().add(setting);
+		//might be scrapped
+//		setting = addSettings(frame);
+//		setting.setVisible(false);
+//		group.getChildren().add(setting);
 		
 		return group;
 	}
 	
+	//Setup multiplayer setup display
 	private Group addMultiplayerOptions(Rectangle frame) {
 		Group group = new Group();
 		
 		ArrayList<ImageView> multiplayerOptions = new ArrayList<ImageView>();
 		multiplayerControls = new ArrayList<ImageView>();	//Stores play/close objects
-		joinedIndicator = new ArrayList<ImageView>();		//Stores obejcts to inidicate join/leave
+		joinedIndicator = new ArrayList<ImageView>();		//Stores objects to indicate join/leave
 		
 		Text label = new Text("Press One of the Listed Keys to Join/Leave");
 		label.setFont(Font.font(30));
@@ -322,6 +316,7 @@ public class GUI {
 		
 		Image tick = new Image(getClass().getResourceAsStream("misc/tick2.png"));
 		
+		//Setup for the images indicating whether a player has joined or not
 		for (int i = 0; i < multiplayerOptions.size(); i++) {
 			multiplayerOptions.get(i).setX(40*(i+1) + player1Disp.getLayoutBounds().getWidth()*i+frame.getX());
 			multiplayerOptions.get(i).setY(100+label.getLayoutBounds().getHeight());
@@ -356,17 +351,23 @@ public class GUI {
 		return group;
 	}
 	
-	private Group addSettings(Rectangle frame) {
-		Group group = new Group();
-		
-		Text label = new Text("Choose a Theme");
-		label.setFont(Font.font(50));
-		label.setFill(Color.WHITE);
-		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
-		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
-		group.getChildren().add(label);
-		
-		return group;
+	//For selecting player skin, game theme.
+//	private Group addSettings(Rectangle frame) {
+//		Group group = new Group();
+//		
+//		Text label = new Text("Choose a Theme");
+//		label.setFont(Font.font(50));
+//		label.setFill(Color.WHITE);
+//		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+//		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
+//		group.getChildren().add(label);
+//		
+//		return group;
+//	}
+	
+	public Scene returnScene() {
+		return scene;
 	}
+
 
 }

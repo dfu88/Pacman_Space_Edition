@@ -299,6 +299,7 @@ public class Leaderboard {
 		int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0;
 		String playerName = name;
 		int playerScore = score;
+		File file = new File(getClass().getResource("res/highscoreClassic.txt").getFile());;
 		
 		if (gameMode == 0) {
 			player1 = dataClassic.get(0).getName();
@@ -311,6 +312,7 @@ public class Leaderboard {
 			score4 = dataClassic.get(3).getScore();
 			player5 = dataClassic.get(4).getName();
 			score5 = dataClassic.get(4).getScore();
+			//file = new File(getClass().getResource("res/highscoreClassic.txt").getFile());
 		} else if (gameMode == 3) {
 			player1 = dataEndless.get(0).getName();
 			score1 = dataEndless.get(0).getScore();
@@ -322,6 +324,7 @@ public class Leaderboard {
 			score4 = dataEndless.get(3).getScore();
 			player5 = dataEndless.get(4).getName();
 			score5 = dataEndless.get(4).getScore();
+			file = new File(getClass().getResource("res/highscoreEndless.txt").getFile());
 		} else if (gameMode == 4) {
 			player1 = dataMulti.get(0).getName();
 			score1 = dataMulti.get(0).getScore();
@@ -333,6 +336,7 @@ public class Leaderboard {
 			score4 = dataMulti.get(3).getScore();
 			player5 = dataMulti.get(4).getName();
 			score5 = dataMulti.get(4).getScore();
+			file = new File(getClass().getResource("res/highscoreMulti.txt").getFile());
 		}
 		
 		if (playerScore > score1) {
@@ -387,9 +391,8 @@ public class Leaderboard {
 		}
 		
 		
-		File file1 = new File(getClass().getResource("res/highscoreClassic.txt").getFile());
 		try {
-			BufferedWriter output = new BufferedWriter(new FileWriter(file1));
+			BufferedWriter output = new BufferedWriter(new FileWriter(file));
 			output.write(player1+","+score1);
 			output.newLine();
 			output.write(player2+","+score2);

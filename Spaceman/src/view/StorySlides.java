@@ -171,9 +171,9 @@ public class StorySlides {
 		dialogueSet1.add("All was peaceful in the world. In our planet \'Meow Meow Nebula\'\n"  
 				+ "\"420 Supreme\", the people lived their lives with pride and joy as usual.\n");
 		dialogueSet1.add("However, that wouldn't last for long. Over the past few years, the 'NRG'"
-				+ "\ncore powering our planet has been dying out. Explorers have gone out to space to"
-				+ "try recover this 'NRG' essence to restore the crystal. Unfortuantely, none of them have"
-				+ "returned to this day.");
+				+ "\ncore powering our planet has been dying out. Explorers have gone out to\nspace to"
+				+ " try recover this 'NRG' essence to restore the crystal. Unfortuantely, none of them have"
+				+ " returned to this day.");
 
 		dialogueSet1.add("Bob here was just your everyday kid who did what other cool and hip youngster do."
 				+ "\nOne day when he was watching episode 69 of \"My Little Horsey\", he heard a loud \nnoise!");
@@ -207,7 +207,7 @@ public class StorySlides {
 		dialogueSet3.add("After successfully fending off those strange creatures, Bob's equipment"
 				+ "\nand ship were damaged.");
 		dialogueSet3.add("Bob: \"Heck! I can't get back home unless I find material to fix my stuff."
-				+ "\nNo wonder why our planet never had another \'NRG\' core. The outer space is way "
+				+ "\nNo wonder why our planet never had another \'NRG\' core. The outer space is \nway "
 				+ "too dangerous with all those creatures out there. It's almost as if they're out to get us.\"");
 		dialogueSet3.add("Mysterious Being: \"Mwuahahah. Right you are!\"");
 		dialogueSet3.add("Bob: \"Huh? Who there?\"");
@@ -247,7 +247,7 @@ public class StorySlides {
 		dialogueBox.setY((SCENE_HEIGHT-dialogueBox.getLayoutBounds().getHeight()));
 		group.getChildren().add(dialogueBox);
 
-		Text dialogue = new Text("Press Enter for next dialogue. \n Backspace for previous dialogue.");
+		Text dialogue = new Text("Press Enter for next dialogue. \nBackspace for previous dialogue.");
 		dialogue.setFont(Font.font(30));
 		dialogue.setFill(Color.WHITE);
 
