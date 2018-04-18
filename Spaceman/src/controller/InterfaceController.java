@@ -11,62 +11,57 @@ public class InterfaceController {
 	
 	public InterfaceController(MainApp instance) {
 		game = instance;
-		
 		startMenu = new GUI(this);
-		
 		lvlCtrl = new LevelController(this);	
 	}
 	
-	public GUI getGUI() {
+	public GUI getGUI() { //do i need
 		return startMenu;
 	}
 	
-	public MainApp getMainApp() {
+	public MainApp getMainApp() { //do i need
 		return game;
 	}
 	
+	//Controls what is generated and displayed based on button pressed
 	public void executeProcess(int option) {
+		//Classic Mode
 		if (option == 0) {
-			System.out.println("420");
 			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
-			
+		
+		//Story Mode
 		} else if (option == 1) {
-			System.out.println("69");
 			lvlCtrl.setMode(option);
 			lvlCtrl.playStory(lvlCtrl.levelWins);
-			//lvlCtrl.setLevel(option);
-			
+		
+		//Multiplayer Mode
 		} else if (option == 2) {
-			System.out.println("42069");
 			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
-			
+		
+		//Endless Mode
 		} else if (option == 3) {
-			System.out.println("1269");
 			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
-			
+		
+		//Long map mode
 		} else if (option == 4) {
-			System.out.println("nice");
 			lvlCtrl.setMode(option);
 			lvlCtrl.setLevel(option);
-			
+		
+		//Leader boards
 		} else if (option == 5) {
 			System.out.println("xd");
 			lvlCtrl.setMode(option);
 			
+		
 			
+		//Setup flags for multiplayer mode
 		} else if (option == 69) {
-			System.out.println("sets pink to player");
-			//lvlCtrl.addGhost(0);
-//			lvlCtrl.setGhostPlayer(0);
 			lvlCtrl.ghostPlayerPink = true;
 			
 		} else if (option == 420) {
-			System.out.println("sets red to player");
-			//lvlCtrl.addGhost(1);
-//			lvlCtrl.setGhostPlayer(1);
 			lvlCtrl.ghostPlayerRed = true;
 		}
 	}
@@ -75,6 +70,9 @@ public class InterfaceController {
 		game.changeScene(startMenu.returnScene());
 	}
 	
+	/*	This function will change the scene of the stage to the scene passed in by
+	 * calling a function from MainApp
+	Inputs:	Scene scene: the scene you want the stage to display	*/
 	public void changeScene(Scene scene) {
 		game.changeScene(scene);
 	}

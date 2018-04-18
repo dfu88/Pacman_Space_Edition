@@ -67,6 +67,10 @@ public class LevelVisuals {
 	
 	private AudioClip death;
 	private AudioClip gOver;
+	private AudioClip stopWatch;
+	private AudioClip lifeUp;
+	private AudioClip shield;
+	private AudioClip genericPU;
 	
 	private Text score;
 	private Text time;
@@ -969,5 +973,26 @@ public class LevelVisuals {
 	public void playDeathSound() {
 		death.play();
 		//while (death.isPlaying()); //maybe reomoves?
+	}
+	
+	public void resetAliens() {
+		red.resetAlien();
+		pink.resetAlien();
+		blue.resetAlien();
+		orange.resetAlien();
+	}
+	
+	public void startAliens() {
+		red.start();
+		pink.start();
+		blue.start();
+		orange.start();
+	}
+	
+	public void stopAliens() {
+		red.stop();
+		pink.stop();
+		blue.stop();
+		orange.stop();
 	}
 }
