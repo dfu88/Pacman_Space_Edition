@@ -45,9 +45,9 @@ public class Alien extends CharacterAnimate{
 	};
 	private final Image[] FLASHING_IMAGES = new Image[] {
 			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
-			new Image(getClass().getResourceAsStream("res/left1.png")),
+			new Image(getClass().getResourceAsStream("res/flashalien2.png")),
 			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
-			new Image(getClass().getResourceAsStream("res/left1.png"))
+			new Image(getClass().getResourceAsStream("res/flashalien2.png"))
 	};
 	private final Image[] RED_IMAGES = new Image[] {
 			new Image(getClass().getResourceAsStream("res/redalien1.png")),
