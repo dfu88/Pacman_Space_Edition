@@ -25,6 +25,10 @@ public class ShortestPath {
 		return -1;
 	}
 
+	/*
+	 * computeShortest function returns the distance of the shortest path
+	 * from source node to target node
+	 */
 	public int computeShortest(int sourceX, int sourceY, int targetX, int targetY){
 		// Intialise set of nodes
 		Vector<Vector<Integer>> nodes = new Vector<Vector<Integer>>();
@@ -137,6 +141,10 @@ public class ShortestPath {
 		return mIndex;
 	}
 
+	/*
+	 * generateNeighbours function returns a vector of all the valid neighbouring nodes
+	 * of the current node
+	 */
 	private Vector<Vector<Integer>> generateNeighbours(Vector<Vector<Integer>> nodes, Vector<Integer> node){
 		int nodeX = node.get(0);
 		int nodeY = node.get(1);
