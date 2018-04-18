@@ -1,10 +1,12 @@
 package view;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -288,6 +290,123 @@ public class Leaderboard {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public void writeData(String name, int score, int gameMode) {
+		readData();
+		String player1 = "", player2 = "", player3 = "", player4 = "", player5 = "";
+		int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0;
+		String playerName = name;
+		int playerScore = score;
+		File file = new File(getClass().getResource("res/highscoreClassic.txt").getFile());;
+		
+		if (gameMode == 0) {
+			player1 = dataClassic.get(0).getName();
+			score1 = dataClassic.get(0).getScore();
+			player2 = dataClassic.get(1).getName();
+			score2 = dataClassic.get(1).getScore();
+			player3 = dataClassic.get(2).getName();
+			score3 = dataClassic.get(2).getScore();
+			player4 = dataClassic.get(3).getName();
+			score4 = dataClassic.get(3).getScore();
+			player5 = dataClassic.get(4).getName();
+			score5 = dataClassic.get(4).getScore();
+			//file = new File(getClass().getResource("res/highscoreClassic.txt").getFile());
+		} else if (gameMode == 3) {
+			player1 = dataEndless.get(0).getName();
+			score1 = dataEndless.get(0).getScore();
+			player2 = dataEndless.get(1).getName();
+			score2 = dataEndless.get(1).getScore();
+			player3 = dataEndless.get(2).getName();
+			score3 = dataEndless.get(2).getScore();
+			player4 = dataEndless.get(3).getName();
+			score4 = dataEndless.get(3).getScore();
+			player5 = dataEndless.get(4).getName();
+			score5 = dataEndless.get(4).getScore();
+			file = new File(getClass().getResource("res/highscoreEndless.txt").getFile());
+		} else if (gameMode == 4) {
+			player1 = dataMulti.get(0).getName();
+			score1 = dataMulti.get(0).getScore();
+			player2 = dataMulti.get(1).getName();
+			score2 = dataMulti.get(1).getScore();
+			player3 = dataMulti.get(2).getName();
+			score3 = dataMulti.get(2).getScore();
+			player4 = dataMulti.get(3).getName();
+			score4 = dataMulti.get(3).getScore();
+			player5 = dataMulti.get(4).getName();
+			score5 = dataMulti.get(4).getScore();
+			file = new File(getClass().getResource("res/highscoreMulti.txt").getFile());
+		}
+		
+		if (playerScore > score1) {
+			//Store score
+			int copyScore = score1;
+			score1 = playerScore;
+			playerScore = copyScore;
+			//Store name
+			String copyName = player1;
+			player1 = playerName;
+			playerName = copyName;
+		} 
+		if (playerScore > score2) {
+			//Store score
+			int copyScore = score2;
+			score2 = playerScore;
+			playerScore = copyScore;
+			//Store name
+			String copyName = player2;
+			player2 = playerName;
+			playerName = copyName;
+		}
+		if (playerScore > score3) {
+			//Store score
+			int copyScore = score3;
+			score3 = playerScore;
+			playerScore = copyScore;
+			//Store name
+			String copyName = player3;
+			player3 = playerName;
+			playerName = copyName;
+		} 
+		if (playerScore > score4) {
+			//Store score
+			int copyScore = score4;
+			score4 = playerScore;
+			playerScore = copyScore;
+			//Store name
+			String copyName = player4;
+			player4 = playerName;
+			playerName = copyName;
+		} 
+		if (playerScore > score5) {
+			//Store score
+			int copyScore = score5;
+			score5 = playerScore;
+			playerScore = copyScore;
+			//Store name
+			String copyName = player5;
+			player5 = playerName;
+			playerName = copyName;
+		}
+		
+		
+		try {
+			BufferedWriter output = new BufferedWriter(new FileWriter(file));
+			output.write(player1+","+score1);
+			output.newLine();
+			output.write(player2+","+score2);
+			output.newLine();
+			output.write(player3+","+score3);
+			output.newLine();
+			output.write(player4+","+score4);
+			output.newLine();
+			output.write(player5+","+score5);
+			output.close();
+		} catch (IOException e){
+			e.printStackTrace();
+		}
+		
 	}
 
 	private Group addExitPopUp() {

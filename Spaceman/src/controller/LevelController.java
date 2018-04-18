@@ -25,7 +25,7 @@ public class LevelController {
 	private LevelVisuals currentView;
 	private StorySlides scenarioDisp;
 
-	private Leaderboard leaderboard;
+	public Leaderboard leaderboard;
 
 	private Level levelModel;
 	private int currentMode;
@@ -59,7 +59,9 @@ public class LevelController {
 		scenarioDisp = new StorySlides(this);
 
 		leaderboard = new Leaderboard(this);
-
+		leaderboard.generateLeaderboard();
+//		levelModel = new Level();
+		
 		modelList = new ArrayList<Level>();
 		Level primaryModel = new Level();
 		modelList.add(primaryModel);
@@ -288,12 +290,19 @@ public class LevelController {
 	}
 
 	private boolean ifSpacemanMetAlien (Alien alien) {
-		int alienX = alien.getX();
-		int spacemanX = currentView.spaceman.getX();
-		int alienY = alien.getY();
-		int spacemanY = currentView.spaceman.getY();
-
-		if (alienX == spacemanX && alienY == spacemanY) {
+		double alienX = alien.getGraphicalX();
+		double spacemanX = currentView.spaceman.getGraphicalX();
+		double alienY = alien.getGraphicalY();
+		double spacemanY = currentView.spaceman.getGraphicalY();
+		
+		double dx = Math.abs(spacemanX-alienX);
+		double dy = Math.abs(spacemanY-alienY);
+		
+		if (dx >= 20 || dy >= 20) {
+			return false;
+		}
+		
+		if ((dx*dx + dy*dy) <= 20*20) {
 			return true;
 		} else {
 			return false;
@@ -344,11 +353,11 @@ public class LevelController {
 
 						currentView.spaceman.resetSpaceman();
 						currentView.resetAliens();
-
-						resetToStartState();
-						levelWins =  0;
-						setLevel(getMode());
-						currentView.gameOverPopUp.setVisible(true);
+						currentView.gameFinishedPopUp.setVisible(true);
+//						resetToStartState();
+//						levelWins =  0;
+//						setLevel(getMode());
+//						currentView.gameOverPopUp.setVisible(true);
 
 					}
 				}

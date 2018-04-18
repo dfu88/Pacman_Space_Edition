@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.GaussianBlur;
 import javafx.scene.image.Image;
@@ -53,6 +54,7 @@ public class LevelVisuals {
 	private Group exitPopUp;
 	private Group gameView;
 	public Group countDownView;
+	public Group gameFinishedPopUp;
 	public Group gameOverPopUp;
 	private Group timeComponent;
 	
@@ -76,6 +78,7 @@ public class LevelVisuals {
 	private Text time;
 	private Text lives;
 	private Text message;
+	private TextField name;
 	
 	public Spaceman spaceman;
 	
@@ -180,10 +183,13 @@ public class LevelVisuals {
 			gameView.setEffect(null);
 		}
 		
-		
 		gameOverPopUp = addGameOverPopUp();
 		gameOverPopUp.setVisible(false);
 		root.getChildren().add(gameOverPopUp);
+		
+		gameFinishedPopUp = addGameFinishedPopUp();
+		gameFinishedPopUp.setVisible(false);
+		root.getChildren().add(gameFinishedPopUp);
 		
 		pauseMenu = addPauseMenu();
 		pauseMenu.setVisible(false);
@@ -410,6 +416,39 @@ public class LevelVisuals {
 		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
 		label.setY(frame.getY()+frame.getLayoutBounds().getHeight()-label.getLayoutBounds().getHeight());
 		group.getChildren().add(label);
+
+		return group;
+	}
+	
+	private Group addGameFinishedPopUp() {
+		Group group = new Group();
+
+		Rectangle frame = new Rectangle(SCENE_WIDTH/2.5,SCENE_HEIGHT/2.5);
+		frame.setFill(Color.BLACK);
+		frame.setStroke(Color.WHITE);
+		frame.setStrokeWidth(2.0);
+		frame.setArcHeight(15);
+		frame.setArcWidth(15);
+		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
+		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
+		group.getChildren().add(frame);
+		
+		Text label = new Text("Enter Your Name");
+		label.setFont(Font.font(48));
+		label.setFill(Color.WHITE);
+		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+		label.setY(frame.getY()+100);
+		group.getChildren().add(label);
+		
+		name = new TextField();
+		name.setPromptText("Input your name, then press 'ENTER'");
+		name.setPrefHeight(75);
+		name.setLayoutX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
+		name.setLayoutY(frame.getY()+150);
+		name.setFont(Font.font("Arial", FontWeight.NORMAL,36));
+		name.setPrefWidth(SCENE_WIDTH/2.5 - 200);
+		group.getChildren().add(name);
+		
 
 		return group;
 	}
@@ -803,6 +842,14 @@ public class LevelVisuals {
 //					exitScreenOn = !exitScreenOn;
 //					currentView.updateExitScreen(exitScreenOn);
 					exitPopUp.setVisible(false);
+				} else if (gameFinishedPopUp.isVisible()) {
+					String playerName = name.getText();
+					controller.leaderboard.writeData(playerName, controller.getLevel().getScore(), controller.getMode());
+					gameFinishedPopUp.setVisible(false);
+					controller.resetToStartState();
+					controller.levelWins =  0;
+					controller.setLevel(controller.getMode());
+					gameOverPopUp.setVisible(true);
 				} else if (gameOverPopUp.isVisible()) {
 					gameOverPopUp.setVisible(false);
 					//controller.timeline.play();
