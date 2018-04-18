@@ -97,8 +97,8 @@ public class Alien extends CharacterAnimate{
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
 		// Intialise Alien current direction
-		this.dx = dx;
-		this.dy = dy;
+		this.dx = 0;
+		this.dy = -1;
 
 		//Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
 		if (alienType == 0) {
@@ -419,8 +419,8 @@ public class Alien extends CharacterAnimate{
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
 		// Intialise Alien current direction
-		this.dx = -1;
-		this.dy = 0;
+		this.dx = 0;
+		this.dy = -1;
 
 		//Image startImage = new Image(getClass().getResourceAsStream("res/left2.png"));
 		if (alienType == 0) {
@@ -455,6 +455,9 @@ public class Alien extends CharacterAnimate{
 	}
 
 	public void moveOneStep() {
+		if (!isRunning()) {
+			return;
+		}
 		
 		if (imageIndex == 0 && this.isRunning()) {
 			if (isPlayer && status != TRAPPED) {

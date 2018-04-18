@@ -919,36 +919,36 @@ public class LevelVisuals {
 				//.updateExitScreen(exitScreenOn);
 			} 
 			if (input.getCode() == KeyCode.W) {
-				if (controller.ghostPlayerPink) {
+				if (controller.ghostPlayerPink && pink.isRunning()) {
 					pink.setKeyInput(1);
 				}
 			} else if (input.getCode() == KeyCode.A) {
-				if (controller.ghostPlayerPink) {
+				if (controller.ghostPlayerPink && pink.isRunning()) {
 					pink.setKeyInput(0);
 				}
 			} else if (input.getCode() == KeyCode.S) {
-				if (controller.ghostPlayerPink) {
+				if (controller.ghostPlayerPink && pink.isRunning()) {
 					pink.setKeyInput(3);
 				}
 			} else if (input.getCode() == KeyCode.D) {
-				if (controller.ghostPlayerPink) {
+				if (controller.ghostPlayerPink && pink.isRunning()) {
 					pink.setKeyInput(2);
 				}
 			}
 			if (input.getCode() == KeyCode.I) {
-				if (controller.ghostPlayerRed) {
+				if (controller.ghostPlayerRed && red.isRunning()) {
 					red.setKeyInput(1);
 				}
 			} else if (input.getCode() == KeyCode.J) {
-				if (controller.ghostPlayerRed) {
+				if (controller.ghostPlayerRed && red.isRunning()) {
 					red.setKeyInput(0);
 				}
 			} else if (input.getCode() == KeyCode.K) {
-				if (controller.ghostPlayerRed) {
+				if (controller.ghostPlayerRed && red.isRunning()) {
 					red.setKeyInput(3);
 				}
 			} else if (input.getCode() == KeyCode.L) {
-				if (controller.ghostPlayerRed) {
+				if (controller.ghostPlayerRed && red.isRunning()) {
 					red.setKeyInput(2);
 				}
 			}
