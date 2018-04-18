@@ -73,6 +73,7 @@ public class LevelVisuals {
 	private AudioClip lifeUp;
 	private AudioClip shield;
 	private AudioClip genericPU;
+	private AudioClip consumeAlien;
 	
 	private Text score;
 	private Text time;
@@ -145,7 +146,22 @@ public class LevelVisuals {
 		
 		url = this.getClass().getResource("sound/death.wav");
 		death = new AudioClip(url.toString());
-
+		
+		url = this.getClass().getResource("sound/clock.wav");
+		stopWatch = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/life.wav");
+		lifeUp = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/shield.wav");
+		shield = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/genericpowerup.wav");
+		genericPU = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/killghost.wav");
+		consumeAlien = new AudioClip(url.toString());
+		
 		//Setup Scene for game visuals
 		root = new Group(); 
 		scene = new Scene(root,SCENE_WIDTH,SCENE_HEIGHT);
@@ -268,7 +284,7 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
-		red = new Alien(0,controller,this,alienX,alienY,-1,0,1,controller.ghostPlayerRed);
+		red = new Alien(0,controller,this,alienX,alienY,-1,0,2,controller.ghostPlayerRed);
 		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15,controller.ghostPlayerPink);
 		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35,false);
 		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60,false);
@@ -577,6 +593,7 @@ public class LevelVisuals {
 							//while (win1.isPlaying()); //remove incase of crash?
 							//change level
 							controller.resetToStartState();
+							
 							controller.levelWins++;
 							controller.setLevel(controller.getMode());
 							//increase difficulty here?
@@ -804,6 +821,10 @@ public class LevelVisuals {
 					controller.timeline.stop();
 					//disp gameover screen here
 					playGameOver();
+					spaceman.resetSpaceman();
+					resetAliens();
+					gameFinishedPopUp.setVisible(true);
+					controller.resetWarp();
 //					spaceman.resetSpaceman();
 //					red.resetAlien();
 //					pink.resetAlien();
@@ -1030,5 +1051,25 @@ public class LevelVisuals {
 		pink.stop();
 		blue.stop();
 		orange.stop();
+	}
+
+	public void playStopWatch() {
+		stopWatch.play();
+	}
+	
+	public void playLifeUp() {
+		lifeUp.play();
+	}
+	
+	public void playShieldSound() {
+		shield.play();
+	}
+	
+	public void playGenericPU() {
+		genericPU.play();
+	}
+	
+	public void playKillSound() {
+		consumeAlien.play();
 	}
 }

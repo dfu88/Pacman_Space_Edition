@@ -39,6 +39,7 @@ public class Spaceman extends CharacterAnimate{
 	//public Clip pelletSound;
 	
 	private AudioClip pelletSound;
+	private AudioClip warp;
 	
 	public Spaceman(LevelController levelController, int x, int y) {
 	//public Spaceman(LevelController levelController, int x, int y) {
@@ -101,6 +102,9 @@ public class Spaceman extends CharacterAnimate{
 		
 		URL url = this.getClass().getResource("sound/boop.wav");
 		pelletSound = new AudioClip(url.toString());
+		
+		url = this.getClass().getResource("sound/warp.wav");
+		warp = new AudioClip(url.toString());
 
 	}
 
@@ -218,6 +222,7 @@ public class Spaceman extends CharacterAnimate{
 //				if (x!=0 || x!=20) {
 				if (nextX < 1 && dx == -1 ) {
 					if (levelController.getMode() == 4) {
+						
 						levelController.getCurrentView().stopAllChars();
 						levelController.timeline.stop();
 						levelController.changeMap(-1);
@@ -227,15 +232,18 @@ public class Spaceman extends CharacterAnimate{
 					} else {
 						x = 19;
 					}
+					warp.play();
 				} else if (nextX > 19  && dx == 1 ) {
 					if (levelController.getMode() == 4) {
 						levelController.getCurrentView().stopAllChars();
 						levelController.timeline.stop();
 						levelController.changeMap(1);
+						
 						//return;
 					} else {
 						x = 1;
 					}
+					warp.play();
 				} else {
 					x = x + dx;
 				}
