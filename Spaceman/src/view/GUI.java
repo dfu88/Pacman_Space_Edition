@@ -58,12 +58,7 @@ public class GUI {
 	//Multiplayer Menu Controls
 	private int multiplayerSel=0;
 	private ArrayList<ImageView> multiplayerControls;
-	private ArrayList<ImageView> joinedIndicator;
-	
-	//Not yet implemented //For skins and themes //could be scrapped
-//	private ArrayList<ImageView> playerOptions;
-	
-	
+	private ArrayList<ImageView> joinedIndicator;	
 
 	public GUI (InterfaceController controller) {
 		this.controller = controller;
@@ -351,23 +346,8 @@ public class GUI {
 		return group;
 	}
 	
-	//For selecting player skin, game theme.
-//	private Group addSettings(Rectangle frame) {
-//		Group group = new Group();
-//		
-//		Text label = new Text("Choose a Theme");
-//		label.setFont(Font.font(50));
-//		label.setFill(Color.WHITE);
-//		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
-//		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
-//		group.getChildren().add(label);
-//		
-//		return group;
-//	}
-	
 	public Scene returnScene() {
 		return scene;
 	}
-
 
 }

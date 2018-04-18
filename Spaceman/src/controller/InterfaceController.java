@@ -15,12 +15,8 @@ public class InterfaceController {
 		lvlCtrl = new LevelController(this);	
 	}
 	
-	public GUI getGUI() { //do i need
+	public GUI getGUI() {
 		return startMenu;
-	}
-	
-	public MainApp getMainApp() { //do i need
-		return game;
 	}
 	
 	//Controls what is generated and displayed based on button pressed

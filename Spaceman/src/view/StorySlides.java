@@ -1,14 +1,7 @@
 package view;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 
 import controller.LevelController;
 
@@ -26,10 +19,6 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
-
-//import javafx.event.ActionEvent;
-//import javafx.event.EventHandler;
-
 
 public class StorySlides {
 
@@ -106,7 +95,6 @@ public class StorySlides {
 		bgList.add(bg5);
 		
 		bgView = new ImageView(bg);
-//		bgView.setImage(bg);
 		
 		setUpKeyInput(scene);
 		
@@ -124,15 +112,10 @@ public class StorySlides {
 		root.getChildren().clear();
 
 		
-		//bgView = new ImageView(bgList.get(levelWins));
-//		bgView = new ImageView(bg);
-//		ImageView bgView = new ImageView(bg);
-		//		bg.
-		//		bg.setScaleY(0.7);
+
 		root.getChildren().add(bgView);
 
 		otherCharDisp = addChar();
-//		otherCharDisp.setVisible(false);
 		root.getChildren().add(otherCharDisp);
 		
 		protagDisp = addProtag();
@@ -147,21 +130,10 @@ public class StorySlides {
 		exitPopUp.setVisible(false);
 		root.getChildren().add(exitPopUp);
 
-		
-
-		
-		
-//		otherCharDisp2 = addChar();
-//		otherCharDisp2.setVisible(false);
-//		root.getChildren().add(otherCharDisp2);
-
 		scenario = addScenario();
 		root.getChildren().add(scenario);
 		
 		currentDialogueSet = listOfDialogue.get(levelWins);
-//		System.out.println(controller.levelWins);
-
-
 	}	
 
 
@@ -234,7 +206,6 @@ public class StorySlides {
 	}
 
 	private Group addScenario() {
-		// TODO Auto-generated method stub
 		Group group = new Group();
 
 		Rectangle dialogueBox = new Rectangle(SCENE_WIDTH*0.9,SCENE_HEIGHT/3);
@@ -251,9 +222,8 @@ public class StorySlides {
 		dialogue.setFont(Font.font(30));
 		dialogue.setFill(Color.WHITE);
 
-		//maybe centre instead
 		dialogue.setX(dialogueBox.getX()+20);
-		dialogue.setY(dialogueBox.getY()+50); //??
+		dialogue.setY(dialogueBox.getY()+50);
 		currentDialogue = dialogue;
 		group.getChildren().add(dialogue);
 
@@ -277,7 +247,6 @@ public class StorySlides {
 		ImageView pausedLabel = new ImageView(paused);
 		pausedLabel.setX((SCENE_WIDTH-pausedLabel.getLayoutBounds().getWidth())*0.5);
 		pausedLabel.setY(frame.getY()+pausedLabel.getLayoutBounds().getHeight()*0.25);
-		//resumeButton.setEffect(shadow);
 		group.getChildren().add(pausedLabel);
 
 		Text label = new Text("Press 'P' to Resume the Level");
@@ -292,35 +261,27 @@ public class StorySlides {
 	}
 
 	private Group addProtag() {
-		// TODO Auto-generated method stub
 		Group group = new Group();
 
 		Image protag = new Image(getClass().getResourceAsStream("res/hBeast.png"));
 		ImageView protagView = new ImageView(protag);
 		protagView.setX(50);
 		protagView.setY(SCENE_HEIGHT - 700);
-		//		protagView.setScaleX(-10);
-		//		protagView.setScaleY(10);
-		//resumeButton.setEffect(shadow);
+
 		group.getChildren().add(protagView);
-
-		//include images for facial exp eg.angry happy
-
 
 		return group;
 	}
 
 	private Group addChar() {
-		// TODO Auto-generated method stub
+
 		Group group = new Group();
 		
 		Image hidden = new Image(getClass().getResourceAsStream("res/hiddenChar.png"));
 		ImageView hiddenChar = new ImageView(hidden);
 		hiddenChar.setX(SCENE_WIDTH-hidden.getWidth()-50);
 		hiddenChar.setY(SCENE_HEIGHT - 700);
-		//		protagView.setScaleX(-10);
-		//		protagView.setScaleY(10);
-		//resumeButton.setEffect(shadow);
+
 		hiddenChar.setVisible(false);
 		char2 = hiddenChar;
 		group.getChildren().add(hiddenChar);
@@ -329,15 +290,10 @@ public class StorySlides {
 		ImageView steveView = new ImageView(steve);
 		steveView.setX(SCENE_WIDTH-steve.getWidth()-50);
 		steveView.setY(SCENE_HEIGHT - 700);
-		//		protagView.setScaleX(-10);
-		//		protagView.setScaleY(10);
-		//resumeButton.setEffect(shadow);
 		steveView.setVisible(false);
 		char1 = steveView;
 		group.getChildren().add(steveView);
 		
-		
-
 		return group;
 	}
 
@@ -376,13 +332,6 @@ public class StorySlides {
 			exitOptions.get(i).setY(frame.getY()+frame.getLayoutBounds().getHeight()-no.getHeight()*1.5);
 			group.getChildren().add(exitOptions.get(i));
 		}
-		//		pausedLabel.setX((SCENE_WIDTH-pausedLabel.getLayoutBounds().getWidth())*0.5);
-		//		pausedLabel.setY(frame.getY()+pausedLabel.getLayoutBounds().getHeight()*0.25);
-		//resumeButton.setEffect(shadow);
-		//pauseOptions.add(pausedLabel);
-		//		group.getChildren().add(pausedLabel);
-
-
 
 		return group;
 	}
@@ -452,7 +401,6 @@ public class StorySlides {
 
 			public void handle(KeyEvent input) {
 
-				//temp, trying to get cycle sound to work consistently
 				stopCycleClip();
 
 				if (input.getCode() == KeyCode.LEFT) {
@@ -464,10 +412,7 @@ public class StorySlides {
 						}
 						cycleOptions(controller.exitOption);
 
-					} else {
-						//spaceman.setKeyInput(0);
-
-					}
+					} 
 
 				} else if(input.getCode() == KeyCode.RIGHT) {
 					//When in exit screen controls option selection instead
@@ -477,9 +422,6 @@ public class StorySlides {
 							playCycleSound();
 						}
 						cycleOptions(controller.exitOption);
-
-					} else {
-						//spaceman.setKeyInput(2);
 
 					}
 
@@ -498,13 +440,11 @@ public class StorySlides {
 							otherCharDisp.setEffect(blur);
 						} else if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("steve")) {
 							otherCharDisp.setEffect(null);
-							//otherCharDisp.setVisible(true);
 							char1.setVisible(true);
 							char2.setVisible(false);
 							protagDisp.setEffect(blur);
 						} else if(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("mysteriousbeing")) {
 							otherCharDisp.setEffect(null);
-							//otherCharDisp.setVisible(true);
 							char1.setVisible(false);
 							char2.setVisible(true);
 							protagDisp.setEffect(blur);
@@ -531,31 +471,33 @@ public class StorySlides {
 							controller.resetToStartState();
 							controller.levelWins = 0;
 							bgIndex = 0;
-							//						paused = !paused;
+							dialogueIndex = -1;
+
 						} else {
 							pauseMenu.setEffect(null);
+							
 						}
-						//					exitScreenOn = !exitScreenOn;
-						//					currentView.updateExitScreen(exitScreenOn);
 						exitPopUp.setVisible(false);
+						
 					} else  if (!pauseMenu.isVisible()){
 						if (dialogueIndex < currentDialogueSet.size()-1) {
 							dialogueIndex++;
 							updateDialogue(currentDialogueSet.get(dialogueIndex));
+							
 						} else if (dialogueIndex == currentDialogueSet.size()-1) {
 							currentDialogue.setText("");
-							//go back to game
-							System.out.println("gasdsada");
+
 							dialogueIndex = -1; //reset after you switch scenes
 							if (controller.levelWins != 3) {
 								controller.setLevel(1);
 								controller.setBgView(bgList.get(bgIndex));
+								
 							} else {
 								controller.resetToStartState();
 								controller.levelWins = 0;
 								bgIndex = 0;
 								bgView.setImage(bgList.get(bgIndex));
-//								System.out.println(controller.levelWins);
+
 							}
 						}
 						//Setting focus of characters
@@ -565,21 +507,15 @@ public class StorySlides {
 							otherCharDisp.setEffect(blur);
 						} else if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("steve")) {
 							otherCharDisp.setEffect(null);
-							//otherCharDisp.setVisible(true);
 							char1.setVisible(true);
 							protagDisp.setEffect(blur);
-//							alienLaugh.play();
-//							while (alienLaugh.isPlaying());
 							
 						} else if(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("mysteriousbeing")) {
 							otherCharDisp.setEffect(null);
-							//otherCharDisp.setVisible(true);
 							char2.setVisible(true);
 							protagDisp.setEffect(blur);
 							
 							alienLaugh.play();
-							//while (alienLaugh.isPlaying());
-							
 						}
 						
 						if	(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("flewout"	) 	||
@@ -587,13 +523,13 @@ public class StorySlides {
 							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("distance")) 	||
 							(currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("mwuaha"	))) {
 							bgIndex++;
+							
 						} else if (currentDialogue.getText().replaceAll(" ","").toLowerCase().contains("boooooom")) {
-//							bgIndex++;
 							explosion.play();
-							//while(explosion.isPlaying());
 						}
 						bgView.setImage(bgList.get(bgIndex));
 					}
+					
 				} else if(input.getCode() == KeyCode.P) {
 					playCycleSound();
 					//Toggles pause screen when not in the exit screen
@@ -614,7 +550,6 @@ public class StorySlides {
 					}
 					playCycleSound();
 					exitPopUp.setVisible(!exitPopUp.isVisible());
-					//.updateExitScreen(exitScreenOn);
 				}
 			}
 		});

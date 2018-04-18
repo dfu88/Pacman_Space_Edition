@@ -8,7 +8,6 @@ import view.LevelVisuals;
 import view.StorySlides;
 
 import java.util.ArrayList;
-import java.util.Random;
 import javafx.util.Duration;
 
 import javafx.scene.image.Image;
@@ -60,7 +59,6 @@ public class LevelController {
 
 		leaderboard = new Leaderboard(this);
 		leaderboard.generateLeaderboard();
-//		levelModel = new Level();
 		
 		modelList = new ArrayList<Level>();
 		Level primaryModel = new Level();
@@ -111,17 +109,15 @@ public class LevelController {
 
 					}
 
-					//When time runs out
+				//When time runs out, ends the game.
 				} else {
 					currentView.updateMessage(-1);
 					timeline.stop();
 					currentView.pauseCountdown();
-					//prob stop sounds here
 					currentView.playGameOver();
 					currentView.stopAliens();
-					//currentView.spaceman.stop();
+					currentView.spaceman.stop();
 					currentView.gameOverPopUp.setVisible(true);
-					//gameover screen !!! gplaygOver and showgoPopup and stop chars
 				}
 
 				//For limited duration powerups eg. time stop
@@ -142,23 +138,19 @@ public class LevelController {
 	public void setLevel(int type){
 		levelModel.initLevel(type, levelWins);
 		currentView.generateMap();
+		
 		if (currentMode == 3) {
 			currentView.updateTime(-1);
+		} else if (currentMode == 1) {
+			levelModel.initLevel(type+levelWins+1, levelWins);
+			currentView.generateMap();
 		}
 		
-//		System.out.println(levelList.size());
-		//Setup maps for Long map mode
+		//Setup maps for warp mode
 		if ((type == 4) & (levelList.size() == 1)) {
-//			Random rand = new Random();
-//			int rando = (rand.nextInt(4)+0);
-//			while (rando == 3 ) {
-//				rando = (rand.nextInt(4)+0);
-//			}
-//			System.out.println("lol");
 			LevelVisuals secondMap = new LevelVisuals(this);
 			Level secondModel = new Level();
-//			secondModel.initLevel(rando,levelWins);
-			secondModel.initLevel(2, levelWins);
+			secondModel.initLevel(5, levelWins);
 			levelModel = secondModel;
 			secondMap.generateMap();
 			secondMap.updateMessage(-1);
@@ -167,12 +159,6 @@ public class LevelController {
 
 			LevelVisuals thirdMap = new LevelVisuals(this);
 			Level thirdModel = new Level();
-//			thirdModel.initLevel(3, 0);
-//			rando = (rand.nextInt(4)+0);
-//			while (rando == 3 ) {
-//				rando = (rand.nextInt(4)+0);
-//			}
-//			thirdModel.initLevel(rando,levelWins);
 			thirdModel.initLevel(3,levelWins);
 			levelModel = thirdModel;
 			modelList.add(thirdModel);
@@ -184,18 +170,24 @@ public class LevelController {
 			levelModel = modelList.get(levelListIndex);
 		}
 		interfaceCtrl.changeScene(currentView.returnScene()); 
-//		System.out.println(levelList.size());
 	}
-
+	
+	
+	/*This function is for warp mode where the scene will change when the player walks through a tunnel.
+	 * Input: direction, the direction the player is moving (+ve for right, -ve for left)
+	 */
 	public void changeMap(int direction) {
-
+		
+		//When the player moves through the left tunnel
 		if (direction < 0) {
 			if (levelListIndex == 0) {
 				levelListIndex = 2;
 			} else {
 				levelListIndex--;
 			}
-
+			
+			
+		//When the player moves through the right tunnel
 		} else if (direction > 0) {
 			if (levelListIndex == 2) {
 				levelListIndex = 0;
@@ -204,10 +196,9 @@ public class LevelController {
 			}
 
 		}
-		currentView.spaceman.setKeyInput(direction); //only way it works for some reason
-		//works unless you enter tunnel without pressing anything
-		//which will cause it to move up
-
+		currentView.spaceman.setKeyInput(direction); 
+		
+		//Retains parameters from previous map
 		int prevLives = levelModel.getLives();
 		int prevScore = levelModel.getScore();
 		boolean prevShieldStat = currentView.spaceman.shieldStatus;
@@ -252,13 +243,13 @@ public class LevelController {
 				currentView.updateScore(levelModel.getScore());
 			}
 
-			//Attempts to hide the powerup if valod
+			//Attempts to hide the powerup if valid
 		} else if (checkedTile == 10 || checkedTile == 11 || checkedTile ==12 || checkedTile ==13|| checkedTile ==14) {
 			if (currentView.hideCorrespondingPowerUp(posX+dx, posY + dy)) {
 
 				//Logic for consuming star
 				if (checkedTile == 10) {
-					currentView.playGenericPU();//temp change to another sound
+					currentView.playGenericPU();
 					currentView.red.changeToFrightMode();
 					currentView.pink.changeToFrightMode();
 					currentView.blue.changeToFrightMode();
@@ -270,7 +261,7 @@ public class LevelController {
 					//Logic for consuming a heart
 				} else if (checkedTile == 11) {
 					levelModel.addLives(1);
-					currentView.playLifeUp(); //temp change to somehting else
+					currentView.playLifeUp(); 
 					currentView.updateLives(levelModel.lives);
 
 					//Logic for consuming cherry
@@ -288,7 +279,7 @@ public class LevelController {
 				}  else if (checkedTile == 14) {
 					currentView.playStopWatch();
 					currentView.stopAliens();
-					powerUpTimeOut = timeElapsed + 5; //consider seperating powerUptimeout
+					powerUpTimeOut = timeElapsed + 5;
 				}
 			}
 		}
@@ -398,7 +389,8 @@ public class LevelController {
 	public void respawnCollectables() {
 		currentView.respawnPellet();
 	}
-
+	
+	//Resets the level to start state
 	public void resetToStartState() {
 		startTimer = 3;
 		exitOption = 0;
@@ -443,6 +435,7 @@ public class LevelController {
 		return levelModel;
 	}
 	
+	//Removes warp maps so they can be re generated
 	public void resetWarp() {
 		currentView = levelList.get(0);
 		if (currentMode == 4) {

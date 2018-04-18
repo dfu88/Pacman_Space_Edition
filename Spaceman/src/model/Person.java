@@ -21,7 +21,6 @@ public class Person {
 		this.name = name;
 	}
 	
-	
 	public void setScore(String score) {
 		this.score = Integer.parseInt(score);
 	}

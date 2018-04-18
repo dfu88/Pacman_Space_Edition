@@ -2,21 +2,12 @@ package model;
 
 import java.util.ArrayList;
 
-import view.Spaceman;
-
-
-
 public class Level {
-	//make these private maybe?
 	public int lives;
 	public int timeLimit;
 	public int score;
-	
-	private int pelletsRemaining;
 
 	private Map currentMap;
-	//public Spaceman spaceman;
-
 	private ArrayList <Map> mapList;
 
 	
@@ -28,7 +19,8 @@ public class Level {
 		return currentMap;
 	}
 	
-	public void makeMaps( ) {
+	//Makes the list of maps the controller can select from
+	public void makeMaps() {
 		mapList.clear();
 		
 		Map classic = new Map();
@@ -36,7 +28,7 @@ public class Level {
 		mapList.add(classic);
 		
 		Map testMap = new Map();
-		testMap.initMap(4);
+		testMap.initMap(2);
 		mapList.add(testMap);
 		
 		Map testMap2 = new Map();
@@ -44,14 +36,22 @@ public class Level {
 		mapList.add(testMap2);
 		
 		Map testMap3 = new Map();
-		testMap3.initMap(2);
+		testMap3.initMap(3);
 		mapList.add(testMap3);
 		
 		Map testMap4 = new Map();
-		testMap4.initMap(1);
+		testMap4.initMap(6);
 		mapList.add(testMap4);
+		
+		Map testMap5 = new Map();
+		testMap5.initMap(5);
+		mapList.add(testMap5);
 	}
-
+	
+	/* This function initialises a level based on the inputs..
+	 * Input: mode, the integer representing the current mode being played
+	 * 		  levelWins, how many wins from the current set of lives
+	 */
 	public void initLevel(int mode, int levelWins) {
 		if (levelWins == 0) {
 			score = 0;
@@ -68,18 +68,11 @@ public class Level {
 		
 		makeMaps();
 		currentMap = mapList.get(mode);
-		//spaceman = new Spaceman(10, 15); //SHOULDNT BE HERE, SPACEMAN IS A CLASS THAT RELATES TO VIEW/GRAPHICS
-		//command to generate visuals for map goes here
 	}
 	
 	public int getTimeLimit() {
 		return timeLimit;
 	}
-//
-//	public void setMap(int type) {
-//		
-//		initLevel());
-//	}
 	
 	public void addPoints(int pointsToAdd) {
 		score += pointsToAdd;
@@ -98,18 +91,16 @@ public class Level {
 	}
 
 	public int getLives() {
-		// TODO Auto-generated method stub
 		return lives;
 	}
 
 	public void setScore(int newScore) {
-		// TODO Auto-generated method stub
 		score = newScore;
 		
 	}
 
 	public void setLives(int newLives) {
-		lives = newLives;// TODO Auto-generated method stub
+		lives = newLives;
 		
 	}
 }

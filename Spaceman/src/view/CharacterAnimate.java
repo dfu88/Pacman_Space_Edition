@@ -34,7 +34,7 @@ public abstract class CharacterAnimate extends Parent{
 	protected int imageIndex;
 	protected Image currentImage;
 
-	// character position in the gtid
+	// character position in the grid
 	protected int x;
 	protected int y;
 

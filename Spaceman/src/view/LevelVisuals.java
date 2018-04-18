@@ -28,20 +28,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.*;
 import javafx.scene.text.*;
 
-//import javafx.event.ActionEvent;
-//import javafx.event.EventHandler;
-
 
 public class LevelVisuals {
 
 	private double SCENE_WIDTH = 1440;
 	private double SCENE_HEIGHT = 900;
 
-	//NOTE MAKE CONST FOR NOW UNLESS TILE SIZE CHANGES BASED ON MAPARRAY SIZE
 	double tileWidth = 40;
 	double tileHeight = 40;
 
-	//NOTE: CHANGE MAGIC NUMBER (21) TO var or constant
 	double mapOffsetY = (SCENE_HEIGHT-tileHeight*21)*0.5; //(WindowH - MapH)/2 (centers it) = 30
 	double mapOffsetX = (SCENE_WIDTH - tileWidth*21)*0.5; //WIndowW - MapW)/2 = 300
 
@@ -114,7 +109,6 @@ public class LevelVisuals {
 		
 		
 		powerUpImgs = setUpPowerImages();
-//		System.out.print(powerUpImgs.size());
 		
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
@@ -168,10 +162,10 @@ public class LevelVisuals {
 		scene.setFill(Color.LIGHTBLUE);
 
 		setUpKeyInput(scene);
-		//		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-		//		root.setBackground(new Background(bg));
 	}
-
+	
+	/*This functions refreshes the level display for a new level
+	 */
 	public void generateMap() {
 		pelletsRendered.clear();
 		powerUpsRendered.clear();
@@ -182,25 +176,14 @@ public class LevelVisuals {
 		
 		Image bg = new Image(getClass().getResourceAsStream("bg/earthsurface.jpeg"));
 		bgView = new ImageView(bg);
-//		bg.
-//		bg.setScaleY(0.7);
 		root.getChildren().add(bgView);
-
+		
 		gameView = addGameComponents();
 		gameView.setEffect(blur);
 		root.getChildren().add(gameView);
 		
-		
-//		gameView.setEffect(blur);
 		countDownView = addCountDown();
 		root.getChildren().add(countDownView);
-		//controller.getMode() == 4 && 
-//		if (controller.levelList.get(0) != this) {
-//			countDownView.setVisible(false);
-//			gameView.setEffect(null);
-//		}
-		
-//		if (controller)
 		
 		gameOverPopUp = addGameOverPopUp();
 		gameOverPopUp.setVisible(false);
@@ -233,14 +216,13 @@ public class LevelVisuals {
 				//Walls
 				if (currentElement == 1) {
 					Rectangle wall = new Rectangle(mapOffsetX+tileWidth*col, mapOffsetY+tileHeight*row, tileWidth, tileHeight);
-					wall.setFill(Color.LIGHTGREY); //fill
-					wall.setStroke(Color.LIGHTGREY);//outline
+					wall.setFill(Color.LIGHTGREY); 
+					wall.setStroke(Color.LIGHTGREY);
 					group.getChildren().add(wall);	
 				} 
 				//Pellets
 				else if (currentElement == 2) {
 					Pellet pellet = new Pellet(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.125);
-					//we can have a class 'Theme' to have a combination of preset colours to use
 					pellet.returnPellet().setFill(Color.PEACHPUFF); 
 					group.getChildren().add(pellet.returnPellet());
 					pelletsRendered.add(pellet);
@@ -248,13 +230,10 @@ public class LevelVisuals {
 				//Magic Pellet	
 				else if ((currentElement == 10) || (currentElement == 11) || (currentElement == 12)||currentElement == 13||currentElement == 14) {
 					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col), mapOffsetY+tileHeight*(row), powerUpImgs.get(currentElement-10) );
-//					PowerUp powerUp = new PowerUp(mapOffsetX+tileWidth*(col+0.5), mapOffsetY+tileHeight*(0.5+row), tileWidth*0.325);
-					//we can have a class 'Theme' to have a combination of preset colours to use
-//					powerUp.returnPowerUp().setFill(Color.YELLOW); 
 					group.getChildren().add(powerUp.returnPowerUp());
-//					group.getChildren().add(powerUp.returnPowerUp());
 					powerUpsRendered.add(powerUp);
 				}
+				
 				//Tunnel Wall x position
 				else if (currentElement == 5) {
 					if (col < 2) {
@@ -283,7 +262,6 @@ public class LevelVisuals {
 			}
 		}
 		spaceman = new Spaceman(controller, startX, startY);
-		//spaceman = new Spaceman(controller, startX, startY);
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
@@ -293,20 +271,6 @@ public class LevelVisuals {
 		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60,false);
 		aliens = new Alien[] {red,pink,blue,orange};
 		group.getChildren().addAll(aliens);
-		
-		//red.start();
-
-		//Add tunnel wall cover after Spaceman added to scene - CHANGE MAGIC NUMBERS
-//		Rectangle tunnelWallLeft = new Rectangle(mapOffsetX+tileWidth*tunnelXLeft, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-//		tunnelWallLeft.setFill(Color.LIGHTBLUE); //fill
-//		tunnelWallLeft.setStroke(Color.LIGHTBLUE);//outline
-//		group.getChildren().add(tunnelWallLeft);
-//		Rectangle tunnelWallRight = new Rectangle(mapOffsetX+tileWidth*tunnelXRight, mapOffsetY+tileHeight*0, tileWidth, tileHeight*20);
-//		tunnelWallRight.setFill(Color.LIGHTBLUE); //fill
-//		tunnelWallRight.setStroke(Color.LIGHTBLUE);//outline
-//		group.getChildren().add(tunnelWallRight);
-
-
 
 		//Add parameter displays
 		Text livesLabel= new Text("Lives:");
@@ -362,8 +326,6 @@ public class LevelVisuals {
 		frame.setFill(Color.BLACK);
 		frame.setStroke(Color.WHITE);
 		frame.setStrokeWidth(2.0);
-		//		frame.setArcHeight(15);
-		//		frame.setArcWidth(15);
 		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
 		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
 		group.getChildren().add(frame);
@@ -396,7 +358,6 @@ public class LevelVisuals {
 		ImageView pausedLabel = new ImageView(paused);
 		pausedLabel.setX((SCENE_WIDTH-pausedLabel.getLayoutBounds().getWidth())*0.5);
 		pausedLabel.setY(frame.getY()+pausedLabel.getLayoutBounds().getHeight()*0.25);
-		//resumeButton.setEffect(shadow);
 		group.getChildren().add(pausedLabel);
 
 		Text label = new Text("Press 'P' to Resume the Level");
@@ -426,7 +387,6 @@ public class LevelVisuals {
 		ImageView gameOverLabel = new ImageView(gameOver);
 		gameOverLabel.setX((SCENE_WIDTH-gameOverLabel.getLayoutBounds().getWidth())*0.5);
 		gameOverLabel.setY(frame.getY()+gameOverLabel.getLayoutBounds().getHeight()*0.25);
-		//resumeButton.setEffect(shadow);
 		group.getChildren().add(gameOverLabel);
 
 		Text label = new Text("Press 'Enter' To Play Again");
@@ -507,62 +467,18 @@ public class LevelVisuals {
 			exitOptions.get(i).setY(frame.getY()+frame.getLayoutBounds().getHeight()-no.getHeight()*1.5);
 			group.getChildren().add(exitOptions.get(i));
 		}
-//		pausedLabel.setX((SCENE_WIDTH-pausedLabel.getLayoutBounds().getWidth())*0.5);
-//		pausedLabel.setY(frame.getY()+pausedLabel.getLayoutBounds().getHeight()*0.25);
-		//resumeButton.setEffect(shadow);
-		//pauseOptions.add(pausedLabel);
-//		group.getChildren().add(pausedLabel);
-
-		
 
 		return group;
-	}
-	
-//	private Group addPauseMenu() {
-//		Group group = new Group();
-//
-//		Rectangle frame = new Rectangle(700,400);
-//		frame.setFill(Color.BLACK);
-//		frame.setStroke(Color.WHITE);
-//		frame.setStrokeWidth(2.0);
-//		frame.setArcHeight(15);
-//		frame.setArcWidth(15);
-//		frame.setX((SCENE_WIDTH-frame.getLayoutBounds().getWidth())*0.5);
-//		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
-//		group.getChildren().add(frame);
-//
-//
-//		Text label = new Text("Paused");
-//		label.setFont(Font.font(50));
-//		label.setFill(Color.WHITE);
-//		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
-//		label.setY(frame.getY()+label.getLayoutBounds().getHeight()+10);
-//		group.getChildren().add(label);
-//
-//		Image resume = new Image(getClass().getResourceAsStream("misc/resume.png"));
-//		ImageView resumeButton = new ImageView(resume);
-//		resumeButton.setX(frame.getX()+100);
-//		resumeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
-//		resumeButton.setEffect(shadow);
-//		pauseOptions.add(resumeButton);
-//
-//		Image close = new Image(getClass().getResourceAsStream("misc/close2.png"));
-//		ImageView closeButton = new ImageView(close);
-//		closeButton.setX(frame.getX()+frame.getLayoutBounds().getWidth()-closeButton.getLayoutBounds().getWidth()-100);
-//		closeButton.setY(frame.getY()+frame.getLayoutBounds().getHeight()-250);
-//		pauseOptions.add(closeButton);
-//
-//		group.getChildren().add(closeButton);
-//		group.getChildren().add(resumeButton);
-//
-//		return group;
-//	}
-	
+	}	
 
 	public Scene returnScene() {
 		return scene;
 	}
 
+	/*This function deals with the logic of the pellets.
+	 * Inputs: charX, the X co-ordinate of the spaceman on the array
+	 * 		   charY, the Y co-ordinate of the spaceman on the array
+	 */
 	public boolean hideCorrespondingPellet(int charX, int charY) {
 		for (int index = 0; index < pelletsRendered.size(); index++) {
 			//Hides corresponding pellet matching destination of spaceman
@@ -574,45 +490,34 @@ public class LevelVisuals {
 
 			if ((currentPellet.getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
 				if ((currentPellet.getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
-
+					
+					//when the pellet is valid
 					if (currentPellet.returnPellet().isVisible()) {
 						pelletsRendered.get(index).returnPellet().setVisible(false);
 						spaceman.playPelletSound();
 						pelletsCollected++;
 						
-						
+						//Endless mode logic
 						if (controller.getMode() == 3) {
-							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+10);
+							pelletsRendered.get(index).setRespawnTime(controller.getTimeElapsed()+15);
 							despawnIndex.add(index);
-							
+						
+						//Collecting all pellets
 						} else if (pelletsCollected == pelletsRendered.size()) {
-							//end game, next level here
 							stopAllChars();
 							controller.timeline.stop();
-							//disp screen
-							//play soud clip
 							win1.play();
-							//do nothing while sound clip is playing
-							//while (win1.isPlaying()); //remove incase of crash?
 							//change level
 							controller.resetToStartState();
 							
 							controller.levelWins++;
 							controller.setLevel(controller.getMode());
-							//increase difficulty here?
 							
-							
-							
-							//testing scenes
 							if (controller.getMode() == 1) {
 								controller.playStory(controller.levelWins);
 							}
 							
 						}
-						
-						//Endless mode: set respawn
-						
-
 						return true;
 					}
 				}
@@ -623,23 +528,12 @@ public class LevelVisuals {
 		return false;
 	}
 
-	public void respawnPellet() {
-
-//		for (int i = 0; i < despawnIndex.size(); i++) {
-//			//Respawn pellets at set time
-//			if (pelletsRendered.get(despawnIndex.get(i)).getRespawnTime() <= controller.getTimeElapsed()) {
-//				pelletsRendered.get(despawnIndex.get(i)).returnPellet().setVisible(true);
-//				despawnIndex.remove(i);
-//				//break;
-//				return;
-//			} 
-//		}
-		
+	//Respawns the pellet when desired time is reached
+	public void respawnPellet() {	
 		if (!despawnIndex.isEmpty()) {
 			if (pelletsRendered.get(despawnIndex.get(0)).getRespawnTime() <= controller.getTimeElapsed()) {
 				pelletsRendered.get(despawnIndex.get(0)).returnPellet().setVisible(true);
 				despawnIndex.remove(0);
-				//break;
 				return;
 			} 
 		}
@@ -649,8 +543,6 @@ public class LevelVisuals {
 	public boolean hideCorrespondingPowerUp(int charX, int charY) {
 		for (int index = 0; index < powerUpsRendered.size(); index++) {
 			//Hides corresponding power up matching destination of spaceman
-//			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth -0.5 == charX) {
-//				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight -0.5 == charY) {
 			if ((powerUpsRendered.get(index).getGraphicalX() - mapOffsetX)/tileWidth  == charX) {
 				if ((powerUpsRendered.get(index).getGraphicalY() - mapOffsetY)/tileHeight  == charY) {		
 					if (powerUpsRendered.get(index).returnPowerUp().isVisible()) {
@@ -673,6 +565,9 @@ public class LevelVisuals {
 		this.score.setText(Integer.toString(controller.getLevel().getScore()));
 	}
 
+	/*This function pdates the text representing time. If invalid hides instead.
+	 * Inputs: time, a integer representing time in seconds, 
+	 */
 	public void updateTime(int time) {
 		if (time <= -1) {
 			timeComponent.setVisible(false);
@@ -681,7 +576,10 @@ public class LevelVisuals {
 		}
 	}
 
-	//Controls countDown display
+	/* This function updates the countdown message when the game is started.
+	 * Displays 3,2,1 and Start! after initial message with 1 second delay inbetween
+	 * Inputs: value, a integer representing what to display
+	 */
 	public void updateMessage(int value) {
 		gameView.setEffect(null);
 		if (value>0) {
@@ -693,11 +591,11 @@ public class LevelVisuals {
 		} else {
 			message.setText("Press 'Enter' to Start");
 			countDownView.setVisible(false);
-			//countdown.setFramePosition(0);
 		}
 		message.setX((SCENE_WIDTH-message.getLayoutBounds().getWidth())*0.5);
 	}
 
+	//Logic to control pause screen
 	public void updatePauseScreen(boolean wasPaused) {
 
 		if (wasPaused) {
@@ -712,6 +610,7 @@ public class LevelVisuals {
 
 	}
 	
+	//Logic to control exit screen
 	public void updateExitScreen(boolean exitScreenOn) {
 
 		if (exitScreenOn) {
@@ -726,6 +625,7 @@ public class LevelVisuals {
 
 	}
 
+	//Logic to highlight selected image
 	public void cycleOptions(int option) {
 		if (option == 0) {
 			exitOptions.get(option).setEffect(shadow);
@@ -738,7 +638,7 @@ public class LevelVisuals {
 
 
 	public void playCountdown() {
-		countdown.start();; //for soem reason loop(0) works better than start()
+		countdown.start();; 
 	}
 
 	public void pauseCountdown() {
@@ -767,7 +667,6 @@ public class LevelVisuals {
 			if (controller.startTimer >= -1 && controller.startTimer <3) {
 				return; //stop key input buffering which caused bugs
 			}
-			//temp, trying to get cycle sound to work consistently
 			stopCycleClip();
 			
 			if (input.getCode() == KeyCode.LEFT) {
@@ -814,28 +713,13 @@ public class LevelVisuals {
 				if (controller.getMode() != 3 & controller.startTimer <= -1) { //doesnt seem to stop when countdown hasnt started
 					controller.timeElapsed = controller.getTimeLimit();
 					updateTime(controller.getTimeLimit() - controller.timeElapsed);
-//					spaceman.stop();
-//					blue.stop(); //changed from red
-//					
-//					//added with createghostPlayer
-//					red.stop();
-//					pink.stop();
 					stopAllChars();
 					controller.timeline.stop();
-					//disp gameover screen here
 					playGameOver();
 					spaceman.resetSpaceman();
 					resetAliens();
 					gameFinishedPopUp.setVisible(true);
 					controller.resetWarp();
-//					spaceman.resetSpaceman();
-//					red.resetAlien();
-//					pink.resetAlien();
-//					blue.resetAlien();
-//					orange.resetAlien();
-//					controller.resetToStartState();
-//					controller.levelWins =  0;
-//					controller.setLevel(controller.getMode()); //idk?? dont need i think
 					gameOverPopUp.setVisible(true);
 				}
 				
@@ -845,28 +729,20 @@ public class LevelVisuals {
 				if (exitPopUp.isVisible()) {		
 					//Quits the game if yes is selected, otherwise will go back to pause menu
 					if (controller.exitOption == 1){
-//						spaceman.stop();
-//						blue.stop(); //was red
-//						
-//						//added with createghostPlayer
-//						red.stop();
-//						pink.stop();
 						stopAllChars();
 						controller.timeline.stop();
 						
 						controller.resetWarp();
 						
-						//Resets initial level states //consider an init() func instead
-						
 						controller.resetToStartState();
 						controller.levelWins = 0;
-//						paused = !paused;
+						
 					} else {
 						pauseMenu.setEffect(null);
+						
 					}
-//					exitScreenOn = !exitScreenOn;
-//					currentView.updateExitScreen(exitScreenOn);
 					exitPopUp.setVisible(false);
+					
 				} else if (gameFinishedPopUp.isVisible()) {
 					String playerName = name.getText();
 					controller.leaderboard.writeData(playerName, controller.getLevel().getScore(), controller.getMode());
@@ -875,15 +751,10 @@ public class LevelVisuals {
 					controller.levelWins =  0;
 					controller.setLevel(controller.getMode());
 					gameOverPopUp.setVisible(true);
+					
 				} else if (gameOverPopUp.isVisible()) {
 					gameOverPopUp.setVisible(false);
-					//controller.timeline.play();
-					//new
 					spaceman.resetSpaceman();
-//					red.resetAlien();
-//					pink.resetAlien();
-//					blue.resetAlien();
-//					orange.resetAlien();
 					resetAliens();
 					
 					controller.resetWarp();
@@ -934,7 +805,10 @@ public class LevelVisuals {
 				if (controller.ghostPlayerPink && pink.isRunning()) {
 					pink.setKeyInput(2);
 				}
-			}
+				//keyinput to set pellet remaining to one
+			} else if (input.getCode() == KeyCode.Z || (input.getCode() == KeyCode.X)) {
+				pelletsCollected = pelletsRendered.size()-1;
+			} 
 			if (input.getCode() == KeyCode.I) {
 				if (controller.ghostPlayerRed && red.isRunning()) {
 					red.setKeyInput(1);
@@ -964,13 +838,6 @@ public class LevelVisuals {
 			//Pauses the game
 			pauseCountdown();
 			controller.timeline.pause();
-
-//			spaceman.pause();
-//			blue.pause();
-//			orange.pause();
-//			//added with createghostPlayer
-//			red.pause();
-//			pink.pause();
 			stopAllChars();
 
 		
