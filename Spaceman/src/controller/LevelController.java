@@ -120,6 +120,7 @@ public class LevelController {
 					currentView.playGameOver();
 					currentView.stopAliens();
 					//currentView.spaceman.stop();
+					currentView.gameOverPopUp.setVisible(true);
 					//gameover screen !!! gplaygOver and showgoPopup and stop chars
 				}
 
@@ -144,32 +145,46 @@ public class LevelController {
 		if (currentMode == 3) {
 			currentView.updateTime(-1);
 		}
-
+		
+//		System.out.println(levelList.size());
 		//Setup maps for Long map mode
 		if ((type == 4) & (levelList.size() == 1)) {
-			Random rand = new Random();
-
+//			Random rand = new Random();
+//			int rando = (rand.nextInt(4)+0);
+//			while (rando == 3 ) {
+//				rando = (rand.nextInt(4)+0);
+//			}
+//			System.out.println("lol");
 			LevelVisuals secondMap = new LevelVisuals(this);
 			Level secondModel = new Level();
-			//			secondModel.initLevel((rand.nextInt(4)+0),0);
-			secondModel.initLevel(2, 0);
+//			secondModel.initLevel(rando,levelWins);
+			secondModel.initLevel(2, levelWins);
 			levelModel = secondModel;
 			secondMap.generateMap();
+			secondMap.updateMessage(-1);
 			modelList.add(secondModel);
 			levelList.add(secondMap);
 
 			LevelVisuals thirdMap = new LevelVisuals(this);
 			Level thirdModel = new Level();
-			thirdModel.initLevel(3, 0);
-			//			thirdModel.initLevel((rand.nextInt(4)+0),0);
+//			thirdModel.initLevel(3, 0);
+//			rando = (rand.nextInt(4)+0);
+//			while (rando == 3 ) {
+//				rando = (rand.nextInt(4)+0);
+//			}
+//			thirdModel.initLevel(rando,levelWins);
+			thirdModel.initLevel(3,levelWins);
 			levelModel = thirdModel;
 			modelList.add(thirdModel);
 			thirdMap.generateMap();
+			thirdMap.updateMessage(-1);
 			levelList.add(thirdMap);
 
 			currentView = levelList.get(levelListIndex);
+			levelModel = modelList.get(levelListIndex);
 		}
 		interfaceCtrl.changeScene(currentView.returnScene()); 
+//		System.out.println(levelList.size());
 	}
 
 	public void changeMap(int direction) {
@@ -205,6 +220,8 @@ public class LevelController {
 
 		levelModel.setLives(prevLives);
 		currentView.updateLives(prevLives);
+		
+		currentView.updateTime(levelModel.getTimeLimit());
 
 		currentView.spaceman.shieldStatus = prevShieldStat;
 
@@ -241,7 +258,7 @@ public class LevelController {
 
 				//Logic for consuming star
 				if (checkedTile == 10) {
-					currentView.playCycleSound();//temp change to another sound
+					currentView.playGenericPU();//temp change to another sound
 					currentView.red.changeToFrightMode();
 					currentView.pink.changeToFrightMode();
 					currentView.blue.changeToFrightMode();
@@ -253,23 +270,23 @@ public class LevelController {
 					//Logic for consuming a heart
 				} else if (checkedTile == 11) {
 					levelModel.addLives(1);
-					currentView.playCycleSound(); //temp change to somehting else
+					currentView.playLifeUp(); //temp change to somehting else
 					currentView.updateLives(levelModel.lives);
 
 					//Logic for consuming cherry
 				} else if (checkedTile == 12) {
-					currentView.playCycleSound();
+					currentView.playGenericPU();
 					levelModel.addPoints(500);
 					currentView.updateScore(levelModel.getScore());
 
 					//Logic for consuming a shield
 				} else if (checkedTile == 13) {
-					currentView.playCycleSound();
+					currentView.playShieldSound();
 					currentView.spaceman.updateShieldStatus();
 
 					//logic for consuming magic stopwatch
 				}  else if (checkedTile == 14) {
-					currentView.playCycleSound();
+					currentView.playStopWatch();
 					currentView.stopAliens();
 					powerUpTimeOut = timeElapsed + 5; //consider seperating powerUptimeout
 				}
@@ -305,11 +322,13 @@ public class LevelController {
 			if (ifSpacemanMetAlien(i)) {
 				//When star powerup is active, alien is consumed
 				if (i.frightenedFlag) {
+					currentView.playKillSound();
 					consumeAlien(i);
 
 					//When shield powerup is active, consumes shield and alien
 				} else if (currentView.spaceman.shieldStatus) {
 					currentView.spaceman.updateShieldStatus();
+					currentView.playKillSound();
 					consumeAlien(i);
 
 					//spaceman will be consumed otherwise
@@ -384,6 +403,9 @@ public class LevelController {
 		startTimer = 3;
 		exitOption = 0;
 		timeElapsed = 0;
+		
+		levelListIndex=0;
+		
 		ghostPlayerRed = false;
 		ghostPlayerPink = false;
 		currentView.resetCountdown();
@@ -419,5 +441,15 @@ public class LevelController {
 
 	public Level getLevel() {
 		return levelModel;
+	}
+	
+	public void resetWarp() {
+		currentView = levelList.get(0);
+		if (currentMode == 4) {
+			for (int index = 2; index > 0; index--) {
+				levelList.remove(index);
+				modelList.remove(index);
+			}
+		}
 	}
 }

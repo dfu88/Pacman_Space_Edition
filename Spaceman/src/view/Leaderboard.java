@@ -213,7 +213,7 @@ public class Leaderboard {
 		tabEndless.setContent(tableEndless);
 		tabPane.getTabs().add(tabEndless);
 		Tab tabMulti = new Tab();
-		tabMulti.setText("Multi-dimension Mode");
+		tabMulti.setText("Warp Mode");
 		tabMulti.setContent(tableMulti);
 		tabPane.getTabs().add(tabMulti);
 		mainPane.setCenter(tabPane);

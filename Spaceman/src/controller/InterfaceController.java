@@ -52,7 +52,7 @@ public class InterfaceController {
 		
 		//Leader boards
 		} else if (option == 5) {
-			System.out.println("xd");
+//			System.out.println("xd");
 			lvlCtrl.setMode(option);
 			lvlCtrl.showLeaderboard(0);
 			
