@@ -120,6 +120,7 @@ public class LevelController {
 					currentView.playGameOver();
 					currentView.stopAliens();
 					//currentView.spaceman.stop();
+					currentView.gameOverPopUp.setVisible(true);
 					//gameover screen !!! gplaygOver and showgoPopup and stop chars
 				}
 
@@ -160,6 +161,7 @@ public class LevelController {
 			secondModel.initLevel(2, levelWins);
 			levelModel = secondModel;
 			secondMap.generateMap();
+			secondMap.updateMessage(-1);
 			modelList.add(secondModel);
 			levelList.add(secondMap);
 
@@ -175,6 +177,7 @@ public class LevelController {
 			levelModel = thirdModel;
 			modelList.add(thirdModel);
 			thirdMap.generateMap();
+			thirdMap.updateMessage(-1);
 			levelList.add(thirdMap);
 
 			currentView = levelList.get(levelListIndex);
@@ -400,6 +403,9 @@ public class LevelController {
 		startTimer = 3;
 		exitOption = 0;
 		timeElapsed = 0;
+		
+		levelListIndex=0;
+		
 		ghostPlayerRed = false;
 		ghostPlayerPink = false;
 		currentView.resetCountdown();
@@ -438,6 +444,7 @@ public class LevelController {
 	}
 	
 	public void resetWarp() {
+		currentView = levelList.get(0);
 		if (currentMode == 4) {
 			for (int index = 2; index > 0; index--) {
 				levelList.remove(index);

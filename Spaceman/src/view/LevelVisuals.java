@@ -194,10 +194,13 @@ public class LevelVisuals {
 //		gameView.setEffect(blur);
 		countDownView = addCountDown();
 		root.getChildren().add(countDownView);
-		if (controller.levelList.get(0) != this) {
-			countDownView.setVisible(false);
-			gameView.setEffect(null);
-		}
+		//controller.getMode() == 4 && 
+//		if (controller.levelList.get(0) != this) {
+//			countDownView.setVisible(false);
+//			gameView.setEffect(null);
+//		}
+		
+//		if (controller)
 		
 		gameOverPopUp = addGameOverPopUp();
 		gameOverPopUp.setVisible(false);
@@ -854,6 +857,7 @@ public class LevelVisuals {
 						controller.resetWarp();
 						
 						//Resets initial level states //consider an init() func instead
+						
 						controller.resetToStartState();
 						controller.levelWins = 0;
 //						paused = !paused;

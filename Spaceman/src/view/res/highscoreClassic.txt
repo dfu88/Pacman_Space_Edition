@@ -1,5 +1,5 @@
-Haren,130
-Dylan,20
-Dylan,17
-Dylan,15
-Dylan,11
+a,1850
+,0
+,0
+,0
+,0
