@@ -30,6 +30,7 @@ and losing lives.
 | 10 | chicken | Y    |		|  DF(00%)+QH(00%)  |
 | 11 | chicken | Y    |		|  DF(00%)+QH(00%)  |
 |Design Elements|
+| --|-------|-------|----------| ---------|
 | 1  | chicken | Y    |		|  DF(00%)+QH(00%)  |
 | 2  | chicken | Y    |		|  DF(00%)+QH(00%)  |
 | 3  | chicken | Y    |		|  DF(00%)+QH(00%)  |
