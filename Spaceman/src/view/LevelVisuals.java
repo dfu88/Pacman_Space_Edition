@@ -110,7 +110,7 @@ public class LevelVisuals {
 		
 		
 		powerUpImgs = setUpPowerImages();
-		System.out.print(powerUpImgs.size());
+//		System.out.print(powerUpImgs.size());
 		
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
@@ -791,6 +791,8 @@ public class LevelVisuals {
 						stopAllChars();
 						controller.timeline.stop();
 						
+						controller.resetWarp();
+						
 						//Resets initial level states //consider an init() func instead
 						controller.resetToStartState();
 						controller.levelWins = 0;
@@ -806,13 +808,19 @@ public class LevelVisuals {
 					//controller.timeline.play();
 					//new
 					spaceman.resetSpaceman();
-					red.resetAlien();
-					pink.resetAlien();
-					blue.resetAlien();
-					orange.resetAlien();
+//					red.resetAlien();
+//					pink.resetAlien();
+//					blue.resetAlien();
+//					orange.resetAlien();
+					resetAliens();
+					
+					controller.resetWarp();
+					
 					controller.resetToStartState();
 					controller.levelWins =  0;
 					controller.setLevel(controller.getMode());
+					
+					
 				} else if (!pauseMenu.isVisible()){
 					controller.timeline.play();
 				}
@@ -907,12 +915,6 @@ public class LevelVisuals {
 				if (controller.getTimeLimit()!=controller.timeElapsed & controller.startTimer<= -2) { 
 
 					startAllChars();
-//					spaceman.start();
-//					blue.start();
-//
-//					//added with createghostPlayer
-//					red.start();
-//					pink.start();
 				}
 			}
 		}
@@ -936,30 +938,18 @@ public class LevelVisuals {
 		 
 		 img = new Image(getClass().getResourceAsStream("res/sWatch.png"));
 		 imgList.add(img);
-		 
-		 
-		 
+		 	 
 		return imgList;
 	}
-//	public void checkSpacemanAndAliens() {
-//		// TODO Auto-generated method stub
-//		
-//	}
 
 	public void stopAllChars() {
 		spaceman.stop();
-		red.stop();
-		pink.stop();
-		blue.stop();
-		orange.stop();
+		stopAliens();
 	}
 	
 	public void startAllChars() {
 		spaceman.start();
-		pink.start();
-		red.start();
-		blue.start();
-		orange.start();
+		startAliens();
 	}
 	
 	public void setBg(Image image) {
@@ -972,7 +962,6 @@ public class LevelVisuals {
 	
 	public void playDeathSound() {
 		death.play();
-		//while (death.isPlaying()); //maybe reomoves?
 	}
 	
 	public void resetAliens() {

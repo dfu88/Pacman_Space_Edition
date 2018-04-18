@@ -36,7 +36,7 @@ public class Level {
 		mapList.add(classic);
 		
 		Map testMap = new Map();
-		testMap.initMap(2);
+		testMap.initMap(4);
 		mapList.add(testMap);
 		
 		Map testMap2 = new Map();
@@ -55,7 +55,7 @@ public class Level {
 	public void initLevel(int mode, int levelWins) {
 		score = 0;
 		lives = 3;
-		if (mode == 3 && mode != 4) {
+		if (mode == 3) {
 			timeLimit = -1;
 		} else {
 			timeLimit = 120 - levelWins*10; //180?

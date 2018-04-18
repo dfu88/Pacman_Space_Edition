@@ -142,15 +142,19 @@ public class LevelController {
 		if (currentMode == 3) {
 			currentView.updateTime(-1);
 		}
-
+		
+//		System.out.println(levelList.size());
 		//Setup maps for Long map mode
 		if ((type == 4) & (levelList.size() == 1)) {
 			Random rand = new Random();
-
+			int rando = (rand.nextInt(4)+0);
+			while (rando == 3 ) {
+				rando = (rand.nextInt(4)+0);
+			}
+//			System.out.println("lol");
 			LevelVisuals secondMap = new LevelVisuals(this);
 			Level secondModel = new Level();
-			//			secondModel.initLevel((rand.nextInt(4)+0),0);
-			secondModel.initLevel(2, 0);
+			secondModel.initLevel(rando,0);
 			levelModel = secondModel;
 			secondMap.generateMap();
 			modelList.add(secondModel);
@@ -158,16 +162,22 @@ public class LevelController {
 
 			LevelVisuals thirdMap = new LevelVisuals(this);
 			Level thirdModel = new Level();
-			thirdModel.initLevel(3, 0);
-			//			thirdModel.initLevel((rand.nextInt(4)+0),0);
+//			thirdModel.initLevel(3, 0);
+			rando = (rand.nextInt(4)+0);
+			while (rando == 3 ) {
+				rando = (rand.nextInt(4)+0);
+			}
+			thirdModel.initLevel(rando,0);
 			levelModel = thirdModel;
 			modelList.add(thirdModel);
 			thirdMap.generateMap();
 			levelList.add(thirdMap);
 
 			currentView = levelList.get(levelListIndex);
+			levelModel = modelList.get(levelListIndex);
 		}
 		interfaceCtrl.changeScene(currentView.returnScene()); 
+//		System.out.println(levelList.size());
 	}
 
 	public void changeMap(int direction) {
@@ -203,6 +213,8 @@ public class LevelController {
 
 		levelModel.setLives(prevLives);
 		currentView.updateLives(prevLives);
+		
+		currentView.updateTime(levelModel.getTimeLimit());
 
 		currentView.spaceman.shieldStatus = prevShieldStat;
 
@@ -410,5 +422,14 @@ public class LevelController {
 
 	public Level getLevel() {
 		return levelModel;
+	}
+	
+	public void resetWarp() {
+		if (currentMode == 4) {
+			for (int index = 2; index > 0; index--) {
+				levelList.remove(index);
+				modelList.remove(index);
+			}
+		}
 	}
 }
