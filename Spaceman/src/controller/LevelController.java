@@ -3,6 +3,7 @@ package controller;
 import model.Level;
 
 import view.Alien;
+import view.Leaderboard;
 import view.LevelVisuals;
 import view.StorySlides;
 
@@ -23,6 +24,8 @@ public class LevelController {
 	private InterfaceController interfaceCtrl;
 	private LevelVisuals currentView;
 	private StorySlides scenarioDisp;
+
+	private Leaderboard leaderboard;
 
 	private Level levelModel;
 	private int currentMode;
@@ -54,6 +57,8 @@ public class LevelController {
 		currentView = primaryLevel;
 
 		scenarioDisp = new StorySlides(this);
+
+		leaderboard = new Leaderboard(this);
 
 		modelList = new ArrayList<Level>();
 		Level primaryModel = new Level();
@@ -388,6 +393,11 @@ public class LevelController {
 
 	public void setBgView(Image image) {
 		currentView.setBg(image);
+	}
+	
+	public void showLeaderboard(int gameMode) {
+		leaderboard.generateLeaderboard();
+		interfaceCtrl.changeScene(leaderboard.returnScene());
 	}
 
 	public LevelVisuals getCurrentView() {
