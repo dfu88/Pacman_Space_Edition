@@ -456,7 +456,7 @@ public class Alien extends CharacterAnimate{
 
 	public void moveOneStep() {
 		
-		if (imageIndex == 0) {
+		if (imageIndex == 0 && this.isRunning()) {
 			if (isPlayer && status != TRAPPED) {
 				changeCurrentDirection(keyInput);
 			}			

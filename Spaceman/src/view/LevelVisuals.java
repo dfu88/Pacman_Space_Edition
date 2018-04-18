@@ -884,7 +884,8 @@ public class LevelVisuals {
 				playCycleSound();
 				exitPopUp.setVisible(!exitPopUp.isVisible());
 				//.updateExitScreen(exitScreenOn);
-			} else if (input.getCode() == KeyCode.W) {
+			} 
+			if (input.getCode() == KeyCode.W) {
 				if (controller.ghostPlayerPink) {
 					pink.setKeyInput(1);
 				}
@@ -900,7 +901,8 @@ public class LevelVisuals {
 				if (controller.ghostPlayerPink) {
 					pink.setKeyInput(2);
 				}
-			} else if (input.getCode() == KeyCode.I) {
+			}
+			if (input.getCode() == KeyCode.I) {
 				if (controller.ghostPlayerRed) {
 					red.setKeyInput(1);
 				}

@@ -40,7 +40,7 @@ public class Level {
 		mapList.add(testMap);
 		
 		Map testMap2 = new Map();
-		testMap2.initMap(6);
+		testMap2.initMap(1);
 		mapList.add(testMap2);
 		
 		Map testMap3 = new Map();
