@@ -57,8 +57,8 @@ public class Spaceman extends CharacterAnimate{
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
 		// Intialise Spaceman moving left
-		dx = 0;
-		dy = -1;
+		dx = -1;
+		dy = 0;
 
 //		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png")); 
 //		images = new Image[] {
@@ -110,11 +110,8 @@ public class Spaceman extends CharacterAnimate{
 
 	@Override
 	public void moveOneStep() {
-		if (!isRunning()) {
-			return;
-		}
 		levelController.respawnCollectables();
-		if (imageIndex == 0) {
+		if (imageIndex == 0 && this.isRunning()) {
 			changeCurrentDirection(keyInput);
 		}
 		
@@ -183,12 +180,12 @@ public class Spaceman extends CharacterAnimate{
 		graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
 
 		// Intialise Spaceman current direction
-		this.dx = 0;
-		this.dy = -1;
+		this.dx = -1;
+		this.dy = 0;
 		
 		imageIndex = 0;
 		currentImage = images[imageIndex];
-		rotationIndex = MOVE_UP;
+		rotationIndex = MOVE_LEFT;
 		currentRotation = ROTATION_DEGREE[rotationIndex];
 
 		imageView.setX(graphicalX);

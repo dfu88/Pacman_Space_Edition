@@ -1,5 +1,5 @@
 sahil,1370
+p,340
+l,180
+,150
 Haren,130
-Dylan,90
-q,50
-Dylan,20
