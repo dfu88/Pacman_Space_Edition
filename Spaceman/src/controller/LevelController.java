@@ -24,7 +24,7 @@ public class LevelController {
 	private LevelVisuals currentView;
 	private StorySlides scenarioDisp;
 
-	public Leaderboard leaderboard;
+	private Leaderboard leaderboard;
 
 	private Level levelModel;
 	private int currentMode;
@@ -305,6 +305,10 @@ public class LevelController {
 		}
 	}
 
+	/*
+	 * Checks if spaceman postion is within 20 pixels of a ghost
+	 * If so, either consume alien or lose and restart position 
+	 */
 	public void checkSpacemanAndAliens () {
 
 		Alien[] aliens = currentView.aliens;
@@ -352,11 +356,6 @@ public class LevelController {
 						currentView.spaceman.resetSpaceman();
 						currentView.resetAliens();
 						currentView.gameFinishedPopUp.setVisible(true);
-//						resetToStartState();
-//						levelWins =  0;
-//						setLevel(getMode());
-//						currentView.gameOverPopUp.setVisible(true);
-
 					}
 				}
 			}
@@ -366,7 +365,7 @@ public class LevelController {
 	private void consumeAlien(Alien alien) {
 		levelModel.addPoints(200);
 		alien.stop();
-		alien.resetAlien();
+		alien.resetAlien(false);
 		alien.start();
 	}
 
@@ -444,5 +443,9 @@ public class LevelController {
 				modelList.remove(index);
 			}
 		}
+	}
+	
+	public Leaderboard getLeaderboard() {
+		return leaderboard;
 	}
 }

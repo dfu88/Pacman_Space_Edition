@@ -58,6 +58,7 @@ public class Leaderboard {
 
 	private Scene scene;
 
+	//Nodes in this scene
 	private AnchorPane root;
 	private BorderPane mainPane;
 	private TabPane tabPane;
@@ -80,6 +81,8 @@ public class Leaderboard {
 		blur = new GaussianBlur();
 		shadow = new DropShadow(500, Color.YELLOW);
 		exitOptions = new ArrayList<ImageView>();
+		
+		//Initialise Sound Clips
 		URL url = this.getClass().getResource("sound/sound1.wav");
 		cycle = new AudioClip(url.toString());
 
@@ -87,7 +90,7 @@ public class Leaderboard {
 		dataEndless = new ArrayList<Person>();
 		dataMulti = new ArrayList<Person>();
 
-		//Setup Scene for game visuals
+		//Setup nodes and add to scene
 		root = new AnchorPane(); 
 		BackgroundImage bg = new BackgroundImage(new Image(getClass().getResourceAsStream("bg/test.png")), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
 		root.setBackground(new Background(bg));
@@ -96,6 +99,9 @@ public class Leaderboard {
 		setUpKeyInput(scene);
 	}
 
+	/*
+	 * Generates the leaderboard by calling the add functions for each child node
+	 */
 	public void generateLeaderboard() {
 		exitOptions.clear();
 		root.getChildren().clear();
@@ -126,6 +132,9 @@ public class Leaderboard {
 		root.getChildren().add(exitPopUp);
 	}
 
+	/*
+	 * Creates the leaderboard table itself and returns it
+	 */
 	private BorderPane addLeaderboard() {
 		// Classic Table
 		tableClassic = new TableView<Person>();
@@ -221,6 +230,9 @@ public class Leaderboard {
 		return mainPane;
 	}
 
+	/*
+	 * Reads the highscore text files and creates a person object and adds it to the data arrayList
+	 */
 	private void readData() {
 		//Read highscoreClassic.txt
 		File file1 = new File(getClass().getResource("res/highscoreClassic.txt").getFile());
@@ -293,6 +305,10 @@ public class Leaderboard {
 		
 	}
 	
+	/*
+	 * Writes the new score into the relevant text file if new score is greater
+	 * than the current top 5 for the game mode
+	 */
 	public void writeData(String name, int score, int gameMode) {
 		readData();
 		String player1 = "", player2 = "", player3 = "", player4 = "", player5 = "";
@@ -458,11 +474,11 @@ public class Leaderboard {
 		}
 	}
 
-	public void playCycleSound( ) {
+	private void playCycleSound( ) {
 		cycle.play();
 	}
 
-	public void stopCycleClip( ) {
+	private void stopCycleClip( ) {
 		if (cycle.isPlaying()) {
 			cycle.stop();
 		}
@@ -473,9 +489,11 @@ public class Leaderboard {
 			public void handle(KeyEvent input) {
 				if (input.getCode() == KeyCode.ESCAPE) {
 					playCycleSound();
+					// Turns on/off the exit pop up
 					exitPopUp.setVisible(!exitPopUp.isVisible());
 				} else if (input.getCode() == KeyCode.LEFT) {
 					if (exitPopUp.isVisible()) {
+						// Cycles the yes or no options for the exit pop up
 						if (levelController.exitOption > 0) {
 							levelController.exitOption--;
 							playCycleSound();
@@ -485,6 +503,7 @@ public class Leaderboard {
 					}
 				} else if (input.getCode() == KeyCode.RIGHT) {
 					if (exitPopUp.isVisible()) {
+						// Cycles the yes or no options for the exit pop up
 						if (levelController.exitOption < 1) {
 							levelController.exitOption++;
 							playCycleSound();

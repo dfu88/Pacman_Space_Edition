@@ -11,20 +11,6 @@ public class ShortestPath {
 		this.levelController = levelController;
 	}
 
-	private int nodeIndex(Vector<Vector<Integer>> nodes, Vector<Integer> node) {
-		int x = node.get(0);
-		int y = node.get(1);
-		for(int i=0; i<nodes.size(); i++) {
-			Vector<Integer> currentNode = nodes.get(i);
-			int currentX = currentNode.get(0);
-			int currentY = currentNode.get(1);
-			if (currentX == x && currentY == y) {
-				return i;
-			}
-		}
-		return -1;
-	}
-
 	/*
 	 * computeShortest function returns the distance of the shortest path
 	 * from source node to target node
@@ -111,6 +97,9 @@ public class ShortestPath {
 		return Integer.MAX_VALUE;
 	}
 
+	/*
+	 *  compareNodes function return true when two nodes are equal
+	 */
 	private boolean compareNodes(Vector<Integer> node1, Vector<Integer> node2) {
 		int node1X = node1.get(0);
 		int node1Y = node1.get(1);
@@ -121,7 +110,27 @@ public class ShortestPath {
 		}
 		return false;
 	}
+	
+	/*
+	 * nodeIndex function finds the corresponding index of a node within a set of nodes
+	 */
+	private int nodeIndex(Vector<Vector<Integer>> nodes, Vector<Integer> node) {
+		int x = node.get(0);
+		int y = node.get(1);
+		for(int i=0; i<nodes.size(); i++) {
+			Vector<Integer> currentNode = nodes.get(i);
+			int currentX = currentNode.get(0);
+			int currentY = currentNode.get(1);
+			if (currentX == x && currentY == y) {
+				return i;
+			}
+		}
+		return -1;
+	}
 
+	/*
+	 * minIndex function finds the corresponding index for node with the smallest weight
+	 */
 	private int minIndex(Vector<Vector<Integer>> openNodes, Vector<Vector<Integer>> nodes, Vector<Integer> weight) {
 		int mWeight = Integer.MAX_VALUE;
 		int mIndex = 0;
@@ -180,6 +189,9 @@ public class ShortestPath {
 		return neighbourNodes;
 	}
 
+	/*
+	 * isValid function returns true when a node is part of a set of nodes
+	 */
 	private boolean isValid(Vector<Vector<Integer>> setNodes, Vector<Integer> node) {
 		for (int i=0; i<setNodes.size(); i++) {
 			if (compareNodes(node, setNodes.get(i))) {

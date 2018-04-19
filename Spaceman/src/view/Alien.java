@@ -17,25 +17,24 @@ import javafx.scene.image.ImageView;
 import controller.LevelController;
 import model.ShortestPath;
 
-public class Alien extends CharacterAnimate{
+public class Alien extends Character{
 
-	public LevelController levelController;
-	public LevelVisuals levelView;
-	public ImageView imageView;
+	private LevelController levelController;
+	private LevelVisuals levelView;
+	private ImageView imageView;
 	private int keyInput;
 	private int alienType;
 	private int frightModeCounter;
-	private int chaseModeCounter;
-	private int scatterModeCounter;	
 	private int trapCounter;
 	private int spawnX;
 	private int spawnY;
 	private double graphicalX;
 	private double graphicalY;
 	private boolean isPlayer;
+	// frightened flag used in levelController
+	// when spaceman meets an alien
 	public boolean frightenedFlag = false;
-	private int initialTrapTime;
-	private static final int TRAPPED = 2;
+	private int initialTrapTime, trapTime;
 	private static final int FRIGHT_MODE_MAX_TIME = 80;
 	private final Image[] FRIGHTENED_IMAGES = new Image[] {
 			new Image(getClass().getResourceAsStream("res/frightalien1.png")),
@@ -81,10 +80,9 @@ public class Alien extends CharacterAnimate{
 		keyInput = -1;
 		
 		this.alienType = alienType;
-		frightModeCounter = 0;
-		chaseModeCounter = 0;
-		scatterModeCounter = 0;	
+		frightModeCounter = 0;	
 		trapCounter = 0;
+		trapTime = initialTrapTime;
 		this.initialTrapTime = initialTrapTime;
 		this.isPlayer = isPlayer;
 
@@ -407,10 +405,16 @@ public class Alien extends CharacterAnimate{
 		}
 	}
 
-	public void resetAlien() {
+	public void resetAlien(boolean isSpawn) {
 		moveCounter = 0;
 		trapCounter = 0;
-		chaseModeCounter = 0;
+		
+		// Intialise trapTime depending if reset to spawn or not
+		if (isSpawn) {
+			trapTime = initialTrapTime;
+		} else {
+			trapTime = 15;
+		}
 
 		// Intialise Alien grid position
 		this.x = spawnX;
@@ -443,6 +447,10 @@ public class Alien extends CharacterAnimate{
 		timeline.setRate(0.95);
 	}
 
+	/*
+	 * public function that changes the aliens to frightened mode
+	 * when spaceman eats a magic pellet
+	 */
 	public void changeToFrightMode() {
 		frightModeCounter = 0;
 		frightenedFlag = true;
@@ -454,6 +462,9 @@ public class Alien extends CharacterAnimate{
 		timeline.play();
 	}
 
+	/*
+	 * @see view.Character#moveOneStep()
+	 */
 	public void moveOneStep() {
 		if (!isRunning()) {
 			return;
@@ -474,10 +485,9 @@ public class Alien extends CharacterAnimate{
 			imageView.setImage(currentImage);
 		}
 
+		// If trapped, move horizontally in cage until alien is released
 		if (status == TRAPPED) {
-
-
-			if (trapCounter > initialTrapTime && x == spawnX && y == spawnY) {
+			if (trapCounter > trapTime && x == spawnX && y == spawnY) {
 				// go out of the cage
 				x = spawnX;
 				y = spawnY - 2;
@@ -494,7 +504,9 @@ public class Alien extends CharacterAnimate{
 			imageView.setX(graphicalX);
 			imageView.setY(graphicalY);
 		}
-
+		
+		// If moving, move vertically or horizontally depending on
+		// current direction
 		if (status == MOVING ) {
 			if (dx != 0 && dy == 0) {
 				moveXAxis();
@@ -507,10 +519,9 @@ public class Alien extends CharacterAnimate{
 			imageView.setY(graphicalY);
 		}
 
+		// If frightened, check if need to change back to normal chase mode
 		if (frightenedFlag) {
-
 			frightModeCounter++;
-
 			if (frightModeCounter == FRIGHT_MODE_MAX_TIME - 30) {
 				images = FLASHING_IMAGES;
 			}
@@ -586,6 +597,9 @@ public class Alien extends CharacterAnimate{
 		status = MOVING;
 	}
 
+	/*
+	 * public function to set key input
+	 */
 	public void setKeyInput(int keyInput) {
 		this.keyInput  = keyInput;
 	}

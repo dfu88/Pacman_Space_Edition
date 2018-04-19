@@ -140,17 +140,17 @@ public class StorySlides {
 	private void setUpDialogue() {
 		//Opening Scene
 		ArrayList<String> dialogueSet1 = new ArrayList<String>();
-		dialogueSet1.add("All was peaceful in the world. In our planet \'Meow Meow Nebula\'\n"  
-				+ "\"420 Supreme\", the people lived their lives with pride and joy as usual.\n");
+		dialogueSet1.add("All was peaceful in the world. In our planet \'Meow Meow Nebula\n"  
+				+ "420 Supreme\', the people lived their lives with pride and joy as usual.\n");
 		dialogueSet1.add("However, that wouldn't last for long. Over the past few years, the 'NRG'"
 				+ "\ncore powering our planet has been dying out. Explorers have gone out to\nspace to"
-				+ " try recover this 'NRG' essence to restore the crystal. Unfortuantely, none of them have"
+				+ " try recover this 'NRG' essence to restore the crystal. Unfortunately, none \nof them have"
 				+ " returned to this day.");
 
 		dialogueSet1.add("Bob here was just your everyday kid who did what other cool and hip youngster do."
 				+ "\nOne day when he was watching episode 69 of \"My Little Horsey\", he heard a loud \nnoise!");
 
-		dialogueSet1.add("*KKKAAAABOOOOOOMASDLKKANALSLSASASHGASSA* (sound effects btw)");
+		dialogueSet1.add("*KKKAAAABOOOOOOMASDLKKANALSLSASASHGASSA*");
 		dialogueSet1.add("Bob: \"What was that?\"");
 		dialogueSet1.add("Bob looked up into the near distance where he saw chaos brewing."
 				+ "\nPeople were panicking in the confusion where there was bright light glowing.");

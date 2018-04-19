@@ -17,10 +17,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.media.AudioClip;
 
-public class Spaceman extends CharacterAnimate{
+public class Spaceman extends Character{
 
 	public LevelController levelController;
-	//private LevelVisuals view;
 	private static final int[] ROTATION_DEGREE = new int[] {0, 90, 180, 270};
 	private int rotationIndex;
 	public ImageView imageView;
@@ -35,8 +34,6 @@ public class Spaceman extends CharacterAnimate{
 	private Image[] shield;
 	private Image[] imagesDefault;
 	public boolean shieldStatus = false;
-	
-	//public Clip pelletSound;
 	
 	private AudioClip pelletSound;
 	private AudioClip warp;
@@ -59,14 +56,6 @@ public class Spaceman extends CharacterAnimate{
 		// Intialise Spaceman moving left
 		dx = -1;
 		dy = 0;
-
-//		Image startImage = new Image(getClass().getResourceAsStream("res/left2.png")); 
-//		images = new Image[] {
-//				startImage,
-//				new Image(getClass().getResourceAsStream("res/left1.png")),
-//				new Image(getClass().getResourceAsStream("res/round.png")),
-//				new Image(getClass().getResourceAsStream("res/left1.png"))
-//		};
 		
 		shield = new Image[] {new Image(getClass().getResourceAsStream("res/spacepac2shield.png")), 
 				new Image(getClass().getResourceAsStream("res/spacepacshield.png")),
@@ -98,7 +87,7 @@ public class Spaceman extends CharacterAnimate{
 		getChildren().add(imageView);
 
 		// remove later when movement logic is completed
-		status = MOVING;
+		//status = MOVING;
 		
 		URL url = this.getClass().getResource("sound/boop.wav");
 		pelletSound = new AudioClip(url.toString());
@@ -108,6 +97,9 @@ public class Spaceman extends CharacterAnimate{
 
 	}
 
+	/*
+	 * @see view.Character#moveOneStep()
+	 */
 	@Override
 	public void moveOneStep() {
 		levelController.respawnCollectables();
@@ -125,28 +117,12 @@ public class Spaceman extends CharacterAnimate{
 			imageIndex++;
 			currentImage = images[imageIndex];
 			imageView.setImage(currentImage);
-//			imageView.setX(graphicalX);
-//			imageView.setY(graphicalY);
-//			imageView.setRotate(currentRotation);
-			//levelController.respawnCollectables();
-
 		} else {
 			imageIndex = 0;
 			currentImage = images[imageIndex];
 			imageView.setImage(currentImage);
-//			imageView.setX(graphicalX);
-//			imageView.setY(graphicalY);
-//			imageView.setRotate(currentRotation);
-//			if (shieldStatus) {
-//				imageView.setImage(shield);
-//			}
 		}
 		
-	//	if (status == MOVING) {
-//			if (pelletSound.isRunning()) {
-//				pelletSound.stop();
-//				pelletSound.setFramePosition(0);//reset sound to 0 seconds
-//			}
 		if (this.isRunning()) {
 			if (pelletSound.isPlaying()) {
 				pelletSound.stop();
@@ -165,7 +141,6 @@ public class Spaceman extends CharacterAnimate{
 				levelController.checkSpacemanAndAliens();
 			}
 		}
-//		}
 	}
 	
 	public void resetSpaceman() {
@@ -200,17 +175,13 @@ public class Spaceman extends CharacterAnimate{
 	}
 	
 	private void moveXAxis() {
-		//Wallcheck logic: If next destination is wall, do not move, else move as normal
 		int nextX = x + dx;
+		// Wallcheck logic: If next destination is wall, do not move, else move as normal
 		if (levelController.checkMap(nextX, y) == 1 || levelController.checkMap(nextX, y) == 9) {
 			//pause animation here
 			imageIndex=0;
 		} else {
-			//start();
-			//if (levelController.checkMap(nextX, y) == 2) {
-				//levelController.updateMap(dx,dy,x,y);
-			//}
-			
+			//Move spaceman in the current direction by one step on the x-axis
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalX = graphicalX + (dx * MOVE_SPEED);
@@ -220,16 +191,11 @@ public class Spaceman extends CharacterAnimate{
 				moveCounter = 0;
 				nextX = x + dx;
 				// HARDCODED VALUES FOR TUNNEL X COORDINATE - USE GRID SIZE
-//				if (x!=0 || x!=20) {
 				if (nextX < 1 && dx == -1 ) {
 					if (levelController.getMode() == 4) {
-						
 						levelController.getCurrentView().stopAllChars();
 						levelController.timeline.stop();
-						levelController.changeMap(-1);
-						//return;
-						
-						
+						levelController.changeMap(-1);					
 					} else {
 						x = 19;
 					}
@@ -239,8 +205,6 @@ public class Spaceman extends CharacterAnimate{
 						levelController.getCurrentView().stopAllChars();
 						levelController.timeline.stop();
 						levelController.changeMap(1);
-						
-						//return;
 					} else {
 						x = 1;
 					}
@@ -248,14 +212,7 @@ public class Spaceman extends CharacterAnimate{
 				} else {
 					x = x + dx;
 				}
-//				}
 				graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
-				
-				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
-//				nextX = x + dx;
-//				if (levelController.checkMap(nextX, y) == 1) {
-//					status = STOPPED;
-//				}
 			}
 		}
 	}
@@ -265,10 +222,7 @@ public class Spaceman extends CharacterAnimate{
 		if (levelController.checkMap(x,nextY) == 1 || levelController.checkMap(x, nextY) == 9) {
 			imageIndex=0;
 		} else {
-			//if (levelController.checkMap(x, nextY) == 2) {
-				//levelController.updateMap(dx,dy,x,y);
-			//}
-			
+			//Move spaceman in the current direction by one step on the x-axis
 			moveCounter++;
 			if (moveCounter < ANIMATION_STEP) {
 				graphicalY = graphicalY + (dy * MOVE_SPEED);
@@ -277,29 +231,8 @@ public class Spaceman extends CharacterAnimate{
 				moveCounter = 0;
 				y = y + dy;
 				graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
-				
-				
-				// this switches status flag so moveXAxis() and moveYAxis aren't called until keyinput changes
-//				int nextY = y + dy;
-//				if (levelController.checkMap(x,nextY) == 1) {
-//					status = STOPPED;
-//				}
 			}
 		}
-		//old stuff
-//		moveCounter++;
-//		if (moveCounter < ANIMATION_STEP) {
-//			graphicalY = graphicalY + (dy * MOVE_SPEED);
-//		} else {
-//			moveCounter = 0;
-//			y = y + dy;
-//			graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
-//			
-//			int nextY = y + dy;
-//			if (levelController.checkMap(x,nextY) == 1) {
-//				status = STOPPED;
-//			}
-//		}
 	}
 
 	private void moveLeft() {
@@ -312,10 +245,8 @@ public class Spaceman extends CharacterAnimate{
 		// Change direction
 		dx = -1;
 		dy = 0;
-		
 		rotationIndex = MOVE_LEFT;
 		currentRotation = ROTATION_DEGREE[rotationIndex];
-		status = MOVING;
 	}
 
 	private void moveRight() {
@@ -329,7 +260,6 @@ public class Spaceman extends CharacterAnimate{
 		dy = 0;
 		rotationIndex = MOVE_RIGHT;
 		currentRotation = ROTATION_DEGREE[rotationIndex];
-		status = MOVING;
 	}
 
 	private void moveUp() {
@@ -343,7 +273,6 @@ public class Spaceman extends CharacterAnimate{
 		dy = -1;
 		rotationIndex = MOVE_UP;
 		currentRotation = ROTATION_DEGREE[rotationIndex];
-		status = MOVING;
 	}
 
 	private void moveDown() {
@@ -357,7 +286,6 @@ public class Spaceman extends CharacterAnimate{
 		dy = 1;
 		rotationIndex = MOVE_DOWN;
 		currentRotation = ROTATION_DEGREE[rotationIndex];
-		status = MOVING;
 	}
 
 	public void setKeyInput(int keyInput) {
@@ -396,20 +324,13 @@ public class Spaceman extends CharacterAnimate{
 					if (direction > 0) {
 						x = col+1;
 						y = row;
-						dx = 1;
-//						changeCurrentDirection(MOVE_RIGHT);
-//						graphicalX = x*TILE_WIDTH + GRAPHICAL_X_OFFSET;
-//						graphicalY = y*TILE_HEIGHT + GRAPHICAL_Y_OFFSET;
-//						imageView.setX(graphicalX);
-//						imageView.setY(graphicalY);			
+						dx = 1;		
 					}
 				} else if (levelController.getLevel().getCurrentMap().getData(row, col) == 6) {
 					if (direction < 0) {
 						x = col-1;
 						y = row;
 						dx = -1;
-//						changeCurrentDirection(MOVE_LEFT);
-
 					}
 				}
 

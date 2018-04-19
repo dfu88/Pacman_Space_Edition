@@ -9,10 +9,9 @@ import javafx.scene.image.Image;
 import javafx.scene.Parent;
 import javafx.util.Duration;
 
-public abstract class CharacterAnimate extends Parent{
+public abstract class Character extends Parent{
 
 	// animation frames total and movement distance
-	
 	protected static final double GRAPHICAL_X_OFFSET = 300;
 	protected static final double GRAPHICAL_Y_OFFSET = 30;
 	protected static final int TILE_WIDTH = 40;
@@ -20,9 +19,9 @@ public abstract class CharacterAnimate extends Parent{
 	protected static final int ANIMATION_STEP = 4;
 	protected static final int MOVE_SPEED = TILE_WIDTH / ANIMATION_STEP;
 	
-
+	// initialise constants
 	protected static final int MOVING = 1;
-	protected static final int STOPPED = 0;
+	protected static final int TRAPPED = 0;
 	protected static final int MOVE_LEFT = 0;
 	protected static final int MOVE_UP = 1;
 	protected static final int MOVE_RIGHT = 2;
@@ -46,7 +45,7 @@ public abstract class CharacterAnimate extends Parent{
 
 	protected Timeline timeline;
 	
-	public CharacterAnimate() {
+	public Character() {
 		imageIndex = 0;
 		moveCounter = 0;
 		dx = 0;
@@ -54,6 +53,9 @@ public abstract class CharacterAnimate extends Parent{
 		timeline = makeTimeline();
 	}
 
+	/*
+	 *  Abstract method, to be overrided in classes inheriting this class
+	 */
 	public abstract void moveOneStep();
 
 	private Timeline makeTimeline() {
@@ -97,7 +99,6 @@ public abstract class CharacterAnimate extends Parent{
 	}
 
 	public boolean isPaused() {
-
 		return timeline.getStatus() == Animation.Status.PAUSED;
 	}
 

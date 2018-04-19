@@ -265,10 +265,10 @@ public class LevelVisuals {
 		group.getChildren().add(spaceman);
 
 		//Add Aliens after map added to scene
-		red = new Alien(0,controller,this,alienX,alienY,-1,0,2,controller.ghostPlayerRed);
+		red = new Alien(0,controller,this,alienX,alienY,-1,0,1,controller.ghostPlayerRed);
 		pink = new Alien(1,controller,this,alienX,alienY,-1,0,15,controller.ghostPlayerPink);
-		blue = new Alien(2,controller,this,alienX,alienY,-1,0,35,false);
-		orange = new Alien(3,controller,this,alienX,alienY,-1,0,60,false);
+		blue = new Alien(2,controller,this,alienX,alienY,-1,0,30,false);
+		orange = new Alien(3,controller,this,alienX,alienY,-1,0,45,false);
 		aliens = new Alien[] {red,pink,blue,orange};
 		group.getChildren().addAll(aliens);
 
@@ -412,8 +412,8 @@ public class LevelVisuals {
 		frame.setY((SCENE_HEIGHT-frame.getLayoutBounds().getHeight())*0.5);
 		group.getChildren().add(frame);
 		
-		Text label = new Text("Enter Your Name");
-		label.setFont(Font.font(48));
+		Text label = new Text("Enter Your Name\nPress 'ENTER' to Continue");
+		label.setFont(Font.font(24));
 		label.setFill(Color.WHITE);
 		label.setX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
 		label.setY(frame.getY()+100);
@@ -425,7 +425,7 @@ public class LevelVisuals {
 		name.setLayoutX((SCENE_WIDTH-label.getLayoutBounds().getWidth())*0.5);
 		name.setLayoutY(frame.getY()+150);
 		name.setFont(Font.font("Arial", FontWeight.NORMAL,36));
-		name.setPrefWidth(SCENE_WIDTH/2.5 - 200);
+		name.setPrefWidth(SCENE_WIDTH/2.5 - 262);
 		group.getChildren().add(name);
 		
 
@@ -743,9 +743,9 @@ public class LevelVisuals {
 					}
 					exitPopUp.setVisible(false);
 					
-				} else if (gameFinishedPopUp.isVisible()) {
+				} if (gameFinishedPopUp.isVisible()) {
 					String playerName = name.getText();
-					controller.leaderboard.writeData(playerName, controller.getLevel().getScore(), controller.getMode());
+					controller.getLeaderboard().writeData(playerName, controller.getLevel().getScore(), controller.getMode());
 					gameFinishedPopUp.setVisible(false);
 					controller.resetToStartState();
 					controller.levelWins =  0;
@@ -776,18 +776,18 @@ public class LevelVisuals {
 				}
 				
 			} else if (input.getCode() == KeyCode.ESCAPE) {
-				//Turns on/off exit screen and pauses if not already
-				if (!exitPopUp.isVisible()) {
-					controller.paused = true;
-					controlPause();
-					pauseMenu.setEffect(blur);
-						
-				} else {
-					pauseMenu.setEffect(null);
+				if (!gameFinishedPopUp.isVisible()) {
+					//Turns on/off exit screen and pauses if not already
+					if (!exitPopUp.isVisible()) {
+						controller.paused = true;
+						controlPause();
+						pauseMenu.setEffect(blur);
+					} else {
+						pauseMenu.setEffect(null);
+					}
+					playCycleSound();
+					exitPopUp.setVisible(!exitPopUp.isVisible());
 				}
-				playCycleSound();
-				exitPopUp.setVisible(!exitPopUp.isVisible());
-				//.updateExitScreen(exitScreenOn);
 			} 
 			if (input.getCode() == KeyCode.W) {
 				if (controller.ghostPlayerPink && pink.isRunning()) {
@@ -830,9 +830,6 @@ public class LevelVisuals {
 	});
 }
 	public void controlPause() {
-		//paused = !paused;
-		//exitOption = 0;
-		
 		
 		if (controller.paused) {
 			//Pauses the game
@@ -906,10 +903,10 @@ public class LevelVisuals {
 	}
 	
 	public void resetAliens() {
-		red.resetAlien();
-		pink.resetAlien();
-		blue.resetAlien();
-		orange.resetAlien();
+		red.resetAlien(true);
+		pink.resetAlien(true);
+		blue.resetAlien(true);
+		orange.resetAlien(true);
 	}
 	
 	public void startAliens() {
