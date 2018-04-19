@@ -1,5 +1,13 @@
 # Java Project - COMPSYS 302
 
+## Compilation Instructions
+1. Clone repo into local drive
+2. Open eclipse
+3. Click 'File'
+4. CLick 'Open Projects from File System'
+5. Open 'MainApp.java'
+6. Run
+
 ## Objective
 The overall goal of this project is to design an offline game as a Java application that takes 
 input from users and responds accordingly, and to develop a computer artificial intelligence 
@@ -15,22 +23,3 @@ game when most arcade games were space shooters. The aim of the game is for the 
 as possible to get a high score, while avoiding the ghost enemies (red, blue, pink and orange blobs) 
 and losing lives.
 
-## Final Submission Table
-|   | Features (minimum specifications) | Yes/No | Comments | Team Members |
-| --|-------|-------|----------| ---------|
-| 1  | chicken | Y   |      |  DF(00%)+QH(00%)  |
-| 2  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 3  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 4  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 5  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 6  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 7  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 8  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 9  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 10 | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 11 | chicken | Y    |		|  DF(00%)+QH(00%)  |
-|Design Elements|
-| 1  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 2  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 3  | chicken | Y    |		|  DF(00%)+QH(00%)  |
-| 4  | chicken | Y    |		|  DF(00%)+QH(00%)  |
