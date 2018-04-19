@@ -743,7 +743,7 @@ public class LevelVisuals {
 					}
 					exitPopUp.setVisible(false);
 					
-				} if (gameFinishedPopUp.isVisible()) {
+				} else if (gameFinishedPopUp.isVisible()) {
 					String playerName = name.getText();
 					controller.getLeaderboard().writeData(playerName, controller.getLevel().getScore(), controller.getMode());
 					gameFinishedPopUp.setVisible(false);
