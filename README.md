@@ -12,7 +12,7 @@ and Artificial Intelligence.
 
 ### Documentation
 
-For further documentation on this project, refer to [Documentation.pdf]{http://github.com/dfu88/pacman-space-edition/blob/master/Documentation.pdf}
+For further documentation on this project, refer to [Documentation.pdf](http://github.com/dfu88/pacman-space-edition/blob/master/Documentation.pdf)
 
 
 ## Getting Started
@@ -25,7 +25,7 @@ You will need Java 1.8 to run the Java application
 
 #### Using the Oracle installer
 
-Download `jdk1.8` from the [Oracle website]{https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html}
+Download `jdk1.8` from the [Oracle website](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 
 ### Installing
 
