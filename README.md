@@ -12,7 +12,7 @@ and Artificial Intelligence.
 
 ### Documentation
 
-For further documentation on this project, refer to [Documentation](http://github.com/dfu88/pacman-space-edition/blob/master/Documentation.pdf)
+For further details on this project, refer to [Documentation](http://github.com/dfu88/pacman-space-edition/blob/master/Documentation.pdf)
 
 
 ## Getting Started
