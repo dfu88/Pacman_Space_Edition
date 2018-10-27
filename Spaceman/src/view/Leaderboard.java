@@ -235,10 +235,9 @@ public class Leaderboard {
 	 */
 	private void readData() {
 		//Read highscoreClassic.txt
-		File file1 = new File(getClass().getResource("res/highscoreClassic.txt").getFile());
 		dataClassic.clear();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file1));
+			BufferedReader reader = new BufferedReader(new FileReader("src/view/res/highScoreClassic.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 				if (line.contains(",")) {
@@ -258,10 +257,9 @@ public class Leaderboard {
 		}
 
 		//Read highscoreEndless.txt
-		File file2 = new File(getClass().getResource("res/highscoreEndless.txt").getFile());
 		dataEndless.clear();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file2));
+			BufferedReader reader = new BufferedReader(new FileReader("src/view/res/highScoreEndless.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 				if (line.contains(",")) {
@@ -281,10 +279,9 @@ public class Leaderboard {
 		}
 
 		//Read highscoreMulti.txt
-		File file3 = new File(getClass().getResource("res/highscoreMulti.txt").getFile());
 		dataMulti.clear();
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(file3));
+			BufferedReader reader = new BufferedReader(new FileReader("src/view/res/highScoreMulti.txt"));
 			String line = reader.readLine();
 			while (line != null) {
 				if (line.contains(",")) {
