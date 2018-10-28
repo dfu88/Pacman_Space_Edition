@@ -312,7 +312,7 @@ public class Leaderboard {
 		int score1 = 0, score2 = 0, score3 = 0, score4 = 0, score5 = 0;
 		String playerName = name;
 		int playerScore = score;
-		File file = new File(getClass().getResource("res/highscoreClassic.txt").getFile());;
+//		File file = new File(getClass().getResource("res/highscoreClassic.txt").getFile());;
 		
 		if (gameMode == 0) {
 			player1 = dataClassic.get(0).getName();
@@ -337,7 +337,7 @@ public class Leaderboard {
 			score4 = dataEndless.get(3).getScore();
 			player5 = dataEndless.get(4).getName();
 			score5 = dataEndless.get(4).getScore();
-			file = new File(getClass().getResource("res/highscoreEndless.txt").getFile());
+//			file = new File(getClass().getResource("res/highscoreEndless.txt").getFile());
 		} else if (gameMode == 4) {
 			player1 = dataMulti.get(0).getName();
 			score1 = dataMulti.get(0).getScore();
@@ -349,7 +349,7 @@ public class Leaderboard {
 			score4 = dataMulti.get(3).getScore();
 			player5 = dataMulti.get(4).getName();
 			score5 = dataMulti.get(4).getScore();
-			file = new File(getClass().getResource("res/highscoreMulti.txt").getFile());
+//			file = new File(getClass().getResource("res/highscoreMulti.txt").getFile());
 		}
 		
 		if (playerScore > score1) {
@@ -405,17 +405,43 @@ public class Leaderboard {
 		
 		
 		try {
-			BufferedWriter output = new BufferedWriter(new FileWriter(file));
-			output.write(player1+","+score1);
-			output.newLine();
-			output.write(player2+","+score2);
-			output.newLine();
-			output.write(player3+","+score3);
-			output.newLine();
-			output.write(player4+","+score4);
-			output.newLine();
-			output.write(player5+","+score5);
-			output.close();
+            if (gameMode == 0) {
+                BufferedWriter output = new BufferedWriter(new FileWriter("src/view/res/highScoreClassic.txt"));
+                output.write(player1+","+score1);
+                output.newLine();
+                output.write(player2+","+score2);
+                output.newLine();
+                output.write(player3+","+score3);
+                output.newLine();
+                output.write(player4+","+score4);
+                output.newLine();
+                output.write(player5+","+score5);
+                output.close();
+            } else if (gameMode == 3) {
+                BufferedWriter output = new BufferedWriter(new FileWriter("src/view/res/highScoreEndless.txt"));
+                output.write(player1+","+score1);
+                output.newLine();
+                output.write(player2+","+score2);
+                output.newLine();
+                output.write(player3+","+score3);
+                output.newLine();
+                output.write(player4+","+score4);
+                output.newLine();
+                output.write(player5+","+score5);
+                output.close();
+            } else if (gameMode == 4) {
+                BufferedWriter output = new BufferedWriter(new FileWriter("src/view/res/highScoreMulti.txt"));
+                output.write(player1+","+score1);
+                output.newLine();
+                output.write(player2+","+score2);
+                output.newLine();
+                output.write(player3+","+score3);
+                output.newLine();
+                output.write(player4+","+score4);
+                output.newLine();
+                output.write(player5+","+score5);
+                output.close();
+            }
 		} catch (IOException e){
 			e.printStackTrace();
 		}
