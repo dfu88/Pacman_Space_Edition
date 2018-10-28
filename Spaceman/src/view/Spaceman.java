@@ -313,7 +313,9 @@ public class Spaceman extends Character{
 	}
 	
 	public void updateShieldStatus() {
-		shieldStatus = !shieldStatus;
+		if (!shieldStatus) {
+			shieldStatus = true;
+		}
 	}
 	
 	

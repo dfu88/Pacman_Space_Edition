@@ -79,7 +79,8 @@ local.properties
 # User-specific stuff
 Spaceman/.idea/**
 Spaceman/*.iml
-Spaceman/META-INF
+Spaceman/META-INF/**
+Spaceman/src/META-INF/**
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
