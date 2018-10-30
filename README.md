@@ -32,7 +32,7 @@ Download `jdk1.8` from the [Oracle website](https://www.oracle.com/technetwork/j
 Clone the repository to your local machine with the following command in terminal:
 
 ```
-git clone https://github.com/dfu88/pacman-space-edition.git
+git clone https://github.com/dylanfu/pacman-space-edition.git
 ```
 
 ## Running the application
